@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
@@ -12,6 +13,8 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
         password: loginUserModel.password,
       );
       print("wade goda");
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("email",loginUserModel.email);
       return DataSuccess(loginUserModel);
 
     } on FirebaseAuthException catch (e) {

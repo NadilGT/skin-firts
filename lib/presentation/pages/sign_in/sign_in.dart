@@ -6,6 +6,7 @@ import 'package:skin_firts/common/widgets/button/basic_app_button.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/core/constants/text_manager.dart';
 import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
+import 'package:skin_firts/presentation/pages/home/home.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_cubit.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_state.dart';
 import 'package:skin_firts/presentation/pages/welcome_screen/welcome_screen.dart';
@@ -25,9 +26,10 @@ class SignIn extends StatelessWidget {
         body: BlocConsumer<SignInCubit, SignInState>(
           listener: (context, state) {
             if (state is SignInSuccess) {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                MaterialPageRoute(builder: (context) => Home()),
+                (route) => false,
               );
             } else if (state is SignInFailure) {
               ScaffoldMessenger.of(
@@ -102,7 +104,11 @@ class SignIn extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         state is SignInLoading
-                            ? Center(child: CircularProgressIndicator(color: AppColors.primaryColor,))
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primaryColor,
+                                ),
+                              )
                             : BasicAppButton(
                                 onPressed: () {
                                   context.read<SignInCubit>().signIn(
