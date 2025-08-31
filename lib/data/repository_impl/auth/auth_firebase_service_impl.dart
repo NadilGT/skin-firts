@@ -25,7 +25,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
       // ignore: avoid_print
       print(message);
 
-      return DataFailed(e);
+      return DataFailed(message);
     }
   }
 }

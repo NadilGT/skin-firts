@@ -19,7 +19,7 @@ class SignInCubit extends Cubit<SignInState>{
     if (result is DataSuccess){
       emit(SignInSuccess(data: result));
     } else if (result is DataFailed){
-      emit(SignInFailure("Sign In Failed"));
+      emit(SignInFailure(result.error ?? "Sign In Failed"));
     }
   }
 

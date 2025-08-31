@@ -102,7 +102,7 @@ class SignIn extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         state is SignInLoading
-                            ? Center(child: CircularProgressIndicator())
+                            ? Center(child: CircularProgressIndicator(color: AppColors.primaryColor,))
                             : BasicAppButton(
                                 onPressed: () {
                                   context.read<SignInCubit>().signIn(
