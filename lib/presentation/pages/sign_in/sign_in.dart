@@ -4,6 +4,11 @@ import 'package:skin_firts/common/widgets/appBar/app_bar.dart';
 import 'package:skin_firts/common/widgets/button/basic_app_button.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/core/constants/text_manager.dart';
+import 'package:skin_firts/core/storage/data_state.dart';
+import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
+import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
+import 'package:skin_firts/presentation/pages/welcome_screen/welcome_screen.dart';
+import 'package:skin_firts/service_locator.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({super.key});
@@ -77,7 +82,29 @@ class SignIn extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BasicAppButton(onPressed: () {}, title: "Log In"),
+                  BasicAppButton(
+                    onPressed: () async {
+                      var result = await sl<LoginUseCase>().call(
+                        params: LoginUserModel(
+                          email: _email.text.toString(),
+                          password: _password.text.toString(),
+                        ),
+                      );
+
+                      if (result is DataSuccess) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WelcomeScreen(),
+                          ),
+                        );
+                        print(result.data);
+                      } else if (result is DataFailed) {
+                        print(result.error);
+                      }
+                    },
+                    title: "Log In",
+                  ),
                   SizedBox(height: 15),
                   Text("or sign up with"),
                   SizedBox(height: 15),
