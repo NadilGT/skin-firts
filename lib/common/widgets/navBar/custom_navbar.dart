@@ -20,7 +20,7 @@ class _MainNavigationState extends State<MainNavigation> {
   late int _selectedIndex;
 
   final List<Widget> _pages = [
-    const Home(),
+    Home(),
     const MessagesPage(),
     const ProfilePage(),
     const CalenderPage(),
