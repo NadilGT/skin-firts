@@ -12,7 +12,8 @@ class DoctorsRepositoryImpl extends DoctorRepository{
     print("repo impl");
     try{
       final httpResponse = await apiService.getAllDoctors();
-      if (httpResponse.response.statusCode == 200) {
+      print(httpResponse);
+      if (httpResponse.response.statusCode == 202) {
         return DataSuccess(httpResponse.data);
       } else {
         print(httpResponse.response);

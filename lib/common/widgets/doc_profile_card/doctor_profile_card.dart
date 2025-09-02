@@ -40,7 +40,7 @@ class DoctorProfileCard extends StatelessWidget {
             ),
             child: CircleAvatar(
               radius: 28,
-              backgroundImage: AssetImage(imageUrl),
+              backgroundImage: NetworkImage(imageUrl),
               backgroundColor: Colors.grey[300],
             ),
           ),
