@@ -10,6 +10,7 @@ class BasicAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actionsPadding: EdgeInsets.only(right: 15),
       backgroundColor: Colors.transparent,
       elevation: 0,
       title: title ?? Text(""),

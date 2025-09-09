@@ -5,6 +5,7 @@ import 'package:skin_firts/common/widgets/doc_profile_card/doctor_profile_card.d
 import 'package:skin_firts/common/widgets/searchBar/custom_search_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/domain/entity/doctor_entity/doctor_entity.dart';
+import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
 
@@ -52,7 +53,7 @@ class Home extends StatelessWidget {
       child: Scaffold(
         body: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
-            if(state is DoctorsLoading){
+            if (state is DoctorsLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (state is DoctorsLoaded) {
               doctors = state.doctors;
@@ -117,7 +118,17 @@ class Home extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       children: [
-                        _menu("assets/images/doc.svg", "Doctors"),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorsListScreen(),
+                              ),
+                            );
+                          },
+                          child: _menu("assets/images/doc.svg", "Doctors"),
+                        ),
                         const SizedBox(width: 15),
                         _menu("assets/images/fav.svg", "Favorite"),
                         const SizedBox(width: 10),
@@ -146,7 +157,6 @@ class Home extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 30,
-                        vertical: 10,
                       ),
                       child: DoctorProfileCard(
                         doctorName: doctor.doctorName,
