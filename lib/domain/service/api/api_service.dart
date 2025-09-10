@@ -6,9 +6,9 @@ import 'package:skin_firts/data/models/doctor_model/doctor_model.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://10.47.201.150:3000")
+@RestApi(baseUrl: "http://192.168.1.166:3000")
 abstract class ApiService {
-  factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
+  factory ApiService(Dio dio) = _ApiService;
 
   @GET('/doctors')
   Future<HttpResponse<List<DoctorModel>>> getAllDoctors();

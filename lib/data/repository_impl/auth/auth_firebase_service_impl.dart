@@ -4,6 +4,8 @@ import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../core/storage/shared_pref_manager.dart';
+
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
   @override
   Future<DataState<LoginUserModel>> signIn(LoginUserModel loginUserModel) async {
@@ -13,6 +15,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
         password: loginUserModel.password,
       );
       print("wade goda");
+      final token = await FirebaseAuth.instance.currentUser?.getIdToken();
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("email",loginUserModel.email);
       return DataSuccess(loginUserModel);
