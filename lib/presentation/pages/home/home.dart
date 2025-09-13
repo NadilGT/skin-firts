@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,40 +12,60 @@ import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import 'widgets/calender_schedule_widget.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+
+  static Widget _iconButton(String asset) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.lightBlue,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      padding: const EdgeInsets.all(8),
+      width: 40,
+      height: 40,
+      child: SvgPicture.asset(asset),
+    );
+  }
+}
+
+class _HomeState extends State<Home> {
   // final List<DoctorModel> doctors = [
-  //   DoctorModel(
-  //     doctorName: "Dr. Olivia Turner, M.D.",
-  //     specialty: "Dermato-Endocrinology",
-  //     profilePic: "assets/images/profile.jpg",
-  //     rating: 5.0,
-  //     reviewCount: 60,
-  //   ),
-  //   DoctorModel(
-  //     doctorName: "Dr. Ethan Johnson, M.D.",
-  //     specialty: "Dermato-Endocrinology",
-  //     profilePic: "assets/images/profile.jpg",
-  //     rating: 5.0,
-  //     reviewCount: 60,
-  //   ),
-  //   DoctorModel(
-  //     doctorName: "Dr. Sophia Carter, M.D.",
-  //     specialty: "Dermato-Endocrinology",
-  //     profilePic: "assets/images/profile.jpg",
-  //     rating: 5.0,
-  //     reviewCount: 60,
-  //   ),
-  //   DoctorModel(
-  //     doctorName: "Dr. Olivia Turner, M.D.",
-  //     specialty: "Dermato-Endocrinology",
-  //     profilePic: "assets/images/profile.jpg",
-  //     rating: 5.0,
-  //     reviewCount: 60,
-  //   ),
-  // ];
   List<DoctorInfoModel> doctors = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initFirebaseMessaging(); // call async method here
+  }
+
+  Future<void> _initFirebaseMessaging() async {
+    final messaging = FirebaseMessaging.instance;
+
+    // Request permission
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    }
+
+    // Get initial token
+    String? token = await messaging.getToken();
+    print('FCM Token: $token');
+
+    // Listen for token refresh
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      print('FCM Token refreshed: $newToken');
+      // Save the new token to your backend if needed
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +122,9 @@ class Home extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            _iconButton("assets/images/notification.svg"),
+                            Home._iconButton("assets/images/notification.svg"),
                             const SizedBox(width: 10),
-                            _iconButton("assets/images/setting.svg"),
+                            Home._iconButton("assets/images/setting.svg"),
                           ],
                         ),
                       ],
@@ -129,8 +150,8 @@ class Home extends StatelessWidget {
                           },
                           child: _menu("assets/images/doc.svg", "Doctors"),
                         ),
-                        const SizedBox(width: 15),
-                        _menu("assets/images/fav.svg", "Favorite"),
+                        // const SizedBox(width: 15),
+                        // _menu("assets/images/fav.svg", "Favorite"),
                         const SizedBox(width: 10),
                         const Expanded(child: CustomSearchBar()),
                       ],
@@ -155,9 +176,7 @@ class Home extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final doctor = doctors[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: DoctorProfileCard(
                         doctorName: doctor.name,
                         specialty: doctor.special,
@@ -187,19 +206,6 @@ class Home extends StatelessWidget {
         ),
         Text(title, style: const TextStyle(color: AppColors.primaryColor)),
       ],
-    );
-  }
-
-  static Widget _iconButton(String asset) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.lightBlue,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      padding: const EdgeInsets.all(8),
-      width: 40,
-      height: 40,
-      child: SvgPicture.asset(asset),
     );
   }
 }

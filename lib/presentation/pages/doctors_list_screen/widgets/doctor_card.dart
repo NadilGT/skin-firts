@@ -7,6 +7,7 @@ class DoctorCard extends StatelessWidget {
   final String imageUrl;
   final double rating;
   final int reviewCount;
+  final bool isFavorite;
   final VoidCallback onclick;
 
   const DoctorCard({
@@ -15,7 +16,7 @@ class DoctorCard extends StatelessWidget {
     required this.specialty,
     required this.imageUrl,
     required this.rating,
-    required this.reviewCount, required this.onclick,
+    required this.reviewCount, required this.onclick, required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -88,7 +89,7 @@ class DoctorCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       _circleIcon(Icons.help_outline),
                       const SizedBox(width: 8),
-                      _circleIcon(Icons.favorite_border),
+                      _circleIcon(isFavorite ? Icons.favorite : Icons.favorite_border),
                     ],
                   ),
                 ],

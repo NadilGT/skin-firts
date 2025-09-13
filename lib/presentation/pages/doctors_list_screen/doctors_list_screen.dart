@@ -58,8 +58,6 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                       SizedBox(width: 5),
                       _appBarIconText("A--Z"),
                       SizedBox(width: 5),
-                      _appBarIcon(Icons.star_border),
-                      SizedBox(width: 5),
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -83,9 +81,6 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                         ),
                       ),
                       SizedBox(width: 5),
-                      _appBarIcon(Icons.girl_outlined),
-                      SizedBox(width: 5),
-                      _appBarIcon(Icons.boy),
                     ],
                   ),
                   Expanded(
@@ -99,6 +94,7 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                           imageUrl: doctor.profilePic,
                           rating: doctor.starts.toDouble(),
                           reviewCount: doctor.messages,
+                          isFavorite: doctor.favorite,
                           onclick: () {
                             Navigator.push(
                               context,
