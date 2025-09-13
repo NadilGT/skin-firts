@@ -1,11 +1,11 @@
-import 'package:skin_firts/domain/entity/doctor_entity/doctor_entity.dart';
+import '../../../../data/models/doctor_info_model/doctor_info_model.dart';
 
 abstract class DoctorsState {}
 
 class DoctorsLoading extends DoctorsState{}
 
 class DoctorsLoaded extends DoctorsState{
-  final List<DoctorEntity> doctors;
+  final List<DoctorInfoModel> doctors;
   DoctorsLoaded({required this.doctors});
 }
 

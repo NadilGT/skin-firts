@@ -11,6 +11,8 @@ class DoctorInfoEntity extends Equatable{
   final String profile;
   final String career;
   final String highlights;
+  final bool favorite;
+  final String profilePic;
 
   const DoctorInfoEntity({
     required this.name,
@@ -23,6 +25,8 @@ class DoctorInfoEntity extends Equatable{
     required this.profile,
     required this.career,
     required this.highlights,
+    required this.favorite,
+    required this.profilePic,
   });
   
   @override
@@ -37,5 +41,6 @@ class DoctorInfoEntity extends Equatable{
     profile,
     career,
     highlights,
+    favorite
   ];
 }

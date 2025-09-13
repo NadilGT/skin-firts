@@ -17,6 +17,8 @@ class DoctorInfoModel extends DoctorInfoEntity {
     required super.profile,
     required super.career,
     required super.highlights,
+    required super.favorite,
+    required super.profilePic,
   });
 
   factory DoctorInfoModel.fromJson(Map<String, dynamic> json) => _$DoctorInfoModelFromJson(json);

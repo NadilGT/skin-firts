@@ -4,11 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skin_firts/common/widgets/doc_profile_card/doctor_profile_card.dart';
 import 'package:skin_firts/common/widgets/searchBar/custom_search_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
-import 'package:skin_firts/domain/entity/doctor_entity/doctor_entity.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
 
+import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import 'widgets/calender_schedule_widget.dart';
 
 class Home extends StatelessWidget {
@@ -44,7 +44,7 @@ class Home extends StatelessWidget {
   //     reviewCount: 60,
   //   ),
   // ];
-  List<DoctorEntity> doctors = [];
+  List<DoctorInfoModel> doctors = [];
 
   @override
   Widget build(BuildContext context) {
@@ -159,11 +159,11 @@ class Home extends StatelessWidget {
                         horizontal: 30,
                       ),
                       child: DoctorProfileCard(
-                        doctorName: doctor.doctorName,
-                        specialty: doctor.specialty,
+                        doctorName: doctor.name,
+                        specialty: doctor.special,
                         imageUrl: doctor.profilePic,
-                        rating: doctor.rating,
-                        reviewCount: doctor.reviewCount,
+                        rating: doctor.starts.toDouble(),
+                        reviewCount: doctor.messages,
                       ),
                     );
                   }, childCount: doctors.length),

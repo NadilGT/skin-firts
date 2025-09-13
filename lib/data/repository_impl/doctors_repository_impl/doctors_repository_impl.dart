@@ -1,14 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
-import 'package:skin_firts/data/models/doctor_model/doctor_model.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/service_locator.dart';
 
+import '../../models/doctor_info_model/doctor_info_model.dart';
+
 class DoctorsRepositoryImpl extends DoctorRepository{
   final ApiService apiService = sl<ApiService>();
   @override
-  Future<DataState<List<DoctorModel>>> getAllDoctors() async {
+  Future<DataState<List<DoctorInfoModel>>> getAllDoctors() async {
     print("repo impl");
     try{
       final httpResponse = await apiService.getAllDoctors();

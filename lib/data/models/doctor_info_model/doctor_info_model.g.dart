@@ -18,6 +18,8 @@ DoctorInfoModel _$DoctorInfoModelFromJson(Map<String, dynamic> json) =>
       profile: json['profile'] as String,
       career: json['career'] as String,
       highlights: json['highlights'] as String,
+      favorite: json['favorite'] as bool,
+      profilePic: json['profilePic'] as String,
     );
 
 Map<String, dynamic> _$DoctorInfoModelToJson(DoctorInfoModel instance) =>
@@ -32,4 +34,6 @@ Map<String, dynamic> _$DoctorInfoModelToJson(DoctorInfoModel instance) =>
       'profile': instance.profile,
       'career': instance.career,
       'highlights': instance.highlights,
+      'favorite': instance.favorite,
+      'profilePic': instance.profilePic,
     };

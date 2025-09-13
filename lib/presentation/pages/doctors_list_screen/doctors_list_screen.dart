@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skin_firts/common/widgets/appBar/app_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
-import 'package:skin_firts/domain/entity/doctor_entity/doctor_entity.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/doctor_info.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
 
-import '../../../common/widgets/doc_profile_card/doctor_profile_card.dart';
+import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import 'widgets/doctor_card.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +18,7 @@ class DoctorsListScreen extends StatefulWidget {
 }
 
 class _DoctorsListScreenState extends State<DoctorsListScreen> {
-  List<DoctorEntity> doctors = [];
+  List<DoctorInfoModel> doctors = [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +67,11 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                       itemBuilder: (context, index) {
                         final doctor = doctors[index];
                         return DoctorCard(
-                          doctorName: doctor.doctorName,
-                          specialty: doctor.specialty,
+                          doctorName: doctor.name,
+                          specialty: doctor.special,
                           imageUrl: doctor.profilePic,
-                          rating: doctor.rating,
-                          reviewCount: doctor.reviewCount,
+                          rating: doctor.starts.toDouble(),
+                          reviewCount: doctor.messages,
                           onclick: () {
                             Navigator.push(
                               context,
