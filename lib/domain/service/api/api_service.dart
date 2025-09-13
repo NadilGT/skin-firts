@@ -17,4 +17,9 @@ abstract class ApiService {
   Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(
     @Query("name") String name,
   );
+
+  @PUT("/doctor-info/favorite")
+  Future<HttpResponse<DoctorInfoModel>> toggleFavorite(
+    @Query("name") String name,
+  );
 }

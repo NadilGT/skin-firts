@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skin_firts/domain/entity/doctor_info_entity/doctor_info_entity.dart';
+import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/bloc/doctor_info_cubit.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/bloc/doctor_info_state.dart';
+import 'package:skin_firts/service_locator.dart';
 
 import '../../../common/widgets/appBar/app_bar.dart';
 import '../../../core/constants/color_manager.dart';
+import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 
 class DoctorInfo extends StatefulWidget {
@@ -19,11 +22,17 @@ class DoctorInfo extends StatefulWidget {
 class _DoctorInfoState extends State<DoctorInfo> {
   DoctorInfoEntity? doctorInfo;
   bool isFavorite = false;
+
+  @override
+  void initState() {
+    isFavorite = widget.doctor.favorite;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
+      create: (context) => DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
       child: Scaffold(
         appBar: BasicAppbar(
           title: Text("Doctors"),
@@ -75,7 +84,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                 ),
                                 child: CircleAvatar(
                                   radius: 40,
-                                  backgroundImage: NetworkImage(widget.doctor.profilePic),
+                                  backgroundImage: NetworkImage(
+                                    widget.doctor.profilePic,
+                                  ),
                                   backgroundColor: Colors.grey[300],
                                 ),
                               ),
@@ -214,9 +225,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               Expanded(
                                 flex: 2,
                                 child: ElevatedButton(
-                                  onPressed: () {
-
-                                  },
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
                                     foregroundColor: Color(0xFF4A7BFF),
@@ -249,12 +258,30 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                 isFavorite
                                     ? Icons.favorite
                                     : Icons.favorite_outline,
-                                () {
-                                  setState(() {
-                                    isFavorite = !isFavorite;
-                                  });
+                                () async {
+                                  try {
+                                    final updatedDoctor =
+                                        await sl<ToggleFavoriteUsecase>().call(
+                                          params: widget.doctor.name,
+                                        );
+
+                                    if (updatedDoctor
+                                        is DataSuccess<DoctorInfoModel>) {
+                                      setState(() {
+                                        isFavorite =
+                                            updatedDoctor.data!.favorite;
+                                      });
+                                    } else {
+                                      print(
+                                        "Failed to toggle favorite: $updatedDoctor",
+                                      );
+                                    }
+                                  } catch (e) {
+                                    // ignore: avoid_print
+                                    print("Error toggling favorite: $e");
+                                  }
                                 },
-                                color: widget.doctor.favorite ? Colors.red : Colors.white,
+                                color: isFavorite ? Colors.red : Colors.white,
                               ),
                             ],
                           ),

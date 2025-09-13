@@ -3,12 +3,15 @@ import 'package:get_it/get_it.dart';
 import 'package:skin_firts/core/network/token_interceptor.dart';
 import 'package:skin_firts/data/repository_impl/auth/auth_firebase_service_impl.dart';
 import 'package:skin_firts/data/repository_impl/doctors_repository_impl/doctors_repository_impl.dart';
+import 'package:skin_firts/data/repository_impl/toggle_favorite_repository_impl/toggle_favorite_repository_impl.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
+import 'package:skin_firts/domain/repositories/toggle_favorite_repository/toggle_favorite_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
+import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 
 import 'core/storage/shared_pref_manager.dart';
 import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
@@ -63,5 +66,13 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<DoctorInfoRepository>(
     DoctorInfoRepositoryImpl()
+  );
+
+  sl.registerSingleton<ToggleFavoriteRepository>(
+    ToggleFavoriteRepositoryImpl()
+  );
+
+  sl.registerSingleton<ToggleFavoriteUsecase>(
+    ToggleFavoriteUsecase()
   );
 }
