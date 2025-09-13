@@ -19,6 +19,7 @@ class DoctorsListScreen extends StatefulWidget {
 
 class _DoctorsListScreenState extends State<DoctorsListScreen> {
   List<DoctorInfoModel> doctors = [];
+  bool showFavoritesOnly = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,11 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
             } else if (state is DoctorsLoaded) {
               doctors = state.doctors;
             }
+
+            final filteredDoctors = showFavoritesOnly
+                ? doctors.where((doc) => doc.favorite == true).toList()
+                : doctors;
+
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
@@ -54,7 +60,28 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                       SizedBox(width: 5),
                       _appBarIcon(Icons.star_border),
                       SizedBox(width: 5),
-                      _appBarIcon(Icons.favorite_border_rounded),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            showFavoritesOnly = !showFavoritesOnly;
+                          });
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.lightBlue,
+                          ),
+                          child: Icon(
+                            showFavoritesOnly
+                                ? Icons
+                                      .favorite
+                                : Icons.favorite_border_rounded,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                      ),
                       SizedBox(width: 5),
                       _appBarIcon(Icons.girl_outlined),
                       SizedBox(width: 5),
@@ -63,9 +90,9 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: doctors.length,
+                      itemCount: filteredDoctors.length,
                       itemBuilder: (context, index) {
-                        final doctor = doctors[index];
+                        final doctor = filteredDoctors[index];
                         return DoctorCard(
                           doctorName: doctor.name,
                           specialty: doctor.special,
