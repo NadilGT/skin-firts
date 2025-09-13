@@ -2,14 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
+import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import 'package:skin_firts/data/models/doctor_model/doctor_model.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://192.168.1.166:3000")
+@RestApi(baseUrl: "http://10.197.161.75:3000")
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
 
   @GET('/doctors')
   Future<HttpResponse<List<DoctorModel>>> getAllDoctors();
+
+  @GET("/doctor-info")
+  Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(
+    @Query("name") String name,
+  );
 }

@@ -6,10 +6,13 @@ import 'package:skin_firts/data/repository_impl/doctors_repository_impl/doctors_
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
+import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
 
 import 'core/storage/shared_pref_manager.dart';
+import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
+import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -52,5 +55,13 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<DoctorsUseCase>(
     DoctorsUseCase()
+  );
+
+  sl.registerSingleton<DoctorInfoUseCase>(
+    DoctorInfoUseCase()
+  );
+
+  sl.registerSingleton<DoctorInfoRepository>(
+    DoctorInfoRepositoryImpl()
   );
 }

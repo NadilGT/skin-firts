@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_conditional_assignment
+
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:skin_firts/core/storage/shared_pref_manager.dart';
@@ -11,7 +13,7 @@ class FirebaseAuthInterceptor extends Interceptor{
   Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler)async{
     String? accessToken = await sharedPrefManager.getToken();
 
-    if (accessToken == null || await isTokenExpired()) {
+    if (accessToken == null) {
       accessToken = await refreshToken();
     }
 
@@ -19,7 +21,7 @@ class FirebaseAuthInterceptor extends Interceptor{
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    super.onRequest(options, handler);
+    handler.next(options);
   }
 
   Future<bool> isTokenExpired() async {
@@ -33,16 +35,19 @@ class FirebaseAuthInterceptor extends Interceptor{
   }
 
   Future<String?> refreshToken() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        String? newToken = await user.getIdToken(true);
-        await sharedPrefManager.saveToken(newToken!);
-        return newToken;
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String? newToken = await user.getIdToken(true);
+      if (newToken != null) {
+        await sharedPrefManager.saveToken(newToken);
       }
-    } catch (e) {
-      print("Token refresh failed: $e");
+      return newToken;
     }
-    return null;
+  } catch (e) {
+    print("Token refresh failed: $e");
   }
+  return null;
+}
+
 }

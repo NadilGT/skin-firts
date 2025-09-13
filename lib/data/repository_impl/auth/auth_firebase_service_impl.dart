@@ -15,7 +15,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
         password: loginUserModel.password,
       );
       print("wade goda");
-      final token = await FirebaseAuth.instance.currentUser?.getIdToken();
+      final token = await FirebaseAuth.instance.currentUser?.getIdToken(true);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("email",loginUserModel.email);
       return DataSuccess(loginUserModel);
