@@ -9,7 +9,6 @@ import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
 import 'package:skin_firts/presentation/pages/home/home.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_cubit.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_state.dart';
-import 'package:skin_firts/presentation/pages/welcome_screen/welcome_screen.dart';
 
 class SignIn extends StatelessWidget {
   SignIn({super.key});
