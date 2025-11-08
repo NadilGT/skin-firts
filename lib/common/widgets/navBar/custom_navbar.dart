@@ -23,7 +23,7 @@ class _MainNavigationState extends State<MainNavigation> {
     Home(),
     const MessagesPage(),
     const ProfilePage(),
-    const CalenderPage(),
+    const CalendarPage(),
   ];
 
   @override

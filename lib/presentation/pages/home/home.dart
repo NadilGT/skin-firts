@@ -8,6 +8,8 @@ import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
+import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
+import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
 
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import 'widgets/calender_schedule_widget.dart';
@@ -33,19 +35,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // final List<DoctorModel> doctors = [
   List<DoctorInfoModel> doctors = [];
 
   @override
   void initState() {
     super.initState();
-    _initFirebaseMessaging(); // call async method here
+    _initFirebaseMessaging();
   }
 
   Future<void> _initFirebaseMessaging() async {
     final messaging = FirebaseMessaging.instance;
 
-    // Request permission
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       badge: true,
@@ -56,14 +56,11 @@ class _HomeState extends State<Home> {
       print('User granted permission');
     }
 
-    // Get initial token
     String? token = await messaging.getToken();
     print('FCM Token: $token');
 
-    // Listen for token refresh
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       print('FCM Token refreshed: $newToken');
-      // Save the new token to your backend if needed
     });
   }
 
@@ -122,9 +119,33 @@ class _HomeState extends State<Home> {
                         ),
                         Row(
                           children: [
-                            Home._iconButton("assets/images/notification.svg"),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MessagesPage(),
+                                  ),
+                                );
+                              },
+                              child: Home._iconButton(
+                                "assets/images/notification.svg",
+                              ),
+                            ),
                             const SizedBox(width: 10),
-                            Home._iconButton("assets/images/setting.svg"),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProfilePage(),
+                                  ),
+                                );
+                              },
+                              child: Home._iconButton(
+                                "assets/images/setting.svg",
+                              ),
+                            ),
                           ],
                         ),
                       ],
