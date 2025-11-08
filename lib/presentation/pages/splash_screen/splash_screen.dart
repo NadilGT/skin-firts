@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
+import 'package:skin_firts/presentation/pages/home/home.dart';
 import 'package:skin_firts/presentation/pages/welcome_screen/welcome_screen.dart';
+
+import '../../../common/widgets/navBar/custom_navbar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -52,9 +56,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> redirect() async {
     await Future.delayed(Duration(seconds: 2));
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => WelcomeScreen()),
-    );
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString("email");
+
+    if (savedEmail != null && savedEmail.isNotEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainNavigation()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      );
+    }
   }
 }
