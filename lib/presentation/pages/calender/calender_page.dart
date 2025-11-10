@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-// Model for appointment
+import '../book_appointment/book_appointment_page.dart';
+import 'bloc/appoinment_cubit.dart';
+
 class Appointment {
   final String doctorName;
   final String specialty;
   final String time;
-  final String status; // 'confirmed', 'pending', 'completed', 'cancelled'
+  final String status;
   final String doctorImage;
 
   Appointment({
@@ -119,6 +122,29 @@ class _CalendarPageState extends State<CalendarPage> {
         return Icons.cancel;
       default:
         return Icons.info;
+    }
+  }
+
+  void _navigateToBookAppointment() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => AppointmentCubit(),
+          child: const BookAppointmentPage(
+            // You can pass doctor details if needed
+            // doctorId: 'doc_123',
+            // doctorName: 'Dr. John Smith',
+            // doctorSpecialty: 'Cardiologist',
+          ),
+        ),
+      ),
+    );
+
+    // Refresh appointments if booking was successful
+    if (result == true) {
+      _loadAppointments();
+      _loadAppointmentsForDay(_selectedDay);
     }
   }
 
@@ -293,17 +319,18 @@ class _CalendarPageState extends State<CalendarPage> {
                     },
                   ),
             
-            const SizedBox(height: 80), // Space for FAB
+            const SizedBox(height: 80),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Navigate to book new appointment
-        },
+        onPressed: _navigateToBookAppointment,
         backgroundColor: const Color(0xFF2E5BFF),
-        icon: const Icon(Icons.add, color: Colors.white,),
-        label: const Text('Book Appointment', style: TextStyle(color: Colors.white),),
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text(
+          'Book Appointment',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

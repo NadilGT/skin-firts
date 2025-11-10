@@ -10,7 +10,9 @@ import '../../../common/widgets/appBar/app_bar.dart';
 import '../../../core/constants/color_manager.dart';
 import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
-import '../DoctorSchedulePage/doctor_schedule_page.dart' show DoctorSchedulePage;
+import '../DoctorSchedulePage/doctor_schedule_page.dart'
+    show DoctorSchedulePage;
+import '../calender/bloc/appoinment_cubit.dart';
 
 class DoctorInfo extends StatefulWidget {
   final DoctorInfoModel doctor;
@@ -240,26 +242,32 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              DoctorSchedulePage(
-                                                doctorName: doctorInfo!.name,
-                                                doctorSpecialty:
-                                                    doctorInfo!.special,
-                                                doctorImage:
-                                                    doctorInfo!.profilePic,
-                                                doctorSchedule: {
-                                                  DateTime(2025, 11, 9): [
-                                                    '09:00 AM',
-                                                    '10:00 AM',
-                                                    '02:00 PM',
-                                                  ],
-                                                  DateTime(2025, 11, 10): [
-                                                    '11:00 AM',
-                                                    '01:00 PM',
-                                                    '04:00 PM',
-                                                  ],
-                                                },
-                                              ),
+                                          builder: (context) => BlocProvider(
+                                            create: (context) =>
+                                                sl<
+                                                  AppointmentCubit
+                                                >(), // or your DI method
+                                            child: DoctorSchedulePage(
+                                              doctorId: doctorInfo!.name,
+                                              doctorName: doctorInfo!.name,
+                                              doctorSpecialty:
+                                                  doctorInfo!.special,
+                                              doctorImage:
+                                                  doctorInfo!.profilePic,
+                                              doctorSchedule: {
+                                                DateTime(2025, 11, 9): [
+                                                  '09:00 AM',
+                                                  '10:00 AM',
+                                                  '02:00 PM',
+                                                ],
+                                                DateTime(2025, 11, 10): [
+                                                  '11:00 AM',
+                                                  '01:00 PM',
+                                                  '04:00 PM',
+                                                ],
+                                              },
+                                            ),
+                                          ),
                                         ),
                                       );
                                     },
