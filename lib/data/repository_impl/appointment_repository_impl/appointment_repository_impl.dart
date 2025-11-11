@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/domain/entity/appointment_entity/appointment_entity.dart';
@@ -9,31 +10,35 @@ import '../../models/appointment/appointment_model.dart';
 
 class AppointmentRepositoryImpl extends AppointmentRepository {
   final ApiService apiService = sl<ApiService>();
-  
+
   @override
-  Future<DataState<Appointment>> createAppointment(AppointmentModel appointment) async {
+  Future<DataState<Appointment>> createAppointment(
+    AppointmentModel appointment,
+  ) async {
     print("appointment repo wada");
     try {
       final httpResponse = await apiService.createAppointment(appointment);
       print("Response status: ${httpResponse.response.statusCode}");
       print("Response data: ${httpResponse.data}");
-      
+
       // Check for 201 (Created) or 200 status code
-      if (httpResponse.response.statusCode == 201 || 
+      if (httpResponse.response.statusCode == 201 ||
           httpResponse.response.statusCode == 200) {
-        
         // Extract the appointment data from the wrapped response
         final responseData = httpResponse.data;
-        
-        // The API returns: {"appointment": {...}, "message": "..."}
+
+        // The API returns: {"appointment": {...}, "message": "...}
         // We need to extract the "appointment" object
         if (responseData != null && responseData is Map<String, dynamic>) {
           if (responseData.containsKey('appointment')) {
-            final appointmentData = responseData['appointment'] as Map<String, dynamic>;
-            
+            final appointmentData =
+                responseData['appointment'] as Map<String, dynamic>;
+
             // Parse the appointment from the extracted data
-            final createdAppointment = AppointmentModel.fromJson(appointmentData);
-            
+            final createdAppointment = AppointmentModel.fromJson(
+              appointmentData,
+            );
+
             return DataSuccess(createdAppointment);
           } else {
             // If response doesn't have 'appointment' key, try parsing directly
@@ -45,14 +50,39 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
         }
       } else {
         print("Error response: ${httpResponse.response}");
-        return DataFailed("Data Fetching Failed - Status: ${httpResponse.response.statusCode}");
+        return DataFailed(
+          "Data Fetching Failed - Status: ${httpResponse.response.statusCode}",
+        );
       }
     } on DioException catch (e) {
       print("DioException: ${e.message}");
       print("Response: ${e.response?.data}");
-      return DataFailed(e.response?.data?.toString() ?? e.message ?? "Unknown error");
+      return DataFailed(
+        e.response?.data?.toString() ?? e.message ?? "Unknown error",
+      );
     } catch (e) {
       print("Exception: $e");
+      return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<List<AppointmentModel>>> getAllAppointments() async {
+    try {
+      final response = await apiService.getAllAppointments();
+      
+      if (response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      } else {
+        return DataFailed(
+          'Failed to fetch appointments - Status: ${response.response.statusCode} - ${response.response.statusMessage ?? ''}',
+        );
+      }
+    } on DioException catch (e) {
+      return DataFailed(
+        e.response?.data?.toString() ?? e.message ?? "Unknown error",
+      );
+    } catch (e) {
       return DataFailed(e.toString());
     }
   }

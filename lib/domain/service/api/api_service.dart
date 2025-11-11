@@ -29,4 +29,7 @@ abstract class ApiService {
   Future<HttpResponse<Map<String, dynamic>>> createAppointment(
     @Body() AppointmentModel appointment,
   );
+
+  @GET('/findAll/appointments')
+  Future<HttpResponse<List<AppointmentModel>>> getAllAppointments();
 }

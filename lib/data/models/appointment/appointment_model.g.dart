@@ -37,7 +37,7 @@ Map<String, dynamic> _$AppointmentModelToJson(AppointmentModel instance) =>
       'doctorId': instance.doctorId,
       'doctorName': instance.doctorName,
       'doctorSpecialty': instance.doctorSpecialty,
-      'appointmentDate': DateFormat('yyyy-MM-dd').format(instance.appointmentDate),
+      'appointmentDate': instance.appointmentDate.toIso8601String(),
       'timeSlot': instance.timeSlot,
       'notes': instance.notes,
       'status': instance.status,
