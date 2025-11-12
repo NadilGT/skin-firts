@@ -257,12 +257,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                               doctorImage:
                                                   doctorInfo!.profilePic,
                                               doctorSchedule: {
-                                                DateTime(2025, 11, 9): [
+                                                DateTime(2025, 11, 12): [
                                                   '09:00 AM',
                                                   '10:00 AM',
                                                   '02:00 PM',
                                                 ],
-                                                DateTime(2025, 11, 10): [
+                                                DateTime(2025, 11, 12): [
                                                   '11:00 AM',
                                                   '01:00 PM',
                                                   '04:00 PM',

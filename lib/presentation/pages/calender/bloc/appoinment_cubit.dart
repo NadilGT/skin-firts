@@ -7,7 +7,7 @@ import '../../../../data/models/appointment/appointment_model.dart';
 import 'appointment_state.dart';
 
 class AppointmentCubit extends Cubit<AppointmentState> {
-  AppointmentCubit() : super(AppointmentInitial());
+  AppointmentCubit({required AppointmentUsecase appointmentUsecase}) : super(AppointmentInitial());
 
   Future<void> createAppointment(AppointmentModel appointment) async {
     emit(AppointmentLoading());

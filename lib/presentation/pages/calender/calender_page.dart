@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../domain/usecases/appointment_usecase/appointment_usecase.dart';
 import '../../../domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import '../book_appointment/book_appointment_page.dart';
 import 'package:skin_firts/service_locator.dart';
+import 'bloc/appoinment_cubit.dart';
 import 'bloc1/appointments_cubit.dart';
 import 'bloc1/appointments_state.dart';
 
@@ -117,22 +119,23 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   }
 
   void _navigateToBookAppointment() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => AppointmentCubits(
-            getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
-          ),
-          child: const BookAppointmentPage(),
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => BlocProvider(
+        create: (context) => AppointmentCubit(
+          appointmentUsecase: sl<AppointmentUsecase>(),
         ),
+        child: const BookAppointmentPage(),
       ),
-    );
+    ),
+  );
 
-    if (result == true) {
-      context.read<AppointmentCubits>().refreshAppointments();
-    }
+  if (result == true) {
+    // Refresh the appointments list after booking
+    context.read<AppointmentCubits>().refreshAppointments();
   }
+}
 
   @override
   Widget build(BuildContext context) {

@@ -94,7 +94,7 @@ Future<void> initilizeDependencies()async{
     GetAllAppointmentsUsecase(),
   );
 
-  sl.registerFactory<AppointmentCubit>(() => AppointmentCubit());
+  sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
 
   sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
 
