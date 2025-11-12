@@ -1,4 +1,4 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print
 import 'package:dio/dio.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/domain/entity/appointment_entity/appointment_entity.dart';
@@ -21,30 +21,26 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
       print("Response status: ${httpResponse.response.statusCode}");
       print("Response data: ${httpResponse.data}");
 
-      // Check for 201 (Created) or 200 status code
       if (httpResponse.response.statusCode == 201 ||
           httpResponse.response.statusCode == 200) {
-        // Extract the appointment data from the wrapped response
         final responseData = httpResponse.data;
 
-        // The API returns: {"appointment": {...}, "message": "...}
-        // We need to extract the "appointment" object
+        // ignore: unnecessary_type_check, unnecessary_null_comparison
         if (responseData != null && responseData is Map<String, dynamic>) {
           if (responseData.containsKey('appointment')) {
             final appointmentData =
                 responseData['appointment'] as Map<String, dynamic>;
 
-            // Parse the appointment from the extracted data
             final createdAppointment = AppointmentModel.fromJson(
               appointmentData,
             );
 
             return DataSuccess(createdAppointment);
           } else {
-            // If response doesn't have 'appointment' key, try parsing directly
             final createdAppointment = AppointmentModel.fromJson(responseData);
             return DataSuccess(createdAppointment);
           }
+        // ignore: dead_code
         } else {
           return DataFailed("Invalid response format");
         }

@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:skin_firts/domain/entity/appointment_entity/appointment_entity.dart';
 

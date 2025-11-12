@@ -1,10 +1,10 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../../../core/storage/shared_pref_manager.dart';
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
   @override
@@ -14,7 +14,6 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
         email: loginUserModel.email,
         password: loginUserModel.password,
       );
-      print("wade goda");
       final token = await FirebaseAuth.instance.currentUser?.getIdToken(true);
       final prefs = await SharedPreferences.getInstance();
       prefs.setString("email",loginUserModel.email);

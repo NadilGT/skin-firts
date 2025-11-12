@@ -5,13 +5,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skin_firts/common/widgets/doc_profile_card/doctor_profile_card.dart';
 import 'package:skin_firts/common/widgets/searchBar/custom_search_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
+import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
 import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
 import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
+import 'package:skin_firts/service_locator.dart';
 
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
+import '../calender/bloc1/appointments_cubit.dart';
 import 'widgets/calender_schedule_widget.dart';
 
 class Home extends StatefulWidget {
@@ -66,8 +69,17 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DoctorsCubit()..getDoctors(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => DoctorsCubit()..getDoctors(),
+        ),
+        BlocProvider(
+          create: (context) => AppointmentCubits(
+            getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
+          )..getAllAppointments(),
+        ),
+      ],
       child: Scaffold(
         body: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {

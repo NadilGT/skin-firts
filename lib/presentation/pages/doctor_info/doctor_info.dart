@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skin_firts/domain/entity/doctor_info_entity/doctor_info_entity.dart';
@@ -364,6 +366,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
     );
   }
 
+  // ignore: unused_element
   Widget _appBarIconText(String text) {
     return Container(
       width: 60,

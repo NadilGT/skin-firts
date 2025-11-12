@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -59,6 +61,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     });
   }
 
+  // ignore: unused_element
   List<DateTime> _getScheduledDays() {
     return widget.doctorSchedule.keys.toList();
   }
