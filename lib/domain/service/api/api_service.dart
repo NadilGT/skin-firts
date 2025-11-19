@@ -3,10 +3,11 @@ import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
+import '../../../data/models/appointment/appointment_model.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://10.197.161.75:3000")
+@RestApi(baseUrl: "http://10.233.30.150:3000")
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
 
@@ -22,4 +23,12 @@ abstract class ApiService {
   Future<HttpResponse<DoctorInfoModel>> toggleFavorite(
     @Query("name") String name,
   );
+
+  @POST('/create/appointment')
+  Future<HttpResponse<Map<String, dynamic>>> createAppointment(
+    @Body() AppointmentModel appointment,
+  );
+
+  @GET('/findAll/appointments')
+  Future<HttpResponse<List<AppointmentModel>>> getAllAppointments();
 }

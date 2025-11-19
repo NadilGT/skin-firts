@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
-import 'package:skin_firts/presentation/pages/home/home.dart';
 import 'package:skin_firts/presentation/pages/welcome_screen/welcome_screen.dart';
 
 import '../../../common/widgets/navBar/custom_navbar.dart';

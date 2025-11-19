@@ -8,14 +8,20 @@ import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
 import 'package:skin_firts/domain/repositories/toggle_favorite_repository/toggle_favorite_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
+import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
+import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.dart';
 
 import 'core/storage/shared_pref_manager.dart';
+import 'data/repository_impl/appointment_repository_impl/appointment_repository_impl.dart';
 import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
+import 'domain/repositories/appointment_repository/appointment_repository.dart';
 import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
+import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
+import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -75,4 +81,21 @@ Future<void> initilizeDependencies()async{
   sl.registerSingleton<ToggleFavoriteUsecase>(
     ToggleFavoriteUsecase()
   );
+
+  sl.registerSingleton<AppointmentRepository>(
+    AppointmentRepositoryImpl(),
+  );
+
+  sl.registerSingleton<AppointmentUsecase>(
+    AppointmentUsecase(),
+  );
+
+    sl.registerSingleton<GetAllAppointmentsUsecase>(
+    GetAllAppointmentsUsecase(),
+  );
+
+  sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
+
+  sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
+
 }
