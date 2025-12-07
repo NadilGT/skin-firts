@@ -1,9 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String _userName = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.reload();
+      final updatedUser = FirebaseAuth.instance.currentUser;
+      setState(() {
+        _userName = updatedUser?.displayName ?? 'No name';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +92,9 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            const Text(
-              'John Doe',
-              style: TextStyle(
+            Text(
+              _userName,
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,

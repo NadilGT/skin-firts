@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/domain/entity/doctor_info_entity/doctor_info_entity.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/bloc/doctor_info_cubit.dart';
@@ -12,6 +13,7 @@ import '../../../common/widgets/appBar/app_bar.dart';
 import '../../../core/constants/color_manager.dart';
 import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
+import '../../../domain/repositories/doctor_schedule/DoctorScheduleRepository.dart';
 import '../DoctorSchedulePage/doctor_schedule_page.dart'
     show DoctorSchedulePage;
 import '../calender/bloc/appoinment_cubit.dart';
@@ -240,54 +242,83 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                     ),
                                   ),
                                   child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BlocProvider(
-                                            create: (context) =>
-                                                sl<
-                                                  AppointmentCubit
-                                                >(), // or your DI method
-                                            child: DoctorSchedulePage(
-                                              doctorId: doctorInfo!.name,
-                                              doctorName: doctorInfo!.name,
-                                              doctorSpecialty:
-                                                  doctorInfo!.special,
-                                              doctorImage:
-                                                  doctorInfo!.profilePic,
-                                              doctorSchedule: {
-                                                DateTime(2025, 11, 12): [
-                                                  '09:00 AM',
-                                                  '10:00 AM',
-                                                  '02:00 PM',
-                                                ],
-                                                DateTime(2025, 11, 12): [
-                                                  '11:00 AM',
-                                                  '01:00 PM',
-                                                  '04:00 PM',
-                                                ],
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                                    onTap: () async {
+                                      // Show loading indicator
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (context) =>
+                                            Center(child: CircularProgressIndicator()),
                                       );
+
+                                      try {
+                                        // Replace with your actual repository / API client
+                                        final repository = DoctorScheduleRepository(
+                                          baseUrl: ApiConstants.baseURL,
+                                        );
+
+                                        final scheduleResponse =
+                                            await repository.getDoctorSchedule(
+                                          doctorInfo!.name,
+                                        );
+
+                                        // Close loading dialog
+                                        if (mounted) Navigator.pop(context);
+
+                                        // Navigate to schedule page with fetched data
+                                        if (mounted) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => BlocProvider(
+                                                create: (context) =>
+                                                    sl<AppointmentCubit>(),
+                                                child: DoctorSchedulePage(
+                                                  doctorId: doctorInfo!.name,
+                                                  doctorName: doctorInfo!.name,
+                                                  doctorSpecialty:
+                                                      doctorInfo!.special,
+                                                  doctorImage:
+                                                      doctorInfo!.profilePic,
+                                                  doctorSchedule:
+                                                      scheduleResponse.schedules,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        // Close loading dialog
+                                        if (mounted) Navigator.pop(context);
+
+                                        // Show error message
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content:
+                                                  Text('Failed to load schedule: $e'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      }
                                     },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.calendar_today, size: 18),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Schedule',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                     child: Row(
+                                       mainAxisAlignment:
+                                           MainAxisAlignment.center,
+                                       children: [
+                                         Icon(Icons.calendar_today, size: 18),
+                                         SizedBox(width: 8),
+                                         Text(
+                                           'Schedule',
+                                           style: TextStyle(
+                                             fontWeight: FontWeight.bold,
+                                           ),
+                                         ),
+                                       ],
+                                     ),
+                                   ),
                                 ),
                               ),
                               SizedBox(width: 12),
