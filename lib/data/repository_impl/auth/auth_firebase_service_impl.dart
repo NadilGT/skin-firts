@@ -3,6 +3,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
+import 'package:skin_firts/data/models/sign_up_user_model/sign_up_user_model.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -30,6 +31,26 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
       // ignore: avoid_print
       print(message);
 
+      return DataFailed(message);
+    }
+  }
+
+  @override
+  Future<DataState<SignUpUserModel>> signUp(SignUpUserModel signUpUserModel) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: signUpUserModel.email,
+        password: signUpUserModel.password,
+      );
+      await userCredential.user?.updateDisplayName(signUpUserModel.name);
+      return DataSuccess(signUpUserModel);
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'weak-password') {
+        message = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'The account already exists for that email.';
+      }
       return DataFailed(message);
     }
   }

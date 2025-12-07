@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/domain/entity/doctor_info_entity/doctor_info_entity.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/bloc/doctor_info_cubit.dart';
@@ -253,7 +254,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       try {
                                         // Replace with your actual repository / API client
                                         final repository = DoctorScheduleRepository(
-                                          baseUrl: 'http://10.107.187.75:3000',
+                                          baseUrl: ApiConstants.baseURL,
                                         );
 
                                         final scheduleResponse =

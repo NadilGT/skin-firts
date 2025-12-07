@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
                                 );
                               },
                               child: Home._iconButton(
-                                "assets/images/notification.svg",
+                                "assets/images/doc.svg",
                               ),
                             ),
                             const SizedBox(width: 10),

@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skin_firts/common/widgets/appBar/app_bar.dart';
 import 'package:skin_firts/common/widgets/button/basic_app_button.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
-import 'package:skin_firts/core/constants/text_manager.dart';
-import 'package:skin_firts/data/models/login_user_model/login_user_model.dart';
+import 'package:skin_firts/data/models/sign_up_user_model/sign_up_user_model.dart';
 import 'package:skin_firts/presentation/pages/home/home.dart';
-import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_cubit.dart';
-import 'package:skin_firts/presentation/pages/sign_in/sign_in_cubit/sign_in_state.dart';
-import 'package:skin_firts/presentation/pages/sign_up/sign_up.dart';
+import 'package:skin_firts/presentation/pages/sign_up/sign_up_cubit/sign_up_cubit.dart';
+import 'package:skin_firts/presentation/pages/sign_up/sign_up_cubit/sign_up_state.dart';
 
-class SignIn extends StatelessWidget {
-  SignIn({super.key});
+class SignUp extends StatelessWidget {
+  SignUp({super.key});
 
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignInCubit(),
+      create: (context) => SignUpCubit(),
       child: Scaffold(
-        appBar: BasicAppbar(title: Text("Log In")),
-        body: BlocConsumer<SignInCubit, SignInState>(
+        appBar: BasicAppbar(title: Text("Sign Up")),
+        body: BlocConsumer<SignUpCubit, SignUpState>(
           listener: (context, state) {
-            if (state is SignInSuccess) {
+            if (state is SignUpSuccess) {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => Home()),
                 (route) => false,
               );
-            } else if (state is SignInFailure) {
+            } else if (state is SignUpFailure) {
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text(state.error)));
@@ -48,25 +46,27 @@ class SignIn extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome",
+                      "Create Account",
                       style: TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      TextManager.welcomeText,
-                      style: TextStyle(
-                        color: AppColors.welcomeTextColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                     SizedBox(height: 50),
                     Text(
-                      "Email or Mobile Number",
+                      "Full Name",
+                      style: TextStyle(
+                        color: AppColors.welcomeTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    _nameField(context),
+                    SizedBox(height: 20),
+                    Text(
+                      "Email",
                       style: TextStyle(
                         color: AppColors.welcomeTextColor,
                         fontSize: 20,
@@ -86,24 +86,11 @@ class SignIn extends StatelessWidget {
                     ),
                     SizedBox(height: 15),
                     _passwordField(context),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Forget Password",
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        state is SignInLoading
+                        state is SignUpLoading
                             ? Center(
                                 child: CircularProgressIndicator(
                                   color: AppColors.primaryColor,
@@ -111,44 +98,16 @@ class SignIn extends StatelessWidget {
                               )
                             : BasicAppButton(
                                 onPressed: () {
-                                  context.read<SignInCubit>().signIn(
-                                    LoginUserModel(
+                                  context.read<SignUpCubit>().signUp(
+                                    SignUpUserModel(
+                                      name: _name.text.trim(),
                                       email: _email.text.trim(),
                                       password: _password.text.trim(),
                                     ),
                                   );
                                 },
-                                title: "Log In",
+                                title: "Sign Up",
                               ),
-                        SizedBox(height: 15),
-                        Text("or sign up with"),
-                        SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _signUpOptions("assets/images/google.svg"),
-                            SizedBox(width: 10),
-                            _signUpOptions("assets/images/facebook.svg"),
-                            SizedBox(width: 10),
-                            _signUpOptions("assets/images/fingerprint.svg"),
-                          ],
-                        ),
-                        SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Don't have an account?"),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-                              },
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(color: AppColors.primaryColor),
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ],
@@ -158,6 +117,15 @@ class SignIn extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Widget _nameField(BuildContext context) {
+    return TextField(
+      controller: _name,
+      decoration: InputDecoration(
+        hintText: 'Enter Full Name',
+      ).applyDefaults(Theme.of(context).inputDecorationTheme),
     );
   }
 
@@ -176,19 +144,6 @@ class SignIn extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'Password',
       ).applyDefaults(Theme.of(context).inputDecorationTheme),
-    );
-  }
-
-  Widget _signUpOptions(String icon) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.lightBlue,
-      ),
-      width: 50,
-      height: 50,
-      child: SvgPicture.asset(icon),
     );
   }
 }

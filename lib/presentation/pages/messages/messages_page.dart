@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:skin_firts/core/constants/api_constants.dart';
 
 // Models
 class Medicine {
@@ -64,7 +65,7 @@ class OrderLineItem {
 
 // API Service
 class MedicineApiService {
-  static const String baseUrl = 'http://10.107.187.75:3000';
+  static const String baseUrl = ApiConstants.baseURL;
 
   static Future<Map<String, dynamic>> searchMedicines({
     String? searchTerm,

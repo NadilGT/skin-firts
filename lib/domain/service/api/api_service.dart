@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
+import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: "http://10.233.30.150:3000")
+@RestApi(baseUrl: ApiConstants.baseURL)
 abstract class ApiService {
   factory ApiService(Dio dio) = _ApiService;
 

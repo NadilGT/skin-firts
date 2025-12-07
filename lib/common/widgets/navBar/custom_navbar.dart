@@ -3,7 +3,7 @@ import 'package:skin_firts/presentation/pages/calender/calender_page.dart';
 import 'package:skin_firts/presentation/pages/home/home.dart';
 import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
 
-import '../../../presentation/pages/messages/messages_page.dart';
+import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -123,7 +123,7 @@ class _MainNavigationState extends State<MainNavigation> {
       case 0:
         return "Home";
       case 1:
-        return "Messages";
+        return "Order";
       case 2:
         return "Profile";
       case 3:

@@ -12,6 +12,7 @@ import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointme
 import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
+import 'package:skin_firts/domain/usecases/sign_up_usecase/sign_up_use_case.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.dart';
 
@@ -56,6 +57,10 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<LoginUseCase>(
     LoginUseCase()
+  );
+
+  sl.registerSingleton<SignUpUseCase>(
+    SignUpUseCase()
   );
 
   sl.registerSingleton<DoctorRepository>(
