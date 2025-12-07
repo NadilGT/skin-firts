@@ -18,18 +18,19 @@ class DayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool shouldHighlight = dayData.isSelected || isCurrentlySelected;
-    
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 50,
         height: 70,
         decoration: BoxDecoration(
-          color: shouldHighlight ? Colors.blue : Colors.white,
+          color: shouldHighlight
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              // ignore: deprecated_member_use
               color: Colors.black.withOpacity(0.1),
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -44,14 +45,18 @@ class DayButton extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: shouldHighlight ? Colors.white : Colors.black,
+                color: shouldHighlight
+                    ? Colors.white
+                    : Theme.of(context).textTheme.bodyLarge?.color,
               ),
             ),
             Text(
               dayData.weekday,
               style: TextStyle(
                 fontSize: 12,
-                color: shouldHighlight ? Colors.white70 : Colors.grey[600],
+                color: shouldHighlight
+                    ? Colors.white70
+                    : Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
           ],

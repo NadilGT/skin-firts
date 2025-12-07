@@ -97,8 +97,8 @@ class _CalendarScheduleWidgetState extends State<CalendarScheduleWidget> {
       height: widget.height,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8E8FF),
-        border: Border.all(color: Colors.blue, width: 2),
+        color: Theme.of(context).cardColor,
+        border: Border.all(color: Theme.of(context).primaryColor, width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: BlocBuilder<AppointmentCubits, AppointmentsState>(
@@ -116,7 +116,7 @@ class _CalendarScheduleWidgetState extends State<CalendarScheduleWidget> {
                 children: [
                   Text(
                     'Error: ${state.message}',
-                    style: const TextStyle(color: Colors.red),
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(

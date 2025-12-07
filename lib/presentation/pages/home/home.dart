@@ -24,16 +24,19 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 
-  static Widget _iconButton(String asset) {
+  static Widget _iconButton(BuildContext context, String asset) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.lightBlue,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(30),
       ),
       padding: const EdgeInsets.all(8),
       width: 40,
       height: 40,
-      child: SvgPicture.asset(asset),
+      child: SvgPicture.asset(
+        asset,
+        color: Theme.of(context).colorScheme.onSecondary,
+      ),
     );
   }
 }
@@ -123,10 +126,10 @@ class _HomeState extends State<Home> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   "Hi, WelcomeBack",
                                   style: TextStyle(
-                                    color: AppColors.primaryColor,
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -153,6 +156,7 @@ class _HomeState extends State<Home> {
                                 );
                               },
                               child: Home._iconButton(
+                                context,
                                 "assets/images/doc.svg",
                               ),
                             ),
@@ -167,6 +171,7 @@ class _HomeState extends State<Home> {
                                 );
                               },
                               child: Home._iconButton(
+                                context,
                                 "assets/images/setting.svg",
                               ),
                             ),
@@ -193,7 +198,7 @@ class _HomeState extends State<Home> {
                               ),
                             );
                           },
-                          child: _menu("assets/images/doc.svg", "Doctors"),
+                          child: _menu(context, "assets/images/doc.svg", "Doctors"),
                         ),
                         // const SizedBox(width: 15),
                         // _menu("assets/images/fav.svg", "Favorite"),
@@ -240,16 +245,19 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _menu(String icon, String title) {
+  Widget _menu(BuildContext context, String icon, String title) {
     return Column(
       children: [
         Container(
           width: 40,
           height: 40,
           padding: const EdgeInsets.all(5),
-          child: SvgPicture.asset(icon),
+          child: SvgPicture.asset(
+            icon,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
         ),
-        Text(title, style: const TextStyle(color: AppColors.primaryColor)),
+        Text(title, style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
       ],
     );
   }

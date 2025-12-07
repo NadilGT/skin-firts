@@ -23,12 +23,9 @@ class DoctorProfileCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 7
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: AppColors.lightBlue,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Row(
@@ -38,7 +35,8 @@ class DoctorProfileCard extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(
+                    color: Theme.of(context).scaffoldBackgroundColor, width: 2),
               ),
               child: CircleAvatar(
                 radius: 28,
@@ -47,7 +45,6 @@ class DoctorProfileCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-      
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +56,7 @@ class DoctorProfileCard extends StatelessWidget {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
@@ -68,22 +65,23 @@ class DoctorProfileCard extends StatelessWidget {
                       children: [
                         Text(
                           doctorName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           specialty,
-                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).textTheme.bodyMedium?.color),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 12),
-      
                   Row(
                     children: [
                       Container(
@@ -92,74 +90,72 @@ class DoctorProfileCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.star,
-                              color: AppColors.primaryColor,
+                              color: Theme.of(context).primaryColor,
                               size: 16,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               rating.toString(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.primaryColor,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(width: 8),
-      
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.chat_bubble_outline,
-                              color: AppColors.primaryColor,
+                              color: Theme.of(context).primaryColor,
                               size: 16,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               reviewCount.toString(),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.primaryColor,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                           ],
                         ),
                       ),
                       const Spacer(),
-      
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.help_outline,
-                          color: AppColors.primaryColor,
+                          color: Theme.of(context).primaryColor,
                           size: 20,
                         ),
                       ),
@@ -170,12 +166,12 @@ class DoctorProfileCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.favorite_border,
-                          color: AppColors.primaryColor,
+                          color: Theme.of(context).primaryColor,
                           size: 20,
                         ),
                       ),

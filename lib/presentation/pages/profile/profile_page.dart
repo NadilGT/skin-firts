@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -33,18 +35,18 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'My Profile',
           style: TextStyle(
-            color: Color(0xFF2E5BFF),
+            color: Theme.of(context).primaryColor,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -78,8 +80,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Container(
                     width: 36,
                     height: 36,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF2E5BFF),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -97,7 +99,6 @@ class _ProfilePageState extends State<ProfilePage> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
               ),
             ),
             const SizedBox(height: 30),
@@ -131,6 +132,13 @@ class _ProfilePageState extends State<ProfilePage> {
               icon: Icons.settings_outlined,
               title: 'Settings',
               onTap: () {},
+            ),
+            SwitchListTile(
+              title: const Text('Dark Mode'),
+              value: context.watch<ThemeCubit>().state.isDarkMode,
+              onChanged: (value) {
+                context.read<ThemeCubit>().toggleTheme();
+              },
             ),
             _buildMenuItem(
               context,
@@ -172,12 +180,12 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFF2E5BFF).withOpacity(0.1),
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: const Color(0xFF2E5BFF),
+                color: Theme.of(context).primaryColor,
                 size: 24,
               ),
             ),
@@ -188,7 +196,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
                 ),
               ),
             ),
