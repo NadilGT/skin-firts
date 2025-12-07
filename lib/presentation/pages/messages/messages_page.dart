@@ -425,7 +425,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
             ),
             child: _isLoading
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Search', style: TextStyle(color: Colors.white)),
+                : Text('Search', style: TextStyle(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.white)),
           ),
         ],
       ),

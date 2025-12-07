@@ -6,11 +6,11 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../data/models/appointment/appointment_model.dart';
 import '../../../domain/usecases/appointment_usecase/appointment_usecase.dart';
 import '../../../domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
+import '../../../service_locator.dart';
 import '../book_appointment/book_appointment_page.dart';
-import 'package:skin_firts/service_locator.dart';
 import 'bloc/appoinment_cubit.dart';
-import 'bloc1/appointments_cubit.dart';
-import 'bloc1/appointments_state.dart';
+import 'bloc/appointments_cubit.dart';
+import 'bloc/appointments_state.dart';
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
@@ -36,8 +36,10 @@ class CalendarPageContent extends StatefulWidget {
 class _CalendarPageContentState extends State<CalendarPageContent> {
   late DateTime _focusedDay;
   late DateTime _selectedDay;
-  Map<DateTime, List<AppointmentModel>> _appointments = {};
+  final Map<DateTime, List<AppointmentModel>> _appointments = {};
   List<AppointmentModel> _selectedDayAppointments = [];
+  int _upcomingAppointments = 0;
+  int _completedAppointments = 0;
 
   @override
   void initState() {
@@ -55,6 +57,8 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
 
   void _organizeAppointments(List<AppointmentModel> appointmentsList) {
     _appointments.clear();
+    int upcoming = 0;
+    int completed = 0;
 
     for (var appointment in appointmentsList) {
       final normalizedDate = DateTime(
@@ -68,7 +72,19 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
       } else {
         _appointments[normalizedDate] = [appointment];
       }
+
+      if (appointment.status.toLowerCase() == 'confirmed' ||
+          appointment.status.toLowerCase() == 'pending') {
+        upcoming++;
+      } else if (appointment.status.toLowerCase() == 'completed') {
+        completed++;
+      }
     }
+
+    setState(() {
+      _upcomingAppointments = upcoming;
+      _completedAppointments = completed;
+    });
 
     _loadAppointmentsForDay(_selectedDay);
   }
@@ -76,15 +92,15 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'confirmed':
-        return Colors.green;
+        return Theme.of(context).colorScheme.primary;
       case 'pending':
-        return Colors.orange;
+        return Theme.of(context).colorScheme.secondary;
       case 'completed':
-        return Colors.blue;
+        return Theme.of(context).colorScheme.primary;
       case 'cancelled':
-        return Colors.red;
+        return Theme.of(context).colorScheme.error;
       default:
-        return Colors.grey;
+        return Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
     }
   }
 
@@ -119,43 +135,42 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   }
 
   void _navigateToBookAppointment() async {
-  final result = await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => BlocProvider(
-        create: (context) => AppointmentCubit(
-          appointmentUsecase: sl<AppointmentUsecase>(),
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => AppointmentCubit(
+            appointmentUsecase: sl<AppointmentUsecase>(),
+          ),
+          child: const BookAppointmentPage(),
         ),
-        child: const BookAppointmentPage(),
       ),
-    ),
-  );
+    );
 
-  if (result == true) {
-    // Refresh the appointments list after booking
-    context.read<AppointmentCubits>().refreshAppointments();
+    if (result == true) {
+      // Refresh the appointments list after booking
+      context.read<AppointmentCubits>().refreshAppointments();
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'My Appointments',
-          style: TextStyle(
-            color: Color(0xFF2E5BFF),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Color(0xFF2E5BFF)),
+            icon: Icon(Icons.refresh, color: Theme.of(context).colorScheme.primary),
             onPressed: () {
               context.read<AppointmentCubits>().refreshAppointments();
             },
@@ -168,7 +183,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.red,
+                backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
           }
@@ -181,8 +196,10 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
         },
         builder: (context, state) {
           if (state is AppointmentLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF2E5BFF)),
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             );
           }
 
@@ -191,26 +208,23 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                  Icon(Icons.error_outline, size: 64, color: Theme.of(context).colorScheme.error.withOpacity(0.7)),
                   const SizedBox(height: 16),
                   Text(
                     'Failed to load appointments',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     state.message,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       context.read<AppointmentCubits>().getAllAppointments();
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E5BFF),
-                    ),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -229,16 +243,15 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                     children: [
                       _buildSummaryCard(
                         'Upcoming',
-                        _countAppointmentsByStatus('confirmed') +
-                            _countAppointmentsByStatus('pending'),
-                        Colors.blue,
+                        _upcomingAppointments,
+                        Theme.of(context).colorScheme.primary,
                         Icons.calendar_today,
                       ),
                       const SizedBox(width: 12),
                       _buildSummaryCard(
                         'Completed',
-                        _countAppointmentsByStatus('completed'),
-                        Colors.green,
+                        _completedAppointments,
+                        Theme.of(context).colorScheme.primary,
                         Icons.check_circle_outline,
                       ),
                     ],
@@ -249,11 +262,11 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
                         spreadRadius: 1,
                         blurRadius: 10,
                         offset: const Offset(0, 2),
@@ -272,30 +285,27 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                     headerStyle: HeaderStyle(
                       formatButtonVisible: false,
                       titleCentered: true,
-                      titleTextStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      leftChevronIcon: const Icon(
+                      titleTextStyle: Theme.of(context).textTheme.titleMedium!,
+                      leftChevronIcon: Icon(
                         Icons.chevron_left,
-                        color: Color(0xFF2E5BFF),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
-                      rightChevronIcon: const Icon(
+                      rightChevronIcon: Icon(
                         Icons.chevron_right,
-                        color: Color(0xFF2E5BFF),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     calendarStyle: CalendarStyle(
                       todayDecoration: BoxDecoration(
-                        color: const Color(0xFF2E5BFF).withOpacity(0.3),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
                         shape: BoxShape.circle,
                       ),
-                      selectedDecoration: const BoxDecoration(
-                        color: Color(0xFF2E5BFF),
+                      selectedDecoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                       ),
-                      markerDecoration: const BoxDecoration(
-                        color: Color(0xFF2E5BFF),
+                      markerDecoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                       ),
                       markersMaxCount: 1,
@@ -328,15 +338,10 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                     vertical: 8,
                   ),
                   child: Text(
-                    _selectedDayAppointments.isEmpty
-                        ? 'No appointments'
-                        : '${_selectedDayAppointments.length} Appointment${_selectedDayAppointments.length > 1 ? 's' : ''}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                      _selectedDayAppointments.isEmpty
+                          ? 'No appointments'
+                          : '${_selectedDayAppointments.length} Appointment${_selectedDayAppointments.length > 1 ? 's' : ''}',
+                      style: Theme.of(context).textTheme.titleLarge),
                 ),
 
                 // Appointments List
@@ -345,7 +350,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                         margin: const EdgeInsets.all(16),
                         padding: const EdgeInsets.all(40),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.background,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
@@ -355,15 +360,12 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                               Icon(
                                 Icons.event_busy,
                                 size: 64,
-                                color: Colors.grey[300],
+                                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
                               ),
                               const SizedBox(height: 16),
                               Text(
                                 'No appointments on this day',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[600],
-                                ),
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ],
                           ),
@@ -389,11 +391,11 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _navigateToBookAppointment,
-        backgroundColor: const Color(0xFF2E5BFF),
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        icon: Icon(Icons.add, color: Theme.of(context).colorScheme.background),
+        label: Text(
           'Book Appointment',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).colorScheme.background),
         ),
       ),
     );
@@ -409,11 +411,11 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 10,
               offset: const Offset(0, 2),
@@ -428,17 +430,13 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
             const SizedBox(height: 8),
             Text(
               '$count',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
             ),
             const SizedBox(height: 2),
-            Text(
-              title,
-              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-            ),
+            Text(title, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),
@@ -449,11 +447,11 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 10,
             offset: const Offset(0, 2),
@@ -469,13 +467,13 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: const Color(0xFF2E5BFF).withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person,
                 size: 32,
-                color: Color(0xFF2E5BFF),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(width: 16),
@@ -486,17 +484,13 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                 children: [
                   Text(
                     appointment.doctorName,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 4),
                   if (appointment.doctorSpecialty != null)
                     Text(
                       appointment.doctorSpecialty!,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   const SizedBox(height: 8),
                   Row(
@@ -504,12 +498,12 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       Icon(
                         Icons.access_time,
                         size: 16,
-                        color: Colors.grey[600],
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         _formatTime(appointment.timeSlot),
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(width: 16),
                       Icon(
@@ -520,11 +514,10 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       const SizedBox(width: 4),
                       Text(
                         appointment.status.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: _getStatusColor(appointment.status),
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: _getStatusColor(appointment.status),
+                            ),
                       ),
                     ],
                   ),
@@ -535,22 +528,12 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
             IconButton(
               onPressed: () => _showAppointmentDetails(appointment),
               icon: const Icon(Icons.more_vert),
-              color: Colors.grey[600],
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
           ],
         ),
       ),
     );
-  }
-
-  int _countAppointmentsByStatus(String status) {
-    int count = 0;
-    _appointments.forEach((date, appointments) {
-      count += appointments
-          .where((apt) => apt.status.toLowerCase() == status.toLowerCase())
-          .length;
-    });
-    return count;
   }
 
   void _showAppointmentDetails(AppointmentModel appointment) {
@@ -611,8 +594,8 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                         _showCancelDialog(appointment);
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        side: const BorderSide(color: Colors.red),
+                        foregroundColor: Theme.of(context).colorScheme.error,
+                        side: BorderSide(color: Theme.of(context).colorScheme.error),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -636,7 +619,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E5BFF),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -659,13 +642,13 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: const Color(0xFF2E5BFF)),
+          Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 12),
           Text(
             '$label:',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[600],
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -698,18 +681,17 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement actual cancellation API call
+              // TODO: Implement appointment cancellation logic here
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Appointment cancelled'),
-                  backgroundColor: Colors.red,
+                SnackBar(
+                  content: const Text('Appointment cancellation feature not available yet.'),
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
-              // Refresh appointments after cancellation
               context.read<AppointmentCubits>().refreshAppointments();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).colorScheme.error,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

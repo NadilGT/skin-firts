@@ -12,16 +12,16 @@ class DayScheduleView extends StatelessWidget {
     required this.selectedDate,
   }) : super(key: key);
 
-  Color _getStatusColor(String status) {
+  Color _getStatusColor(BuildContext context, String status) {
     switch (status.toLowerCase()) {
       case 'confirmed':
-        return Colors.green;
+        return Theme.of(context).colorScheme.secondary;
       case 'pending':
         return Colors.orange;
       case 'cancelled':
-        return Colors.red;
+        return Theme.of(context).colorScheme.error;
       case 'completed':
-        return Colors.blue;
+        return Theme.of(context).primaryColor;
       default:
         return Colors.grey;
     }
@@ -37,14 +37,14 @@ class DayScheduleView extends StatelessWidget {
             Icon(
               Icons.calendar_today,
               size: 64,
-              color: Colors.grey[400],
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
             const SizedBox(height: 16),
             Text(
               'No appointments scheduled',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
             const SizedBox(height: 8),
@@ -52,7 +52,7 @@ class DayScheduleView extends StatelessWidget {
               DateFormat('MMMM d, yyyy').format(selectedDate),
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[500],
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
           ],
@@ -68,14 +68,15 @@ class DayScheduleView extends StatelessWidget {
       itemCount: sortedAppointments.length,
       itemBuilder: (context, index) {
         final appointment = sortedAppointments[index];
-        
+        final statusColor = _getStatusColor(context, appointment.status);
+
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: BorderSide(
-              color: _getStatusColor(appointment.status),
+              color: statusColor,
               width: 2,
             ),
           ),
@@ -92,7 +93,7 @@ class DayScheduleView extends StatelessWidget {
                         Icon(
                           Icons.access_time,
                           size: 20,
-                          color: _getStatusColor(appointment.status),
+                          color: statusColor,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -110,7 +111,7 @@ class DayScheduleView extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: _getStatusColor(appointment.status).withOpacity(0.2),
+                        color: statusColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -118,7 +119,7 @@ class DayScheduleView extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: _getStatusColor(appointment.status),
+                          color: statusColor,
                         ),
                       ),
                     ),
@@ -127,7 +128,9 @@ class DayScheduleView extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    const Icon(Icons.person, size: 18, color: Colors.grey),
+                    Icon(Icons.person,
+                        size: 18,
+                        color: Theme.of(context).textTheme.bodyMedium?.color),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -143,7 +146,9 @@ class DayScheduleView extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.medical_services, size: 18, color: Colors.grey),
+                    Icon(Icons.medical_services,
+                        size: 18,
+                        color: Theme.of(context).textTheme.bodyMedium?.color),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -162,25 +167,28 @@ class DayScheduleView extends StatelessWidget {
                         appointment.doctorSpecialty!,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ],
                   ),
                 ],
-                if (appointment.notes != null && appointment.notes!.isNotEmpty) ...[
+                if (appointment.notes != null &&
+                    appointment.notes!.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.note, size: 18, color: Colors.grey),
+                      Icon(Icons.note,
+                          size: 18,
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           appointment.notes!,
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey[700],
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),

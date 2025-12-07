@@ -29,7 +29,6 @@ class DoctorSchedulePage extends StatefulWidget {
 }
 
 class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
-  // example persistent controllers (one per persistent field)
   late final TextEditingController _nameController;
   late final TextEditingController _emailController;
 
@@ -68,19 +67,23 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back,
+              color: theme.appBarTheme.iconTheme?.color),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Schedule',
           style: TextStyle(
-            color: Color(0xFF2E5BFF),
+            color: theme.primaryColor,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -91,10 +94,10 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
         listener: (context, state) {
           if (state is AppointmentCreated) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Appointment booked successfully!'),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 3),
+              SnackBar(
+                content: const Text('Appointment booked successfully!'),
+                backgroundColor: colorScheme.primary,
+                duration: const Duration(seconds: 3),
               ),
             );
             Navigator.pop(context, true);
@@ -102,7 +105,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Failed to book appointment: ${state.error}'),
-                backgroundColor: Colors.red,
+                backgroundColor: colorScheme.error,
                 duration: const Duration(seconds: 3),
               ),
             );
@@ -117,14 +120,14 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                 margin: const EdgeInsets.all(16),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2E5BFF).withOpacity(0.1),
+                  color: theme.primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundColor: Colors.grey[300],
+                      backgroundColor: colorScheme.surfaceContainerHighest,
                       backgroundImage: NetworkImage(widget.doctorImage),
                     ),
                     const SizedBox(width: 16),
@@ -134,10 +137,10 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                         children: [
                           Text(
                             widget.doctorName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: theme.textTheme.bodyLarge?.color,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -145,7 +148,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                             widget.doctorSpecialty,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[600],
+                              color: theme.textTheme.bodyMedium?.color,
                             ),
                           ),
                         ],
@@ -159,11 +162,11 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: colorScheme.shadow.withOpacity(0.1),
                       spreadRadius: 1,
                       blurRadius: 10,
                       offset: const Offset(0, 2),
@@ -180,33 +183,36 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                   headerStyle: HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
-                    titleTextStyle: const TextStyle(
+                    titleTextStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: theme.textTheme.titleMedium?.color,
                     ),
-                    leftChevronIcon: const Icon(
+                    leftChevronIcon: Icon(
                       Icons.chevron_left,
-                      color: Color(0xFF2E5BFF),
+                      color: theme.primaryColor,
                     ),
-                    rightChevronIcon: const Icon(
+                    rightChevronIcon: Icon(
                       Icons.chevron_right,
-                      color: Color(0xFF2E5BFF),
+                      color: theme.primaryColor,
                     ),
                   ),
                   calendarStyle: CalendarStyle(
                     todayDecoration: BoxDecoration(
-                      color: const Color(0xFF2E5BFF).withOpacity(0.3),
+                      color: theme.primaryColor.withOpacity(0.3),
                       shape: BoxShape.circle,
                     ),
-                    selectedDecoration: const BoxDecoration(
-                      color: Color(0xFF2E5BFF),
+                    selectedDecoration: BoxDecoration(
+                      color: theme.primaryColor,
                       shape: BoxShape.circle,
                     ),
-                    markerDecoration: const BoxDecoration(
-                      color: Color(0xFF2E5BFF),
+                    markerDecoration: BoxDecoration(
+                      color: theme.primaryColor,
                       shape: BoxShape.circle,
                     ),
                     outsideDaysVisible: false,
+                    defaultTextStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
+                    weekendTextStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                   ),
                   onDaySelected: (selectedDay, focusedDay) {
                     setState(() {
@@ -230,12 +236,12 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Available Time Slots',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: theme.textTheme.titleLarge?.color,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -243,7 +249,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                         ? Container(
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
+                              color: colorScheme.surfaceContainerHighest,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
@@ -251,7 +257,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                                 'No available slots for this day',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey[600],
+                                  color: theme.textTheme.bodyMedium?.color,
                                 ),
                               ),
                             ),
@@ -275,24 +281,25 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
   }
 
   Widget _buildTimeSlotChip(String timeSlot) {
+    final theme = Theme.of(context);
+    
     return InkWell(
       onTap: () {
-        // Handle time slot selection
         _showBookingConfirmation(timeSlot);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF2E5BFF), width: 1.5),
+          border: Border.all(color: theme.primaryColor, width: 1.5),
         ),
         child: Text(
           timeSlot,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2E5BFF),
+            color: theme.primaryColor,
           ),
         ),
       ),
@@ -357,7 +364,6 @@ class _BookingDialogState extends State<_BookingDialog> {
 
   @override
   void dispose() {
-    // Dispose controllers when the dialog widget is disposed
     patientIdController.dispose();
     patientNameController.dispose();
     phoneController.dispose();
@@ -368,19 +374,20 @@ class _BookingDialogState extends State<_BookingDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    
     return BlocProvider.value(
       value: widget.appointmentCubit,
       child: BlocConsumer<AppointmentCubit, AppointmentState>(
         listener: (context, state) {
           if (state is AppointmentCreated) {
-            // Close dialog on success
             Navigator.pop(context);
           } else if (state is AppointmentFailed) {
-            // Show error in dialog
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.error}'),
-                backgroundColor: Colors.red,
+                backgroundColor: colorScheme.error,
               ),
             );
           }
@@ -389,10 +396,14 @@ class _BookingDialogState extends State<_BookingDialog> {
           final isLoading = state is AppointmentLoading;
 
           return AlertDialog(
+            backgroundColor: colorScheme.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text('Confirm Appointment'),
+            title: Text(
+              'Confirm Appointment',
+              style: TextStyle(color: theme.textTheme.titleLarge?.color),
+            ),
             content: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -404,7 +415,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2E5BFF).withOpacity(0.1),
+                        color: theme.primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -412,34 +423,42 @@ class _BookingDialogState extends State<_BookingDialog> {
                         children: [
                           Text(
                             'Doctor: ${widget.doctorName}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
+                              color: theme.textTheme.bodyLarge?.color,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Date: ${widget.selectedDay.toString().split(' ')[0]}',
-                            style: const TextStyle(fontSize: 14),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Time: ${widget.timeSlot}',
-                            style: const TextStyle(fontSize: 14),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: theme.textTheme.bodyMedium?.color,
+                            ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Divider(),
+                    Divider(color: colorScheme.outlineVariant),
                     const SizedBox(height: 16),
 
                     // Patient Information Section
-                    const Text(
+                    Text(
                       'Patient Information',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        color: theme.textTheme.titleMedium?.color,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -447,20 +466,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                     // Patient ID Field
                     TextFormField(
                       controller: patientIdController,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         labelText: 'Patient ID *',
+                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Enter patient ID',
-                        prefixIcon: const Icon(
+                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+                        prefixIcon: Icon(
                           Icons.badge,
-                          color: Color(0xFF2E5BFF),
+                          color: theme.primaryColor,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF2E5BFF),
+                          borderSide: BorderSide(
+                            color: theme.primaryColor,
                             width: 2,
                           ),
                         ),
@@ -477,20 +504,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                     // Patient Name Field
                     TextFormField(
                       controller: patientNameController,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         labelText: 'Full Name *',
+                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Enter patient name',
-                        prefixIcon: const Icon(
+                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+                        prefixIcon: Icon(
                           Icons.person_outline,
-                          color: Color(0xFF2E5BFF),
+                          color: theme.primaryColor,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF2E5BFF),
+                          borderSide: BorderSide(
+                            color: theme.primaryColor,
                             width: 2,
                           ),
                         ),
@@ -508,20 +543,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         labelText: 'Email *',
+                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Enter your email',
-                        prefixIcon: const Icon(
+                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+                        prefixIcon: Icon(
                           Icons.email,
-                          color: Color(0xFF2E5BFF),
+                          color: theme.primaryColor,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF2E5BFF),
+                          borderSide: BorderSide(
+                            color: theme.primaryColor,
                             width: 2,
                           ),
                         ),
@@ -543,20 +586,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                     TextFormField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         labelText: 'Phone Number (Optional)',
+                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Enter your phone number',
-                        prefixIcon: const Icon(
+                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+                        prefixIcon: Icon(
                           Icons.phone,
-                          color: Color(0xFF2E5BFF),
+                          color: theme.primaryColor,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF2E5BFF),
+                          borderSide: BorderSide(
+                            color: theme.primaryColor,
                             width: 2,
                           ),
                         ),
@@ -576,20 +627,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                     TextFormField(
                       controller: notesController,
                       maxLines: 3,
+                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
                         labelText: 'Notes (Optional)',
+                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Any additional information',
-                        prefixIcon: const Icon(
+                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
+                        prefixIcon: Icon(
                           Icons.note_outlined,
-                          color: Color(0xFF2E5BFF),
+                          color: theme.primaryColor,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF2E5BFF),
+                          borderSide: BorderSide(
+                            color: theme.primaryColor,
                             width: 2,
                           ),
                         ),
@@ -606,9 +665,9 @@ class _BookingDialogState extends State<_BookingDialog> {
                     : () {
                         Navigator.pop(context);
                       },
-                child: const Text(
+                child: Text(
                   'Cancel',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: theme.textTheme.bodyMedium?.color),
                 ),
               ),
               ElevatedButton(
@@ -616,7 +675,6 @@ class _BookingDialogState extends State<_BookingDialog> {
                     ? null
                     : () {
                         if (formKey.currentState!.validate()) {
-                          // Create appointment model
                           final appointment = AppointmentModel(
                             patientId: patientIdController.text.trim(),
                             patientName: patientNameController.text.trim(),
@@ -637,28 +695,28 @@ class _BookingDialogState extends State<_BookingDialog> {
                             status: 'pending',
                           );
 
-                          // Create appointment via cubit
                           widget.appointmentCubit.createAppointment(appointment);
                         }
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E5BFF),
+                  backgroundColor: theme.primaryColor,
+                  foregroundColor: colorScheme.onPrimary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: isLoading
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
-                          color: Colors.white,
+                          color: colorScheme.onPrimary,
                           strokeWidth: 2,
                         ),
                       )
-                    : const Text(
+                    : Text(
                         'Confirm',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: colorScheme.onPrimary),
                       ),
               ),
             ],

@@ -41,7 +41,7 @@ class _MainNavigationState extends State<MainNavigation> {
         height: 80,
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).bottomAppBarTheme.color,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -67,7 +67,9 @@ class _MainNavigationState extends State<MainNavigation> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF6C63FF) : Colors.transparent,
+                  color: isSelected
+                      ? Theme.of(context).primaryColor
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -75,7 +77,9 @@ class _MainNavigationState extends State<MainNavigation> {
                   children: [
                     Icon(
                       _getIconForIndex(index),
-                      color: isSelected ? Colors.white : Colors.grey[600],
+                      color: isSelected
+                          ? Theme.of(context).textTheme.bodyMedium?.color
+                          : Theme.of(context).textTheme.bodyMedium?.color,
                       size: 24,
                     ),
                     if (isSelected) ...[
@@ -85,8 +89,10 @@ class _MainNavigationState extends State<MainNavigation> {
                         opacity: 1.0,
                         child: Text(
                           _getLabelForIndex(index),
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isSelected
+                                ? Theme.of(context).textTheme.bodyMedium?.color
+                                : Theme.of(context).textTheme.bodyMedium?.color,
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                           ),

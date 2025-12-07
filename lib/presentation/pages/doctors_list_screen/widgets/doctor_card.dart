@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:skin_firts/core/constants/color_manager.dart';
 
 class DoctorCard extends StatelessWidget {
   final String doctorName;
@@ -16,7 +15,9 @@ class DoctorCard extends StatelessWidget {
     required this.specialty,
     required this.imageUrl,
     required this.rating,
-    required this.reviewCount, required this.onclick, required this.isFavorite,
+    required this.reviewCount,
+    required this.onclick,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -26,8 +27,16 @@ class DoctorCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.lightBlue,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,7 +44,7 @@ class DoctorCard extends StatelessWidget {
             CircleAvatar(
               radius: 40,
               backgroundImage: NetworkImage(imageUrl),
-              backgroundColor: Colors.grey[300],
+              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -44,19 +53,19 @@ class DoctorCard extends StatelessWidget {
                 children: [
                   Text(
                     doctorName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.primaryColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     specialty,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -65,31 +74,33 @@ class DoctorCard extends StatelessWidget {
                       ElevatedButton(
                         onPressed: onclick,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryColor,
+                          backgroundColor: Theme.of(context).primaryColor,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 6,
                           ),
                           minimumSize: const Size(0, 32),
-                          tapTargetSize: MaterialTapTargetSize
-                              .shrinkWrap,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "Info",
-                          style: TextStyle(fontSize: 14, color: AppColors.mainWhite),
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onPrimary),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      _circleIcon(Icons.calendar_month),
+                      _circleIcon(context, Icons.calendar_month),
                       const SizedBox(width: 8),
-                      _circleIcon(Icons.info_outline),
+                      _circleIcon(context, Icons.info_outline),
                       const SizedBox(width: 8),
-                      _circleIcon(Icons.help_outline),
+                      _circleIcon(context, Icons.help_outline),
                       const SizedBox(width: 8),
-                      _circleIcon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                      _circleIcon(context,
+                          isFavorite ? Icons.favorite : Icons.favorite_border),
                     ],
                   ),
                 ],
@@ -101,15 +112,15 @@ class DoctorCard extends StatelessWidget {
     );
   }
 
-  Widget _circleIcon(IconData icon) {
+  Widget _circleIcon(BuildContext context, IconData icon) {
     return Container(
       width: 36,
       height: 36,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor.withOpacity(0.1),
         shape: BoxShape.circle,
       ),
-      child: Icon(icon, size: 20, color: AppColors.primaryColor),
+      child: Icon(icon, size: 20, color: Theme.of(context).primaryColor),
     );
   }
 }

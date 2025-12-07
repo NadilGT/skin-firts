@@ -61,4 +61,64 @@ class AppTheme {
       ),
     ),
   );
+
+  static final darkTheme = ThemeData(
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w500,
+        color: AppColors.mainWhite,
+      ),
+    ),
+    primaryColor: AppColors.mainWhite,
+    scaffoldBackgroundColor: AppColors.mainBlack,
+    brightness: Brightness.dark,
+    fontFamily: "LeagueSpartan",
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: AppColors.mainBlack,
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      hintStyle: TextStyle(
+        color: AppColors.mainWhite.withOpacity(0.5),
+        fontWeight: FontWeight.w500,
+        fontSize: 20,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.mainWhite),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: AppColors.mainWhite),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: AppColors.mainWhite,
+          width: 1.5,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.red.shade400, width: 1.5),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: Colors.red.shade400, width: 1.5),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.mainWhite,
+        foregroundColor: AppColors.mainBlack,
+        elevation: 0,
+        textStyle: TextStyle(
+          fontFamily: "LeagueSpartan",
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      ),
+    ),
+  );
 }

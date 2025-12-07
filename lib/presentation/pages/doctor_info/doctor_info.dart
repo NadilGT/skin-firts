@@ -10,7 +10,6 @@ import 'package:skin_firts/presentation/pages/doctor_info/bloc/doctor_info_state
 import 'package:skin_firts/service_locator.dart';
 
 import '../../../common/widgets/appBar/app_bar.dart';
-import '../../../core/constants/color_manager.dart';
 import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../domain/repositories/doctor_schedule/DoctorScheduleRepository.dart';
@@ -68,7 +67,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF6B9FFF), Color(0xFF4A7BFF)],
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).primaryColor.withAlpha(200),
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -85,7 +87,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
                                     width: 3,
                                   ),
                                 ),
@@ -94,7 +98,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   backgroundImage: NetworkImage(
                                     widget.doctor.profilePic,
                                   ),
-                                  backgroundColor: Colors.grey[300],
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceVariant,
                                 ),
                               ),
                               SizedBox(width: 16),
@@ -106,10 +112,14 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                     vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(
-                                      color: Colors.white.withOpacity(0.3),
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary.withOpacity(0.3),
                                     ),
                                   ),
                                   child: Column(
@@ -120,7 +130,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                         children: [
                                           Icon(
                                             Icons.verified,
-                                            color: Colors.white,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
                                             size: 16,
                                           ),
                                           SizedBox(width: 4),
@@ -128,7 +140,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                             doctorInfo?.experience.toString() ??
                                                 "loading",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                             ),
@@ -138,7 +152,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       Text(
                                         'experience',
                                         style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary
+                                              .withOpacity(0.9),
                                           fontSize: 12,
                                         ),
                                       ),
@@ -146,7 +163,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       Text(
                                         'Focus: ',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 12,
                                         ),
@@ -154,7 +173,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       Text(
                                         doctorInfo?.focus ?? "nothing",
                                         style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary
+                                              .withOpacity(0.9),
                                           fontSize: 11,
                                           height: 1.3,
                                         ),
@@ -171,7 +193,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           Text(
                             doctorInfo?.name ?? "n/a",
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
@@ -179,7 +201,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           Text(
                             doctorInfo?.special ?? "",
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary.withOpacity(0.9),
                               fontSize: 16,
                             ),
                           ),
@@ -192,35 +216,41 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               Text(
                                 doctorInfo?.starts.toString() ?? "0",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(width: 16),
                               Icon(
                                 Icons.chat_bubble_outline,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 size: 18,
                               ),
                               SizedBox(width: 4),
                               Text(
                                 doctorInfo?.messages.toString() ?? "0",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(width: 16),
                               Icon(
                                 Icons.access_time,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 size: 18,
                               ),
                               SizedBox(width: 4),
                               Text(
                                 doctorInfo?.date.toString() ?? "DD/MM/YYYY",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                   fontSize: 12,
                                 ),
                               ),
@@ -234,8 +264,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                 child: ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: Color(0xFF4A7BFF),
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                    foregroundColor: Theme.of(
+                                      context,
+                                    ).primaryColor,
                                     padding: EdgeInsets.symmetric(vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25),
@@ -247,20 +281,22 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       showDialog(
                                         context: context,
                                         barrierDismissible: false,
-                                        builder: (context) =>
-                                            Center(child: CircularProgressIndicator()),
+                                        builder: (context) => Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
                                       );
 
                                       try {
                                         // Replace with your actual repository / API client
-                                        final repository = DoctorScheduleRepository(
-                                          baseUrl: ApiConstants.baseURL,
-                                        );
+                                        final repository =
+                                            DoctorScheduleRepository(
+                                              baseUrl: ApiConstants.baseURL,
+                                            );
 
                                         final scheduleResponse =
                                             await repository.getDoctorSchedule(
-                                          doctorInfo!.name,
-                                        );
+                                              doctorInfo!.name,
+                                            );
 
                                         // Close loading dialog
                                         if (mounted) Navigator.pop(context);
@@ -270,20 +306,24 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => BlocProvider(
-                                                create: (context) =>
-                                                    sl<AppointmentCubit>(),
-                                                child: DoctorSchedulePage(
-                                                  doctorId: doctorInfo!.name,
-                                                  doctorName: doctorInfo!.name,
-                                                  doctorSpecialty:
-                                                      doctorInfo!.special,
-                                                  doctorImage:
-                                                      doctorInfo!.profilePic,
-                                                  doctorSchedule:
-                                                      scheduleResponse.schedules,
-                                                ),
-                                              ),
+                                              builder: (context) =>
+                                                  BlocProvider(
+                                                    create: (context) =>
+                                                        sl<AppointmentCubit>(),
+                                                    child: DoctorSchedulePage(
+                                                      doctorId:
+                                                          doctorInfo!.name,
+                                                      doctorName:
+                                                          doctorInfo!.name,
+                                                      doctorSpecialty:
+                                                          doctorInfo!.special,
+                                                      doctorImage: doctorInfo!
+                                                          .profilePic,
+                                                      doctorSchedule:
+                                                          scheduleResponse
+                                                              .schedules,
+                                                    ),
+                                                  ),
                                             ),
                                           );
                                         }
@@ -293,32 +333,36 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
                                         // Show error message
                                         if (mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
                                             SnackBar(
-                                              content:
-                                                  Text('Failed to load schedule: $e'),
-                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                'Failed to load schedule: $e',
+                                              ),
+                                              backgroundColor: Theme.of(
+                                                context,
+                                              ).colorScheme.error,
                                             ),
                                           );
                                         }
                                       }
                                     },
-                                     child: Row(
-                                       mainAxisAlignment:
-                                           MainAxisAlignment.center,
-                                       children: [
-                                         Icon(Icons.calendar_today, size: 18),
-                                         SizedBox(width: 8),
-                                         Text(
-                                           'Schedule',
-                                           style: TextStyle(
-                                             fontWeight: FontWeight.bold,
-                                           ),
-                                         ),
-                                       ],
-                                     ),
-                                   ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.calendar_today, size: 18),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'Schedule',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(width: 12),
@@ -353,7 +397,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                     print("Error toggling favorite: $e");
                                   }
                                 },
-                                color: isFavorite ? Colors.red : Colors.white,
+                                color: isFavorite
+                                    ? Theme.of(context).colorScheme.error
+                                    : Theme.of(context).colorScheme.onPrimary,
                               ),
                             ],
                           ),
@@ -391,9 +437,9 @@ class _DoctorInfoState extends State<DoctorInfo> {
       height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.lightBlue,
+        color: Theme.of(context).primaryColor.withOpacity(0.1),
       ),
-      child: Icon(icon, color: AppColors.primaryColor),
+      child: Icon(icon, color: Theme.of(context).primaryColor),
     );
   }
 
@@ -403,13 +449,13 @@ class _DoctorInfoState extends State<DoctorInfo> {
       width: 60,
       height: 40,
       decoration: BoxDecoration(
-        color: AppColors.primaryColor,
+        color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(40),
       ),
       alignment: Alignment.center,
       child: Text(
         text,
-        style: TextStyle(color: AppColors.mainWhite),
+        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         textAlign: TextAlign.center,
       ),
     );
@@ -424,13 +470,19 @@ class _DoctorInfoState extends State<DoctorInfo> {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Theme.of(context).primaryColor.withOpacity(0.1),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
+        border: Border.all(
+          color: Theme.of(context).primaryColor.withOpacity(0.3),
+        ),
       ),
       child: IconButton(
         onPressed: onPressed,
-        icon: Icon(icon, color: color ?? Colors.white, size: 20),
+        icon: Icon(
+          icon,
+          color: color ?? Theme.of(context).colorScheme.onPrimary,
+          size: 20,
+        ),
         padding: EdgeInsets.zero,
       ),
     );
@@ -441,11 +493,11 @@ class _DoctorInfoState extends State<DoctorInfo> {
       width: double.infinity,
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Theme.of(context).shadowColor.withOpacity(0.05),
             blurRadius: 10,
             offset: Offset(0, 2),
           ),
@@ -459,13 +511,17 @@ class _DoctorInfoState extends State<DoctorInfo> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
           SizedBox(height: 10),
           Text(
             content,
-            style: TextStyle(fontSize: 16, color: Colors.black54, height: 1.5),
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
+              height: 1.5,
+            ),
           ),
         ],
       ),
