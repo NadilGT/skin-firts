@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,11 +40,22 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<DoctorInfoModel> doctors = [];
+  String? userName;
 
   @override
   void initState() {
     super.initState();
     _initFirebaseMessaging();
+    _getUserName();
+  }
+
+  void _getUserName() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        userName = user.displayName;
+      });
+    }
   }
 
   Future<void> _initFirebaseMessaging() async {
@@ -110,8 +122,8 @@ class _HomeState extends State<Home> {
                             const SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   "Hi, WelcomeBack",
                                   style: TextStyle(
                                     color: AppColors.primaryColor,
@@ -119,8 +131,8 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                                 Text(
-                                  "Nadil Dinsara",
-                                  style: TextStyle(
+                                  userName ?? "User",
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                   ),
@@ -136,7 +148,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => MedicineOrderPage(),
+                                    builder: (context) => const MedicineOrderPage(),
                                   ),
                                 );
                               },
@@ -150,7 +162,7 @@ class _HomeState extends State<Home> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ProfilePage(),
+                                    builder: (context) => const ProfilePage(),
                                   ),
                                 );
                               },
