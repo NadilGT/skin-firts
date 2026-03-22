@@ -96,7 +96,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                 child: CircleAvatar(
                                   radius: 40,
                                   backgroundImage: NetworkImage(
-                                    widget.doctor.profilePic,
+                                    widget.doctor.profile_pic,
                                   ),
                                   backgroundColor: Theme.of(
                                     context,
@@ -318,7 +318,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                                       doctorSpecialty:
                                                           doctorInfo!.special,
                                                       doctorImage: doctorInfo!
-                                                          .profilePic,
+                                                          .profile_pic,
                                                       doctorSchedule:
                                                           scheduleResponse
                                                               .schedules,

@@ -20,9 +20,12 @@ import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.
 import 'core/storage/shared_pref_manager.dart';
 import 'data/repository_impl/appointment_repository_impl/appointment_repository_impl.dart';
 import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
+import 'data/repository_impl/focus_repository_impl/focus_repository_impl.dart';
 import 'domain/repositories/appointment_repository/appointment_repository.dart';
 import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
+import 'domain/repositories/focus_repository/focus_repository.dart';
 import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
+import 'domain/usecases/focus_usecase/focus_usecase.dart';
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 
 final sl = GetIt.instance;
@@ -102,6 +105,14 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<ThemeCubit>(
     ThemeCubit(),
+  );
+
+  sl.registerSingleton<FocusRepository>(
+    FocusRepositoryImpl(),
+  );
+
+  sl.registerSingleton<FocusUsecase>(
+    FocusUsecase(),
   );
 
   sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));

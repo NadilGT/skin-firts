@@ -18,6 +18,8 @@ class AppointmentModel extends Appointment {
     this.id,
     this.createdAt,
     this.updatedAt,
+    required super.appointmentId,
+    required super.appointmentNumber,
     required super.patientId,
     required super.patientName,
     required super.patientEmail,

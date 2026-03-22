@@ -676,6 +676,8 @@ class _BookingDialogState extends State<_BookingDialog> {
                     : () {
                         if (formKey.currentState!.validate()) {
                           final appointment = AppointmentModel(
+                            appointmentId: '',
+                            appointmentNumber: 0,
                             patientId: patientIdController.text.trim(),
                             patientName: patientNameController.text.trim(),
                             patientEmail: emailController.text.trim(),

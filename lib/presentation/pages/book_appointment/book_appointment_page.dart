@@ -127,6 +127,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
       }
 
       final appointment = AppointmentModel(
+        appointmentId: '',
+        appointmentNumber: 0,
         patientId: _patientIdController.text.trim(),
         patientName: _patientNameController.text.trim(),
         patientEmail: _patientEmailController.text.trim(),

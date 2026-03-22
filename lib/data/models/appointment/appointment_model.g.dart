@@ -15,6 +15,8 @@ AppointmentModel _$AppointmentModelFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
+      appointmentId: json['appointmentId'] as String,
+      appointmentNumber: (json['appointmentNumber'] as num).toInt(),
       patientId: json['patientId'] as String,
       patientName: json['patientName'] as String,
       patientEmail: json['patientEmail'] as String,
@@ -30,6 +32,8 @@ AppointmentModel _$AppointmentModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AppointmentModelToJson(AppointmentModel instance) =>
     <String, dynamic>{
+      'appointmentId': instance.appointmentId,
+      'appointmentNumber': instance.appointmentNumber,
       'patientId': instance.patientId,
       'patientName': instance.patientName,
       'patientEmail': instance.patientEmail,
