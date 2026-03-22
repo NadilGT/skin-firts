@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:skin_firts/common/widgets/doc_profile_card/doctor_profile_card.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
@@ -213,62 +212,43 @@ class _HomeState extends State<Home> {
 
                 const SliverToBoxAdapter(child: SizedBox(height: 30)),
 
-                // Top Doctors and See All
+                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Top Doctors",
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DoctorsListScreen(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Book Appointment",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DoctorsListScreen(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "See All",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 15)),
-
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final doctor = doctors[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
-                      child: DoctorProfileCard(
-                        doctorName: doctor.name,
-                        specialty: doctor.special,
-                        imageUrl: doctor.profile_pic,
-                        rating: doctor.starts?.toDouble() ?? 0.0,
-                        reviewCount: doctor.messages ?? 0,
-                      ),
-                    );
-                  }, childCount: doctors.length),
-                ),
+                
+                const SliverToBoxAdapter(child: SizedBox(height: 30)),
               ],
             );
           },
