@@ -8,6 +8,7 @@ class DoctorInfoModel extends DoctorInfoEntity {
 
   const DoctorInfoModel({
     required super.name,
+    required super.doctor_id,
     required super.experience,
     required super.focus,
     required super.special,
@@ -18,9 +19,10 @@ class DoctorInfoModel extends DoctorInfoEntity {
     required super.career,
     required super.highlights,
     required super.favorite,
-    required super.profilePic,
+    required super.profile_pic,
   });
 
-  factory DoctorInfoModel.fromJson(Map<String, dynamic> json) => _$DoctorInfoModelFromJson(json);
+  factory DoctorInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$DoctorInfoModelFromJson(json);
   Map<String, dynamic> toJson() => _$DoctorInfoModelToJson(this);
 }

@@ -230,7 +230,7 @@ class _HomeState extends State<Home> {
                       child: DoctorProfileCard(
                         doctorName: doctor.name,
                         specialty: doctor.special,
-                        imageUrl: doctor.profilePic,
+                        imageUrl: doctor.profile_pic,
                         rating: doctor.starts.toDouble(),
                         reviewCount: doctor.messages,
                       ),

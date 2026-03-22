@@ -91,7 +91,7 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                         return DoctorCard(
                           doctorName: doctor.name,
                           specialty: doctor.special,
-                          imageUrl: doctor.profilePic,
+                          imageUrl: doctor.profile_pic,
                           rating: doctor.starts.toDouble(),
                           reviewCount: doctor.messages,
                           isFavorite: doctor.favorite,

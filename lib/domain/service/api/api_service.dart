@@ -26,7 +26,7 @@ abstract class ApiService {
   );
 
   @POST('/create/appointment')
-  Future<HttpResponse<Map<String, dynamic>>> createAppointment(
+  Future<HttpResponse<dynamic>> createAppointment(
     @Body() AppointmentModel appointment,
   );
 
