@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/focus_model/focus_model.dart';
 
 part 'api_service.g.dart';
 
@@ -32,4 +33,7 @@ abstract class ApiService {
 
   @GET('/findAll/appointments')
   Future<HttpResponse<List<AppointmentModel>>> getAllAppointments();
+
+  @GET('/findAll/focus')
+  Future<HttpResponse<List<FocusModel>>> getAllFocus();
 }

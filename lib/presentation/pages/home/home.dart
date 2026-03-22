@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
+import 'package:skin_firts/presentation/pages/appointment/appointment.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
@@ -222,7 +223,7 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DoctorsListScreen(),
+                            builder: (context) => AppointmentPage(),
                           ),
                         );
                       },
