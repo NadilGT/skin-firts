@@ -92,8 +92,8 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                           doctorName: doctor.name,
                           specialty: doctor.special,
                           imageUrl: doctor.profile_pic,
-                          rating: doctor.starts.toDouble(),
-                          reviewCount: doctor.messages,
+                          rating: doctor.starts?.toDouble() ?? 0.0,
+                          reviewCount: doctor.messages ?? 0,
                           isFavorite: doctor.favorite,
                           onclick: () {
                             Navigator.push(

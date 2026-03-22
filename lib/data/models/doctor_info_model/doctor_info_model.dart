@@ -5,7 +5,6 @@ part 'doctor_info_model.g.dart';
 
 @JsonSerializable()
 class DoctorInfoModel extends DoctorInfoEntity {
-
   const DoctorInfoModel({
     required super.name,
     required super.doctor_id,

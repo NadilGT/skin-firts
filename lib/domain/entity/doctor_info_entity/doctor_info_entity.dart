@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 class DoctorInfoEntity extends Equatable{
   final String doctor_id;
   final String name;
-  final int experience;
+  final int? experience;
   final String focus;
   final String special;
-  final int starts;
-  final int messages;
-  final String date;
+  final int? starts;
+  final int? messages;
+  final String? date;
   final String profile;
   final String career;
   final String highlights;
