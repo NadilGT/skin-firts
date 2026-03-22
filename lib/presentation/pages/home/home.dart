@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skin_firts/common/widgets/doc_profile_card/doctor_profile_card.dart';
-import 'package:skin_firts/common/widgets/searchBar/custom_search_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
@@ -118,26 +117,30 @@ class _HomeState extends State<Home> {
                         Row(
                           children: [
                             const CircleAvatar(
+                              radius: 24,
                               backgroundImage: AssetImage(
                                 "assets/images/profile.jpg",
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Hi, WelcomeBack",
+                                  "Good Morning 👋",
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
+                                const SizedBox(height: 4),
                                 Text(
                                   userName ?? "User",
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
                                 ),
                               ],
@@ -182,13 +185,50 @@ class _HomeState extends State<Home> {
                   ),
                 ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 25)),
+                const SliverToBoxAdapter(child: SizedBox(height: 30)),
 
+                // Calendar Schedule
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Your Schedule",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        CalendarScheduleWidget(
+                          width: MediaQuery.of(context).size.width - 60,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+
+                // Top Doctors and See All
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        Text(
+                          "Top Doctors",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -198,35 +238,27 @@ class _HomeState extends State<Home> {
                               ),
                             );
                           },
-                          child: _menu(context, "assets/images/doc.svg", "Doctors"),
+                          child: Text(
+                            "See All",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
                         ),
-                        // const SizedBox(width: 15),
-                        // _menu("assets/images/fav.svg", "Favorite"),
-                        const SizedBox(width: 10),
-                        const Expanded(child: CustomSearchBar()),
                       ],
                     ),
                   ),
                 ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
-
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: CalendarScheduleWidget(
-                      width: MediaQuery.of(context).size.width - 60,
-                    ),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                const SliverToBoxAdapter(child: SizedBox(height: 15)),
 
                 SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final doctor = doctors[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
                       child: DoctorProfileCard(
                         doctorName: doctor.name,
                         specialty: doctor.special,
@@ -245,20 +277,5 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _menu(BuildContext context, String icon, String title) {
-    return Column(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          padding: const EdgeInsets.all(5),
-          child: SvgPicture.asset(
-            icon,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-        ),
-        Text(title, style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
-      ],
-    );
-  }
+
 }

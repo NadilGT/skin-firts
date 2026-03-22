@@ -35,75 +35,76 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).primaryColor;
+    final inactiveColor = isDarkMode ? Colors.grey.shade500 : Colors.grey.shade400;
+
     return Scaffold(
       body: _pages[_selectedIndex],
-      bottomNavigationBar: Container(
-        height: 80,
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).bottomAppBarTheme.color,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.15),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(_pages.length, (index) {
-            final isSelected = _selectedIndex == index;
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeInOut,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? Theme.of(context).primaryColor
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      _getIconForIndex(index),
-                      color: isSelected
-                          ? Theme.of(context).textTheme.bodyMedium?.color
-                          : Theme.of(context).textTheme.bodyMedium?.color,
-                      size: 24,
-                    ),
-                    if (isSelected) ...[
-                      const SizedBox(width: 8),
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: 1.0,
-                        child: Text(
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: 70,
+          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(35),
+            boxShadow: [
+              BoxShadow(
+                color: isDarkMode 
+                    ? Colors.black.withOpacity(0.3) 
+                    : Colors.black.withOpacity(0.08),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: List.generate(_pages.length, (index) {
+              final isSelected = _selectedIndex == index;
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutCubic,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? primaryColor.withOpacity(0.12)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _getIconForIndex(index),
+                        color: isSelected ? primaryColor : inactiveColor,
+                        size: 24,
+                      ),
+                      if (isSelected) ...[
+                        const SizedBox(width: 8),
+                        Text(
                           _getLabelForIndex(index),
                           style: TextStyle(
-                            color: isSelected
-                                ? Theme.of(context).textTheme.bodyMedium?.color
-                                : Theme.of(context).textTheme.bodyMedium?.color,
-                            fontWeight: FontWeight.w600,
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+          ),
         ),
       ),
     );
