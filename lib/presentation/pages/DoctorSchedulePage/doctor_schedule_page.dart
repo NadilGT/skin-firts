@@ -7,6 +7,8 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../data/models/appointment/appointment_model.dart';
 import '../calender/bloc/appoinment_cubit.dart';
 import '../calender/bloc/appointment_state.dart';
+import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
+import '../appointment/next_appointment_number_cubit/next_appointment_number_state.dart';
 
 class DoctorSchedulePage extends StatefulWidget {
   final String doctorId;
@@ -34,7 +36,6 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
 
   late DateTime _focusedDay;
   late DateTime _selectedDay;
-  List<String> _selectedTimeSlots = [];
 
   @override
   void initState() {
@@ -43,7 +44,13 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     _emailController = TextEditingController();
     _focusedDay = DateTime.now();
     _selectedDay = DateTime.now();
-    _loadTimeSlotsForDay(_selectedDay);
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
+        widget.doctorId,
+        _selectedDay.toString().split(' ')[0],
+      );
+    });
   }
 
   @override
@@ -51,13 +58,6 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     _nameController.dispose();
     _emailController.dispose();
     super.dispose();
-  }
-
-  void _loadTimeSlotsForDay(DateTime day) {
-    final normalizedDay = DateTime(day.year, day.month, day.day);
-    setState(() {
-      _selectedTimeSlots = widget.doctorSchedule[normalizedDay] ?? [];
-    });
   }
 
   // ignore: unused_element
@@ -219,7 +219,10 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
                     });
-                    _loadTimeSlotsForDay(selectedDay);
+                    context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
+                      widget.doctorId,
+                      selectedDay.toString().split(' ')[0],
+                    );
                   },
                   eventLoader: (day) {
                     final normalizedDay = DateTime(day.year, day.month, day.day);
@@ -230,14 +233,14 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
 
               const SizedBox(height: 24),
 
-              // Available Time Slots
+              // Available Time Slots -> Next Appointment Number
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Available Time Slots',
+                      'Next Appointment Number',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -245,30 +248,98 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _selectedTimeSlots.isEmpty
-                        ? Container(
+                    BlocBuilder<NextAppointmentNumberCubit, NextAppointmentNumberState>(
+                      builder: (context, state) {
+                        if (state is NextAppointmentNumberLoading) {
+                          return Container(
+                            padding: const EdgeInsets.all(40),
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(color: theme.primaryColor),
+                          );
+                        } else if (state is NextAppointmentNumberLoaded) {
+                          return Container(
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
-                              color: colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(12),
+                              color: theme.primaryColor.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: theme.primaryColor.withOpacity(0.3), width: 1.5),
                             ),
                             child: Center(
-                              child: Text(
-                                'No available slots for this day',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: theme.textTheme.bodyMedium?.color,
-                                ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Your Number Will Be',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.textTheme.bodyMedium?.color,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    state.nextAppointmentNumber.nextAppointmentNumber.toString(),
+                                    style: TextStyle(
+                                      fontSize: 64,
+                                      fontWeight: FontWeight.w900,
+                                      color: theme.primaryColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme.primaryColor,
+                                      foregroundColor: colorScheme.onPrimary,
+                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      _showBookingConfirmation(state.nextAppointmentNumber.nextAppointmentNumber);
+                                    },
+                                    child: const Text('Book Appointment', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            children: _selectedTimeSlots
-                                .map((timeSlot) => _buildTimeSlotChip(timeSlot))
-                                .toList(),
+                          );
+                        } else if (state is NextAppointmentNumberError) {
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: colorScheme.error.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.error_outline, color: colorScheme.error),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text('Error: ${state.error}', style: TextStyle(color: colorScheme.error)),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        
+                        return Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
                           ),
+                          child: Center(
+                            child: Text(
+                              'Select a date to view the next available number',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.textTheme.bodyMedium?.color,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -280,33 +351,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     );
   }
 
-  Widget _buildTimeSlotChip(String timeSlot) {
-    final theme = Theme.of(context);
-    
-    return InkWell(
-      onTap: () {
-        _showBookingConfirmation(timeSlot);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: theme.primaryColor, width: 1.5),
-        ),
-        child: Text(
-          timeSlot,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: theme.primaryColor,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showBookingConfirmation(String timeSlot) {
+  void _showBookingConfirmation(int appointmentNumber) {
     showDialog(
       context: context,
       builder: (dialogContext) => _BookingDialog(
@@ -314,7 +359,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
         doctorName: widget.doctorName,
         doctorSpecialty: widget.doctorSpecialty,
         selectedDay: _selectedDay,
-        timeSlot: timeSlot,
+        appointmentNumber: appointmentNumber,
         appointmentCubit: context.read<AppointmentCubit>(),
       ),
     );
@@ -327,7 +372,7 @@ class _BookingDialog extends StatefulWidget {
   final String doctorName;
   final String doctorSpecialty;
   final DateTime selectedDay;
-  final String timeSlot;
+  final int appointmentNumber;
   final AppointmentCubit appointmentCubit;
 
   const _BookingDialog({
@@ -335,7 +380,7 @@ class _BookingDialog extends StatefulWidget {
     required this.doctorName,
     required this.doctorSpecialty,
     required this.selectedDay,
-    required this.timeSlot,
+    required this.appointmentNumber,
     required this.appointmentCubit,
   });
 
@@ -439,10 +484,11 @@ class _BookingDialogState extends State<_BookingDialog> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Time: ${widget.timeSlot}',
+                            'Appointment Number: ${widget.appointmentNumber}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: theme.textTheme.bodyMedium?.color,
+                              fontWeight: FontWeight.w600,
+                              color: theme.primaryColor,
                             ),
                           ),
                         ],
@@ -677,7 +723,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                         if (formKey.currentState!.validate()) {
                           final appointment = AppointmentModel(
                             appointmentId: '',
-                            appointmentNumber: 0,
+                            appointmentNumber: widget.appointmentNumber,
                             patientId: patientIdController.text.trim(),
                             patientName: patientNameController.text.trim(),
                             patientEmail: emailController.text.trim(),
@@ -690,7 +736,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                                 ? null
                                 : widget.doctorSpecialty,
                             appointmentDate: widget.selectedDay,
-                            timeSlot: widget.timeSlot,
+                            timeSlot: null,
                             notes: notesController.text.trim().isEmpty
                                 ? null
                                 : notesController.text.trim(),

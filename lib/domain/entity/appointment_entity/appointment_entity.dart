@@ -11,7 +11,7 @@ class Appointment extends Equatable {
   final String doctorName;
   final String? doctorSpecialty;
   final DateTime appointmentDate;
-  final String timeSlot;
+  final String? timeSlot;
   final String? notes;
   final String status;
 
@@ -26,7 +26,7 @@ class Appointment extends Equatable {
     required this.doctorName,
     this.doctorSpecialty,
     required this.appointmentDate,
-    required this.timeSlot,
+    this.timeSlot,
     this.notes,
     this.status = 'pending',
   });

@@ -28,7 +28,7 @@ class AppointmentModel extends Appointment {
     required super.doctorName,
     super.doctorSpecialty,
     required super.appointmentDate,
-    required super.timeSlot,
+    super.timeSlot,
     super.notes,
     super.status = 'pending',
   });

@@ -25,7 +25,7 @@ AppointmentModel _$AppointmentModelFromJson(Map<String, dynamic> json) =>
       doctorName: json['doctorName'] as String,
       doctorSpecialty: json['doctorSpecialty'] as String?,
       appointmentDate: DateTime.parse(json['appointmentDate'] as String),
-      timeSlot: json['timeSlot'] as String,
+      timeSlot: json['timeSlot'] as String?,
       notes: json['notes'] as String?,
       status: json['status'] as String? ?? 'pending',
     );
