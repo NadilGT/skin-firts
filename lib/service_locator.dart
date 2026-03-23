@@ -26,6 +26,7 @@ import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
 import 'domain/repositories/focus_repository/focus_repository.dart';
 import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
 import 'domain/usecases/focus_usecase/focus_usecase.dart';
+import 'domain/usecases/get_all_doctors_by_focus_usecase/get_all_doctors_by_focus_usecase.dart';
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 
 final sl = GetIt.instance;
@@ -113,6 +114,10 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<FocusUsecase>(
     FocusUsecase(),
+  );
+
+  sl.registerSingleton<GetAllDoctorsByFocusUseCase>(
+    GetAllDoctorsByFocusUseCase(),
   );
 
   sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));

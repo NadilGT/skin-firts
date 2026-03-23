@@ -24,4 +24,18 @@ class DoctorInfoRepositoryImpl extends DoctorInfoRepository{
       return DataFailed(e.response.toString());
     }
   }
+
+  @override
+  Future<DataState<List<DoctorInfoModel>>> getAllDoctorsByFocus(String focus)async{
+    try{
+      final httpResponse = await apiService.getAllDoctorsByFocus(focus);
+      if(httpResponse.response.statusCode == 200){
+        return DataSuccess(httpResponse.data);
+      } else {
+        return DataFailed("Data Fetching Failed");
+      }
+    } on DioException catch(e) {
+      return DataFailed(e.response.toString());
+    }
+  }
 }

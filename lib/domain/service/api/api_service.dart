@@ -36,4 +36,9 @@ abstract class ApiService {
 
   @GET('/findAll/focus')
   Future<HttpResponse<List<FocusModel>>> getAllFocus();
+
+  @GET('/findAll/doctors/focus')
+  Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctorsByFocus(
+    @Query("focus") String focus,
+  );
 }
