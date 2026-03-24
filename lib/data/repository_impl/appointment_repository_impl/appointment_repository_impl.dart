@@ -64,7 +64,7 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
   }
 
   @override
-  Future<DataState<List<AppointmentModel>>> getAllAppointments() async {
+  Future<DataState<PaginatedAppointmentsModel>> getAllAppointments() async {
     try {
       final response = await apiService.getAllAppointments();
       

@@ -48,3 +48,22 @@ class Appointment extends Equatable {
     status,
   ];
 }
+
+class PaginatedAppointments extends Equatable {
+  final List<Appointment> data;
+  final int limit;
+  final int page;
+  final int total;
+  final int totalPages;
+
+  const PaginatedAppointments({
+    required this.data,
+    required this.limit,
+    required this.page,
+    required this.total,
+    required this.totalPages,
+  });
+
+  @override
+  List<Object?> get props => [data, limit, page, total, totalPages];
+}

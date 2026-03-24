@@ -38,3 +38,30 @@ class AppointmentModel extends Appointment {
 
   Map<String, dynamic> toJson() => _$AppointmentModelToJson(this);
 }
+
+class PaginatedAppointmentsModel extends PaginatedAppointments {
+  const PaginatedAppointmentsModel({
+    required super.data,
+    required super.limit,
+    required super.page,
+    required super.total,
+    required super.totalPages,
+  });
+
+  // Returns data as the more specific List<AppointmentModel> type
+  List<AppointmentModel> get appointments =>
+      data.cast<AppointmentModel>();
+
+  factory PaginatedAppointmentsModel.fromJson(Map<String, dynamic> json) {
+    final dataList = (json['data'] as List<dynamic>)
+        .map((e) => AppointmentModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return PaginatedAppointmentsModel(
+      data: dataList,
+      limit: (json['limit'] as num).toInt(),
+      page: (json['page'] as num).toInt(),
+      total: (json['total'] as num).toInt(),
+      totalPages: (json['totalPages'] as num).toInt(),
+    );
+  }
+}

@@ -33,7 +33,7 @@ abstract class ApiService {
   );
 
   @GET('/findAll/appointments')
-  Future<HttpResponse<List<AppointmentModel>>> getAllAppointments();
+  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments();
 
   @GET('/findAll/focus')
   Future<HttpResponse<List<FocusModel>>> getAllFocus();
