@@ -62,7 +62,7 @@ class DayScheduleView extends StatelessWidget {
 
     // Sort appointments by time
     final sortedAppointments = List<AppointmentModel>.from(appointments)
-      ..sort((a, b) => a.timeSlot.compareTo(b.timeSlot));
+      ..sort((a, b) => (a.timeSlot ?? '').compareTo(b.timeSlot ?? ''));
 
     return ListView.builder(
       itemCount: sortedAppointments.length,
@@ -97,7 +97,7 @@ class DayScheduleView extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          appointment.timeSlot,
+                          appointment.timeSlot ?? '#${appointment.appointmentNumber}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

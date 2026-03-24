@@ -502,7 +502,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        _formatTime(appointment.timeSlot),
+                        appointment.timeSlot != null ? _formatTime(appointment.timeSlot!) : '#${appointment.appointmentNumber}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(width: 16),
@@ -570,11 +570,13 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
               'Date',
               DateFormat('MMM dd, yyyy').format(appointment.appointmentDate),
             ),
+            if (appointment.timeSlot != null)
             _buildDetailRow(
               Icons.access_time,
               'Time',
-              _formatTime(appointment.timeSlot),
+              _formatTime(appointment.timeSlot!),
             ),
+            _buildDetailRow(Icons.tag, 'Appointment #', appointment.appointmentNumber.toString()),
             _buildDetailRow(
               Icons.info_outline,
               'Status',

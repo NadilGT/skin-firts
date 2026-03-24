@@ -11,7 +11,7 @@ class Appointment extends Equatable {
   final String doctorName;
   final String? doctorSpecialty;
   final DateTime appointmentDate;
-  final String timeSlot;
+  final String? timeSlot;
   final String? notes;
   final String status;
 
@@ -26,7 +26,7 @@ class Appointment extends Equatable {
     required this.doctorName,
     this.doctorSpecialty,
     required this.appointmentDate,
-    required this.timeSlot,
+    this.timeSlot,
     this.notes,
     this.status = 'pending',
   });
@@ -47,4 +47,23 @@ class Appointment extends Equatable {
     notes,
     status,
   ];
+}
+
+class PaginatedAppointments extends Equatable {
+  final List<Appointment> data;
+  final int limit;
+  final int page;
+  final int total;
+  final int totalPages;
+
+  const PaginatedAppointments({
+    required this.data,
+    required this.limit,
+    required this.page,
+    required this.total,
+    required this.totalPages,
+  });
+
+  @override
+  List<Object?> get props => [data, limit, page, total, totalPages];
 }

@@ -3,9 +3,13 @@ import 'package:get_it/get_it.dart';
 import 'package:skin_firts/core/network/token_interceptor.dart';
 import 'package:skin_firts/data/repository_impl/auth/auth_firebase_service_impl.dart';
 import 'package:skin_firts/data/repository_impl/doctors_repository_impl/doctors_repository_impl.dart';
+import 'package:skin_firts/data/repository_impl/find_role_repository_impl/find_role_repository_impl.dart';
+import 'package:skin_firts/data/repository_impl/register_user_repository_impl/register_user_repository_impl.dart';
 import 'package:skin_firts/data/repository_impl/toggle_favorite_repository_impl/toggle_favorite_repository_impl.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
+import 'package:skin_firts/domain/repositories/find_role_repository/find_role_repository.dart';
+import 'package:skin_firts/domain/repositories/register_user_repository/register_user_repository.dart';
 import 'package:skin_firts/domain/repositories/toggle_favorite_repository/toggle_favorite_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
@@ -26,6 +30,9 @@ import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
 import 'domain/repositories/focus_repository/focus_repository.dart';
 import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
 import 'domain/usecases/focus_usecase/focus_usecase.dart';
+import 'domain/usecases/get_all_doctors_by_focus_usecase/get_all_doctors_by_focus_usecase.dart';
+import 'domain/usecases/get_next_appointment_number_usecase/get_next_appointment_number_usecase.dart';
+import 'presentation/pages/appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 
 final sl = GetIt.instance;
@@ -57,6 +64,14 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<AuthFirebaseService>(
     AuthFirebaseServiceImpl()
+  );
+
+  sl.registerSingleton<RegisterUserRepository>(
+    RegisterUserRepositoryImpl()
+  );
+
+  sl.registerSingleton<FindRoleRepository>(
+    FindRoleRepositoryImpl()
   );
 
   sl.registerSingleton<LoginUseCase>(
@@ -115,8 +130,20 @@ Future<void> initilizeDependencies()async{
     FocusUsecase(),
   );
 
+  sl.registerSingleton<GetAllDoctorsByFocusUseCase>(
+    GetAllDoctorsByFocusUseCase(),
+  );
+
+  sl.registerSingleton<GetNextAppointmentNumberUsecase>(
+    GetNextAppointmentNumberUsecase(),
+  );
+
   sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
 
   sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
+
+  sl.registerFactory<NextAppointmentNumberCubit>(
+    () => NextAppointmentNumberCubit(),
+  );
 
 }

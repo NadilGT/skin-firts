@@ -16,6 +16,7 @@ import '../../../domain/repositories/doctor_schedule/DoctorScheduleRepository.da
 import '../DoctorSchedulePage/doctor_schedule_page.dart'
     show DoctorSchedulePage;
 import '../calender/bloc/appoinment_cubit.dart';
+import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
 
 class DoctorInfo extends StatefulWidget {
   final DoctorInfoModel doctor;
@@ -307,12 +308,18 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  BlocProvider(
-                                                    create: (context) =>
-                                                        sl<AppointmentCubit>(),
+                                                  MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider(
+                                                        create: (context) => sl<AppointmentCubit>(),
+                                                      ),
+                                                      BlocProvider(
+                                                        create: (context) => sl<NextAppointmentNumberCubit>(),
+                                                      ),
+                                                    ],
                                                     child: DoctorSchedulePage(
                                                       doctorId:
-                                                          doctorInfo!.name,
+                                                          widget.doctor.doctor_id,
                                                       doctorName:
                                                           doctorInfo!.name,
                                                       doctorSpecialty:
