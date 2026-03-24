@@ -7,6 +7,7 @@ import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart'
 import '../../../data/models/appointment/appointment_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
+import '../../../data/models/register_user_model/register_user_model.dart';
 
 part 'api_service.g.dart';
 
@@ -47,5 +48,10 @@ abstract class ApiService {
   Future<HttpResponse<NextAppointmentNumberModel>> getNextAppointmentNumber(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+  );
+
+  @POST('/register/patient')
+  Future<HttpResponse<RegisterUserResponseModel>> registerPatient(
+    @Body() RegisterUserModel registerUserModel,
   );
 }
