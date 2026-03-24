@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/find_role_model/find_role_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
 import '../../../data/models/register_user_model/register_user_model.dart';
@@ -53,5 +54,10 @@ abstract class ApiService {
   @POST('/register/patient')
   Future<HttpResponse<RegisterUserResponseModel>> registerPatient(
     @Body() RegisterUserModel registerUserModel,
+  );
+
+  @GET('/role/mobile')
+  Future<HttpResponse<FindRoleResponseModel>> findRole(
+    @Query("firebaseUid") String firebaseUid,
   );
 }

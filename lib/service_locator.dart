@@ -3,10 +3,12 @@ import 'package:get_it/get_it.dart';
 import 'package:skin_firts/core/network/token_interceptor.dart';
 import 'package:skin_firts/data/repository_impl/auth/auth_firebase_service_impl.dart';
 import 'package:skin_firts/data/repository_impl/doctors_repository_impl/doctors_repository_impl.dart';
+import 'package:skin_firts/data/repository_impl/find_role_repository_impl/find_role_repository_impl.dart';
 import 'package:skin_firts/data/repository_impl/register_user_repository_impl/register_user_repository_impl.dart';
 import 'package:skin_firts/data/repository_impl/toggle_favorite_repository_impl/toggle_favorite_repository_impl.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
+import 'package:skin_firts/domain/repositories/find_role_repository/find_role_repository.dart';
 import 'package:skin_firts/domain/repositories/register_user_repository/register_user_repository.dart';
 import 'package:skin_firts/domain/repositories/toggle_favorite_repository/toggle_favorite_repository.dart';
 import 'package:skin_firts/domain/service/api/api_service.dart';
@@ -66,6 +68,10 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<RegisterUserRepository>(
     RegisterUserRepositoryImpl()
+  );
+
+  sl.registerSingleton<FindRoleRepository>(
+    FindRoleRepositoryImpl()
   );
 
   sl.registerSingleton<LoginUseCase>(
