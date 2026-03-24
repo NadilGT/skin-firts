@@ -13,6 +13,7 @@ class SignUp extends StatelessWidget {
 
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
@@ -77,6 +78,17 @@ class SignUp extends StatelessWidget {
                     _emailField(context),
                     SizedBox(height: 20),
                     Text(
+                      "Phone Number",
+                      style: TextStyle(
+                        color: AppColors.welcomeTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    _phoneField(context),
+                    SizedBox(height: 20),
+                    Text(
                       "Password",
                       style: TextStyle(
                         color: AppColors.welcomeTextColor,
@@ -102,6 +114,7 @@ class SignUp extends StatelessWidget {
                                     SignUpUserModel(
                                       name: _name.text.trim(),
                                       email: _email.text.trim(),
+                                      phoneNumber: _phone.text.trim(),
                                       password: _password.text.trim(),
                                     ),
                                   );
@@ -138,9 +151,20 @@ class SignUp extends StatelessWidget {
     );
   }
 
+  Widget _phoneField(BuildContext context) {
+    return TextField(
+      controller: _phone,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        hintText: 'Enter Phone Number',
+      ).applyDefaults(Theme.of(context).inputDecorationTheme),
+    );
+  }
+
   Widget _passwordField(BuildContext context) {
     return TextField(
       controller: _password,
+      obscureText: true,
       decoration: InputDecoration(
         hintText: 'Password',
       ).applyDefaults(Theme.of(context).inputDecorationTheme),
