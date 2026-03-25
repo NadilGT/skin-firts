@@ -8,6 +8,7 @@ import 'package:skin_firts/service_locator.dart';
 
 import '../../models/appointment/appointment_model.dart';
 import '../../models/next_appointment_number_model/next_appointment_number_model.dart';
+import '../../models/running_appointment_number_model/running_appointment_number_model.dart';
 
 class AppointmentRepositoryImpl extends AppointmentRepository {
   final ApiService apiService = sl<ApiService>();
@@ -100,6 +101,33 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
       } else {
         return DataFailed(
           'Failed to fetch next appointment number - Status: ${response.response.statusCode} - ${response.response.statusMessage ?? ''}',
+        );
+      }
+    } on DioException catch (e) {
+      return DataFailed(
+        e.response?.data?.toString() ?? e.message ?? "Unknown error",
+      );
+    } catch (e) {
+      return DataFailed(e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
+    String doctorId,
+    String date,
+  ) async {
+    try {
+      final response = await apiService.getRunningAppointmentNumber(
+        doctorId,
+        date,
+      );
+      
+      if (response.response.statusCode == 200) {
+        return DataSuccess(response.data);
+      } else {
+        return DataFailed(
+          'Failed to fetch running appointment number - Status: ${response.response.statusCode} - ${response.response.statusMessage ?? ''}',
         );
       }
     } on DioException catch (e) {
