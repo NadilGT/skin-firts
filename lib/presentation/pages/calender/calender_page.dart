@@ -390,15 +390,15 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _navigateToBookAppointment,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        icon: Icon(Icons.add, color: Theme.of(context).colorScheme.background),
-        label: Text(
-          'Book Appointment',
-          style: TextStyle(color: Theme.of(context).colorScheme.background),
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _navigateToBookAppointment,
+      //   backgroundColor: Theme.of(context).colorScheme.primary,
+      //   icon: Icon(Icons.add, color: Theme.of(context).colorScheme.background),
+      //   label: Text(
+      //     'Book Appointment',
+      //     style: TextStyle(color: Theme.of(context).colorScheme.background),
+      //   ),
+      // ),
     );
   }
 

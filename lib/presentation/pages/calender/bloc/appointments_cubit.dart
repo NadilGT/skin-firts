@@ -21,9 +21,8 @@ class AppointmentCubits extends Cubit<AppointmentsState> {
     try {
       final result = await _getAllAppointmentsUsecase.call(params: userId);
 
-      if (result is DataSuccess<List<AppointmentModel>>) {
-        // result.data is already List<AppointmentModel>, no need to parse
-        final appointments = result.data ?? [];
+      if (result is DataSuccess<PaginatedAppointmentsModel>) {
+        final appointments = result.data?.appointments ?? [];
         emit(AppointmentLoaded(appointments: appointments));
       } else if (result is DataFailed) {
         emit(AppointmentError(

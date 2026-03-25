@@ -148,39 +148,39 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MedicineOrderPage(),
-                                  ),
-                                );
-                              },
-                              child: Home._iconButton(
-                                context,
-                                "assets/images/doc.svg",
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ProfilePage(),
-                                  ),
-                                );
-                              },
-                              child: Home._iconButton(
-                                context,
-                                "assets/images/setting.svg",
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => const MedicineOrderPage(),
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: Home._iconButton(
+                        //         context,
+                        //         "assets/images/doc.svg",
+                        //       ),
+                        //     ),
+                        //     const SizedBox(width: 10),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => const ProfilePage(),
+                        //           ),
+                        //         );
+                        //       },
+                        //       child: Home._iconButton(
+                        //         context,
+                        //         "assets/images/setting.svg",
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

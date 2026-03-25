@@ -40,10 +40,10 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
-          onPressed: () => Navigator.pop(context),
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
+        //   onPressed: () => Navigator.pop(context),
+        // ),
         title: Text(
           'My Profile',
           style: TextStyle(
