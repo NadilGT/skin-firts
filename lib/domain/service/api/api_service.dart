@@ -36,8 +36,10 @@ abstract class ApiService {
     @Body() AppointmentModel appointment,
   );
 
-  @GET('/findAll/appointments')
-  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments();
+  @GET('/findAll/appointments/patient')
+  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
+    @Query("patientId") String patientId,
+  );
 
   @GET('/findAll/focus')
   Future<HttpResponse<List<FocusModel>>> getAllFocus();

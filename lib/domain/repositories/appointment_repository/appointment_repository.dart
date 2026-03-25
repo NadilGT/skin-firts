@@ -7,7 +7,7 @@ import '../../entity/appointment_entity/appointment_entity.dart';
 
 abstract class AppointmentRepository  {
   Future<DataState<Appointment>> createAppointment(AppointmentModel appointment);
-  Future<DataState<PaginatedAppointmentsModel>> getAllAppointments();
+  Future<DataState<PaginatedAppointmentsModel>> getAllAppointments(String patientId);
   Future<DataState<NextAppointmentNumberModel>> getNextAppointmentNumber(
     String doctorId,
     String date,

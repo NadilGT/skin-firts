@@ -65,9 +65,9 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
   }
 
   @override
-  Future<DataState<PaginatedAppointmentsModel>> getAllAppointments() async {
+  Future<DataState<PaginatedAppointmentsModel>> getAllAppointments(String patientId) async {
     try {
-      final response = await apiService.getAllAppointments();
+      final response = await apiService.getAllAppointments(patientId);
       
       if (response.response.statusCode == 200) {
         return DataSuccess(response.data);

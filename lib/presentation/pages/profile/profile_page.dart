@@ -25,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       await user.reload();
+      if (!mounted) return;
       final updatedUser = FirebaseAuth.instance.currentUser;
       setState(() {
         _userName = updatedUser?.displayName ?? 'No name';

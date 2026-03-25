@@ -54,6 +54,7 @@ class _HomeState extends State<Home> {
   void _getUserName() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      if (!mounted) return;
       setState(() {
         userName = user.displayName;
       });
@@ -91,7 +92,7 @@ class _HomeState extends State<Home> {
         BlocProvider(
           create: (context) => AppointmentCubits(
             getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
-          )..getAllAppointments(),
+          )..getAllAppointments(params: FirebaseAuth.instance.currentUser?.uid ?? ""),
         ),
       ],
       child: Scaffold(
