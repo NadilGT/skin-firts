@@ -54,25 +54,26 @@ class DayScheduleView extends StatelessWidget {
               width: 72,
               height: 72,
               decoration: BoxDecoration(
-                color: const Color(0xFF1C2B4A).withOpacity(0.06),
+                color: (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white).withOpacity(0.06),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.calendar_today_rounded,
                 size: 32,
-                color: const Color(0xFF1C2B4A).withOpacity(0.35),
+                color: (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white).withOpacity(0.35),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'No appointments',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1C2B4A),
-                letterSpacing: -0.2,
+              Text(
+                'No appointments',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).textTheme.titleMedium?.color ??
+                      const Color(0xFF1C2B4A),
+                  letterSpacing: -0.2,
+                ),
               ),
-            ),
             const SizedBox(height: 4),
             Text(
               DateFormat('MMMM d, yyyy').format(selectedDate),
@@ -101,11 +102,11 @@ class DayScheduleView extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1C2B4A).withOpacity(0.06),
+                color: (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.black).withOpacity(0.06),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
               ),
@@ -152,10 +153,10 @@ class DayScheduleView extends StatelessWidget {
                                   Text(
                                     appointment.timeSlot ??
                                         '#${appointment.appointmentNumber}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700,
-                                      color: Color(0xFF1C2B4A),
+                                      color: Theme.of(context).textTheme.titleSmall?.color ?? const Color(0xFF1C2B4A),
                                       letterSpacing: -0.2,
                                     ),
                                   ),
@@ -190,7 +191,7 @@ class DayScheduleView extends StatelessWidget {
                           const SizedBox(height: 12),
                           Container(
                             height: 1,
-                            color: const Color(0xFF1C2B4A).withOpacity(0.06),
+                            color: (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white).withOpacity(0.06),
                           ),
                           const SizedBox(height: 12),
 
@@ -205,10 +206,10 @@ class DayScheduleView extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   appointment.patientName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xFF1C2B4A),
+                                    color: Theme.of(context).textTheme.titleSmall?.color ?? const Color(0xFF1C2B4A),
                                   ),
                                 ),
                               ),
@@ -228,10 +229,10 @@ class DayScheduleView extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   'Dr. ${appointment.doctorName}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF1C2B4A),
+                                    color: Theme.of(context).textTheme.bodyMedium?.color ?? const Color(0xFF1C2B4A),
                                   ),
                                 ),
                               ),
@@ -261,7 +262,7 @@ class DayScheduleView extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFF5F7FA),
+                                color: Theme.of(context).brightness == Brightness.light ? const Color(0xFFF5F7FA) : Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(

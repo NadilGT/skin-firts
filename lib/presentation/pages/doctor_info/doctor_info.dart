@@ -43,13 +43,14 @@ class _DoctorInfoState extends State<DoctorInfo> {
       create: (context) =>
           DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF5F7FA),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: BasicAppbar(
-          title: const Text(
+          title: Text(
             "Doctor Profile",
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 17,
+              color: Theme.of(context).textTheme.titleLarge?.color ?? (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white),
               letterSpacing: -0.3,
             ),
           ),
@@ -88,15 +89,15 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           end: Alignment.bottomRight,
                           colors: [
                             const Color(0xFF1C2B4A),
-                            primaryColor,
+                            Theme.of(context).brightness == Brightness.light ? primaryColor : const Color(0xFF2260FF).withOpacity(0.8),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
                           BoxShadow(
-                            color: primaryColor.withOpacity(0.35),
-                            blurRadius: 28,
-                            offset: const Offset(0, 12),
+                            color: primaryColor.withOpacity(Theme.of(context).brightness == Brightness.light ? 0.35 : 0.1),
+                            blurRadius: 32,
+                            offset: const Offset(0, 16),
                           ),
                         ],
                       ),
@@ -207,8 +208,8 @@ class _DoctorInfoState extends State<DoctorInfo> {
                           const SizedBox(height: 3),
                           Text(
                             doctorInfo?.special ?? widget.doctor.special,
-                            style: const TextStyle(
-                              color: Colors.white60,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.7),
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                             ),
@@ -316,7 +317,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 13),
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Theme.of(context).brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Row(
@@ -330,7 +331,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                           'Schedule',
                                           style: TextStyle(
                                             fontWeight: FontWeight.w700,
-                                            color: primaryColor,
+                                            color: Theme.of(context).brightness == Brightness.light ? primaryColor : Colors.white,
                                             fontSize: 14,
                                           ),
                                         ),
@@ -402,7 +403,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
       width: 38,
       height: 38,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(11),
         boxShadow: [
           BoxShadow(
@@ -413,7 +414,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
         ],
       ),
       child: Icon(icon,
-          color: Theme.of(context).primaryColor, size: 18),
+          color: Theme.of(context).brightness == Brightness.light ? Theme.of(context).primaryColor : Colors.white, size: 18),
     );
   }
 
@@ -440,13 +441,13 @@ class _DoctorInfoState extends State<DoctorInfo> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+            color: (Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.black).withOpacity(Theme.of(context).brightness == Brightness.light ? 0.05 : 0.2),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -466,10 +467,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
               const SizedBox(width: 10),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1C2B4A),
+                  color: Theme.of(context).textTheme.titleSmall?.color ?? (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white.withOpacity(0.9)),
                   letterSpacing: -0.2,
                 ),
               ),
@@ -480,7 +481,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
             content,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey.shade600,
               height: 1.65,
             ),
           ),

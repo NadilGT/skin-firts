@@ -86,11 +86,13 @@ class _CalendarScheduleWidgetState extends State<CalendarScheduleWidget> {
       width: widget.width ?? 400,
       height: widget.height,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1C2B4A).withOpacity(0.07),
+            color: Theme.of(context).brightness == Brightness.light 
+                ? const Color(0xFF1C2B4A).withOpacity(0.07)
+                : Colors.black.withOpacity(0.3),
             blurRadius: 24,
             offset: const Offset(0, 6),
           ),
@@ -125,7 +127,7 @@ class _CalendarScheduleWidgetState extends State<CalendarScheduleWidget> {
                       state.message,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.grey.shade500, fontSize: 13),
+                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500, fontSize: 13),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
@@ -168,8 +170,8 @@ class _CalendarScheduleWidgetState extends State<CalendarScheduleWidget> {
                 // ── Week header strip ─────────────────────────────
                 Container(
                   padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF1C2B4A),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(24),
                     ),

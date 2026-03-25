@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
         ),
       ],
       child: Scaffold(
-        backgroundColor: const Color(0xFFF5F7FA),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
             if (state is DoctorsLoading) {
@@ -137,7 +137,7 @@ class _HomeState extends State<Home> {
                                 Text(
                                   "Good Morning 👋",
                                   style: TextStyle(
-                                    color: Colors.grey.shade500,
+                                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400,
                                     letterSpacing: 0.1,
@@ -146,8 +146,8 @@ class _HomeState extends State<Home> {
                                 const SizedBox(height: 3),
                                 Text(
                                   userName ?? "User",
-                                  style: const TextStyle(
-                                    color: Color(0xFF1C2B4A),
+                                  style: TextStyle(
+                                    color: Theme.of(context).textTheme.titleLarge?.color ?? const Color(0xFF1C2B4A),
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
                                     letterSpacing: -0.4,
@@ -171,12 +171,12 @@ class _HomeState extends State<Home> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Your Schedule",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1C2B4A),
+                            color: Theme.of(context).textTheme.titleLarge?.color ?? const Color(0xFF1C2B4A),
                             letterSpacing: -0.3,
                           ),
                         ),
@@ -185,7 +185,7 @@ class _HomeState extends State<Home> {
                           "Upcoming appointments",
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.grey.shade500,
+                            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -214,7 +214,7 @@ class _HomeState extends State<Home> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1C2B4A),
+                        backgroundColor: Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Theme.of(context).colorScheme.surface,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
