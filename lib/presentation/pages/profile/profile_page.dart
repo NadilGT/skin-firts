@@ -35,130 +35,308 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: isDark
+          ? Theme.of(context).scaffoldBackgroundColor
+          : const Color(0xFFF5F7FA),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
-        //   onPressed: () => Navigator.pop(context),
-        // ),
+        centerTitle: true,
         title: Text(
           'My Profile',
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            color: isDark ? Colors.white : const Color(0xFF1C2B4A),
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
           ),
         ),
-        centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            // Profile Image Section
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[200],
+            const SizedBox(height: 8),
+
+            // ── Profile hero section ─────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 28),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF1C2B4A),
+                      primaryColor,
+                    ],
                   ),
-                  child: const Icon(
-                    Icons.person,
-                    size: 60,
-                    color: Colors.grey,
-                  ),
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryColor.withOpacity(0.30),
+                      blurRadius: 24,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shape: BoxShape.circle,
+                child: Column(
+                  children: [
+                    // Avatar with edit button
+                    Stack(
+                      children: [
+                        Container(
+                          width: 96,
+                          height: 96,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.15),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.35),
+                              width: 2.5,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.person_rounded,
+                            size: 52,
+                            color: Colors.white70,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.edit_rounded,
+                              color: primaryColor,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 18,
+
+                    const SizedBox(height: 14),
+
+                    Text(
+                      _userName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.4,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 4),
+                    Text(
+                      FirebaseAuth.instance.currentUser?.email ?? '',
+                      style: const TextStyle(
+                        color: Colors.white60,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 28),
+
+            // ── Menu group 1: Account ────────────────────────────────
+            _SectionLabel(label: 'Account'),
+            _MenuCard(
+              children: [
+                _buildMenuItem(
+                  context,
+                  icon: Icons.person_outline_rounded,
+                  title: 'Profile',
+                  onTap: () {},
+                ),
+                _Divider(),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.favorite_outline_rounded,
+                  title: 'Favorites',
+                  iconColor: Colors.pinkAccent.shade100,
+                  onTap: () {},
+                ),
+                _Divider(),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.account_balance_wallet_outlined,
+                  title: 'Payment Method',
+                  onTap: () {},
                 ),
               ],
             ),
+
             const SizedBox(height: 16),
-            Text(
-              _userName,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+
+            // ── Menu group 2: Preferences ────────────────────────────
+            _SectionLabel(label: 'Preferences'),
+            _MenuCard(
+              children: [
+                _buildMenuItem(
+                  context,
+                  icon: Icons.lock_outline_rounded,
+                  title: 'Privacy Policy',
+                  onTap: () {},
+                ),
+                _Divider(),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.settings_outlined,
+                  title: 'Settings',
+                  onTap: () {},
+                ),
+                _Divider(),
+
+                // Dark mode toggle — inline, same row style
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 10),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .primaryColor
+                              .withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          context.watch<ThemeCubit>().state.isDarkMode
+                              ? Icons.dark_mode_rounded
+                              : Icons.light_mode_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Text(
+                          'Dark Mode',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).brightness ==
+                                    Brightness.dark
+                                ? Colors.white
+                                : const Color(0xFF1C2B4A),
+                          ),
+                        ),
+                      ),
+                      Transform.scale(
+                        scale: 0.85,
+                        child: Switch(
+                          value:
+                              context.watch<ThemeCubit>().state.isDarkMode,
+                          onChanged: (_) {
+                            context.read<ThemeCubit>().toggleTheme();
+                          },
+                          activeColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                _Divider(),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.help_outline_rounded,
+                  title: 'Help',
+                  onTap: () {},
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // ── Logout — standalone danger row ───────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.remove("email");
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SignIn(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.07),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: Colors.red.withOpacity(0.18),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.logout_rounded,
+                          color: Colors.redAccent,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: Colors.redAccent,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 30),
-            // Menu Items
-            _buildMenuItem(
-              context,
-              icon: Icons.person_outline,
-              title: 'Profile',
-              onTap: () {},
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.favorite_outline,
-              title: 'Favorite',
-              onTap: () {},
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.account_balance_wallet_outlined,
-              title: 'Payment Method',
-              onTap: () {},
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.lock_outline,
-              title: 'Privacy Policy',
-              onTap: () {},
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.settings_outlined,
-              title: 'Settings',
-              onTap: () {},
-            ),
-            SwitchListTile(
-              title: const Text('Dark Mode'),
-              value: context.watch<ThemeCubit>().state.isDarkMode,
-              onChanged: (value) {
-                context.read<ThemeCubit>().toggleTheme();
-              },
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.help_outline,
-              title: 'Help',
-              onTap: () {},
-            ),
-            _buildMenuItem(
-              context,
-              icon: Icons.logout,
-              title: 'Logout',
-              onTap: () async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.remove("email");
-                // ignore: use_build_context_synchronously
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-              },
-            ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 36),
           ],
         ),
       ),
@@ -170,43 +348,118 @@ class _ProfilePageState extends State<ProfilePage> {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    Color? iconColor,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
             Container(
-              width: 48,
-              height: 48,
+              width: 42,
+              height: 42,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                color: (iconColor ?? Theme.of(context).primaryColor)
+                    .withOpacity(0.10),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: Theme.of(context).primaryColor,
-                size: 24,
+                color: iconColor ?? Theme.of(context).primaryColor,
+                size: 20,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
+                  color: isDark ? Colors.white : const Color(0xFF1C2B4A),
                 ),
               ),
             ),
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.grey,
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: Colors.grey.shade400,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+class _SectionLabel extends StatelessWidget {
+  final String label;
+  const _SectionLabel({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 28, bottom: 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          label.toUpperCase(),
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: Colors.grey.shade500,
+            letterSpacing: 1.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuCard extends StatelessWidget {
+  final List<Widget> children;
+  const _MenuCard({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? Theme.of(context).cardColor : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.25 : 0.05),
+              blurRadius: 18,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(children: children),
+        ),
+      ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 72),
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: Colors.grey.withOpacity(0.10),
       ),
     );
   }

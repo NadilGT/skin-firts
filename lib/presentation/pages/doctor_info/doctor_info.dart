@@ -13,8 +13,7 @@ import '../../../common/widgets/appBar/app_bar.dart';
 import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../domain/repositories/doctor_schedule/DoctorScheduleRepository.dart';
-import '../DoctorSchedulePage/doctor_schedule_page.dart'
-    show DoctorSchedulePage;
+import '../DoctorSchedulePage/doctor_schedule_page.dart' show DoctorSchedulePage;
 import '../calender/bloc/appoinment_cubit.dart';
 import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
 
@@ -38,89 +37,106 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+
     return BlocProvider(
-      create: (context) => DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
+      create: (context) =>
+          DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
       child: Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
         appBar: BasicAppbar(
-          title: Text("Doctors"),
+          title: const Text(
+            "Doctor Profile",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 17,
+              letterSpacing: -0.3,
+            ),
+          ),
           action: Row(
             children: [
-              _appBarIcon(Icons.search),
-              SizedBox(width: 10),
-              _appBarIcon(Icons.menu_open_sharp),
+              _appBarIcon(Icons.search_rounded),
+              const SizedBox(width: 8),
+              _appBarIcon(Icons.menu_rounded),
             ],
           ),
         ),
         body: BlocBuilder<DoctorInfoCubit, DoctorInfoState>(
           builder: (context, state) {
             if (state is DoctorInfoLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                  strokeWidth: 2,
+                ),
+              );
             } else if (state is DoctorInfoLoaded) {
               doctorInfo = state.doctorInfoEntity;
             }
+
             return SafeArea(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(16),
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    // ── Hero card ──────────────────────────────────────
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            Theme.of(context).primaryColor,
-                            Theme.of(context).primaryColor.withAlpha(200),
+                            const Color(0xFF1C2B4A),
+                            primaryColor,
                           ],
                         ),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryColor.withOpacity(0.35),
+                            blurRadius: 28,
+                            offset: const Offset(0, 12),
+                          ),
+                        ],
                       ),
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(22),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Avatar + badge row
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Avatar
                               Container(
-                                width: 80,
-                                height: 80,
+                                padding: const EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                    width: 3,
+                                    color: Colors.white.withOpacity(0.4),
+                                    width: 2,
                                   ),
                                 ),
                                 child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: NetworkImage(
-                                    widget.doctor.profile_pic,
-                                  ),
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.surfaceVariant,
+                                  radius: 38,
+                                  backgroundImage:
+                                      NetworkImage(widget.doctor.profile_pic),
+                                  backgroundColor:
+                                      Colors.white.withOpacity(0.15),
                                 ),
                               ),
-                              SizedBox(width: 16),
-                              // Experience Badge
+                              const SizedBox(width: 16),
+                              // Experience + focus badge
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 8,
-                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14, vertical: 12),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white.withOpacity(0.12),
+                                    borderRadius: BorderRadius.circular(18),
                                     border: Border.all(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary.withOpacity(0.3),
+                                      color: Colors.white.withOpacity(0.2),
                                     ),
                                   ),
                                   child: Column(
@@ -129,57 +145,44 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
-                                            Icons.verified,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 4),
+                                          const Icon(Icons.verified_rounded,
+                                              color: Colors.white, size: 15),
+                                          const SizedBox(width: 6),
                                           Text(
                                             doctorInfo?.experience.toString() ??
-                                                "loading",
-                                            style: TextStyle(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.onPrimary,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                                "...",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 15,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      Text(
+                                      const Text(
                                         'experience',
                                         style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary
-                                              .withOpacity(0.9),
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Focus: ',
-                                        style: TextStyle(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      Text(
-                                        doctorInfo?.focus ?? "nothing",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary
-                                              .withOpacity(0.9),
+                                          color: Colors.white60,
                                           fontSize: 11,
-                                          height: 1.3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const Text(
+                                        'Focus',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 11,
+                                          letterSpacing: 0.3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        doctorInfo?.focus ?? "—",
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 11,
+                                          height: 1.4,
                                         ),
                                       ),
                                     ],
@@ -188,183 +191,147 @@ class _DoctorInfoState extends State<DoctorInfo> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
 
-                          // Doctor Name and Specialization
+                          const SizedBox(height: 18),
+
+                          // Name + specialty
                           Text(
-                            doctorInfo?.name ?? "n/a",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                            doctorInfo?.name ?? widget.doctor.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.4,
                             ),
                           ),
+                          const SizedBox(height: 3),
                           Text(
-                            doctorInfo?.special ?? "",
-                            style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onPrimary.withOpacity(0.9),
-                              fontSize: 16,
+                            doctorInfo?.special ?? widget.doctor.special,
+                            style: const TextStyle(
+                              color: Colors.white60,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
-                          SizedBox(height: 20),
 
+                          const SizedBox(height: 16),
+
+                          // Divider
+                          Container(
+                            height: 1,
+                            color: Colors.white.withOpacity(0.12),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Stats row
                           Row(
                             children: [
-                              Icon(Icons.star, color: Colors.amber, size: 20),
-                              SizedBox(width: 4),
-                              Text(
-                                doctorInfo?.starts.toString() ?? "0",
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              _StatChip(
+                                icon: Icons.star_rounded,
+                                iconColor: Colors.amber,
+                                label: doctorInfo?.starts.toString() ?? "0",
                               ),
-                              SizedBox(width: 16),
-                              Icon(
-                                Icons.chat_bubble_outline,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 18,
+                              const SizedBox(width: 14),
+                              _StatChip(
+                                icon: Icons.chat_bubble_outline_rounded,
+                                iconColor: Colors.white70,
+                                label: doctorInfo?.messages.toString() ?? "0",
                               ),
-                              SizedBox(width: 4),
-                              Text(
-                                doctorInfo?.messages.toString() ?? "0",
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Icon(
-                                Icons.access_time,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                size: 18,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                doctorInfo?.date.toString() ?? "DD/MM/YYYY",
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  fontSize: 12,
-                                ),
+                              const SizedBox(width: 14),
+                              _StatChip(
+                                icon: Icons.access_time_rounded,
+                                iconColor: Colors.white70,
+                                label: doctorInfo?.date.toString() ?? "DD/MM",
+                                small: true,
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+
+                          const SizedBox(height: 18),
+
+                          // Action buttons row
                           Row(
                             children: [
+                              // Schedule button
                               Expanded(
                                 flex: 2,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                    foregroundColor: Theme.of(
-                                      context,
-                                    ).primaryColor,
-                                    padding: EdgeInsets.symmetric(vertical: 12),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      // Show loading indicator
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (context) => Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-
-                                      try {
-                                        // Replace with your actual repository / API client
-                                        final repository =
-                                            DoctorScheduleRepository(
-                                              baseUrl: ApiConstants.baseURL,
-                                            );
-
-                                        final scheduleResponse =
-                                            await repository.getDoctorSchedule(
-                                              doctorInfo!.name,
-                                            );
-
-                                        // Close loading dialog
-                                        if (mounted) Navigator.pop(context);
-
-                                        // Navigate to schedule page with fetched data
-                                        if (mounted) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MultiBlocProvider(
-                                                    providers: [
-                                                      BlocProvider(
-                                                        create: (context) => sl<AppointmentCubit>(),
-                                                      ),
-                                                      BlocProvider(
-                                                        create: (context) => sl<NextAppointmentNumberCubit>(),
-                                                      ),
-                                                    ],
-                                                    child: DoctorSchedulePage(
-                                                      doctorId:
-                                                          widget.doctor.doctor_id,
-                                                      doctorName:
-                                                          doctorInfo!.name,
-                                                      doctorSpecialty:
-                                                          doctorInfo!.special,
-                                                      doctorImage: doctorInfo!
-                                                          .profile_pic,
-                                                      doctorSchedule:
-                                                          scheduleResponse
-                                                              .schedules,
-                                                    ),
-                                                  ),
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        // Close loading dialog
-                                        if (mounted) Navigator.pop(context);
-
-                                        // Show error message
-                                        if (mounted) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Failed to load schedule: $e',
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => const Center(
+                                        child: CircularProgressIndicator(
+                                            color: Colors.white),
+                                      ),
+                                    );
+                                    try {
+                                      final repository =
+                                          DoctorScheduleRepository(
+                                              baseUrl: ApiConstants.baseURL);
+                                      final scheduleResponse =
+                                          await repository.getDoctorSchedule(
+                                              doctorInfo!.name);
+                                      if (mounted) Navigator.pop(context);
+                                      if (mounted) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider(
+                                                    create: (context) =>
+                                                        sl<AppointmentCubit>()),
+                                                BlocProvider(
+                                                    create: (context) =>
+                                                        sl<NextAppointmentNumberCubit>()),
+                                              ],
+                                              child: DoctorSchedulePage(
+                                                doctorId: widget.doctor.doctor_id,
+                                                doctorName: doctorInfo!.name,
+                                                doctorSpecialty: doctorInfo!.special,
+                                                doctorImage: doctorInfo!.profile_pic,
+                                                doctorSchedule: scheduleResponse.schedules,
                                               ),
-                                              backgroundColor: Theme.of(
-                                                context,
-                                              ).colorScheme.error,
                                             ),
-                                          );
-                                        }
+                                          ),
+                                        );
                                       }
-                                    },
+                                    } catch (e) {
+                                      if (mounted) Navigator.pop(context);
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(
+                                              'Failed to load schedule: $e'),
+                                          backgroundColor:
+                                              Theme.of(context).colorScheme.error,
+                                        ));
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 13),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.calendar_today, size: 18),
-                                        SizedBox(width: 8),
+                                        Icon(Icons.calendar_month_rounded,
+                                            size: 16, color: primaryColor),
+                                        const SizedBox(width: 8),
                                         Text(
                                           'Schedule',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w700,
+                                            color: primaryColor,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ],
@@ -372,62 +339,54 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 12),
-                              _buildActionButton(Icons.info_outline, () {}),
-                              SizedBox(width: 8),
-                              _buildActionButton(Icons.share_outlined, () {}),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 10),
+                              _buildActionButton(Icons.info_outline_rounded,
+                                  () {}),
+                              const SizedBox(width: 8),
+                              _buildActionButton(
+                                  Icons.share_outlined, () {}),
+                              const SizedBox(width: 8),
                               _buildActionButton(
                                 isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_outline,
+                                    ? Icons.favorite_rounded
+                                    : Icons.favorite_border_rounded,
                                 () async {
                                   try {
                                     final updatedDoctor =
                                         await sl<ToggleFavoriteUsecase>().call(
-                                          params: widget.doctor.name,
-                                        );
-
+                                      params: widget.doctor.name,
+                                    );
                                     if (updatedDoctor
                                         is DataSuccess<DoctorInfoModel>) {
                                       setState(() {
                                         isFavorite =
                                             updatedDoctor.data!.favorite;
                                       });
-                                    } else {
-                                      print(
-                                        "Failed to toggle favorite: $updatedDoctor",
-                                      );
                                     }
                                   } catch (e) {
-                                    // ignore: avoid_print
                                     print("Error toggling favorite: $e");
                                   }
                                 },
                                 color: isFavorite
-                                    ? Theme.of(context).colorScheme.error
-                                    : Theme.of(context).colorScheme.onPrimary,
+                                    ? Colors.red.shade300
+                                    : Colors.white70,
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+
+                    const SizedBox(height: 20),
+
+                    // ── Info sections ────────────────────────────────────
+                    _buildInfoSection('Profile', doctorInfo?.profile ?? "—"),
+                    const SizedBox(height: 12),
+                    _buildInfoSection('Career Path', doctorInfo?.career ?? "—"),
+                    const SizedBox(height: 12),
                     _buildInfoSection(
-                      'Profile',
-                      doctorInfo?.profile ?? "empty",
-                    ),
-                    SizedBox(height: 16),
-                    _buildInfoSection(
-                      'Career Path',
-                      doctorInfo?.career ?? "empty",
-                    ),
-                    SizedBox(height: 16),
-                    _buildInfoSection(
-                      'Highlights',
-                      doctorInfo?.highlights ?? "empty",
-                    ),
+                        'Highlights', doctorInfo?.highlights ?? "—"),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -440,56 +399,37 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
   Widget _appBarIcon(IconData icon) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 38,
+      height: 38,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(11),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Icon(icon, color: Theme.of(context).primaryColor),
+      child: Icon(icon,
+          color: Theme.of(context).primaryColor, size: 18),
     );
   }
 
-  // ignore: unused_element
-  Widget _appBarIconText(String text) {
+  Widget _buildActionButton(IconData icon, VoidCallback onPressed,
+      {Color? color}) {
     return Container(
-      width: 60,
-      height: 40,
+      width: 42,
+      height: 42,
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(40),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        text,
-        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Widget _buildActionButton(
-    IconData icon,
-    VoidCallback onPressed, {
-    Color? color,
-  }) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.15),
         shape: BoxShape.circle,
-        border: Border.all(
-          color: Theme.of(context).primaryColor.withOpacity(0.3),
-        ),
+        border: Border.all(color: Colors.white.withOpacity(0.25)),
       ),
       child: IconButton(
         onPressed: onPressed,
-        icon: Icon(
-          icon,
-          color: color ?? Theme.of(context).colorScheme.onPrimary,
-          size: 20,
-        ),
+        icon: Icon(icon, color: color ?? Colors.white70, size: 18),
         padding: EdgeInsets.zero,
       ),
     );
@@ -498,40 +438,87 @@ class _DoctorInfoState extends State<DoctorInfo> {
   Widget _buildInfoSection(String title, String content) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).shadowColor.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, 2),
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyLarge?.color,
-            ),
+          Row(
+            children: [
+              Container(
+                width: 4,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1C2B4A),
+                  letterSpacing: -0.2,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             content,
             style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-              height: 1.5,
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              height: 1.65,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+// ── Stat chip helper ─────────────────────────────────────────────────────────
+class _StatChip extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String label;
+  final bool small;
+
+  const _StatChip({
+    required this.icon,
+    required this.iconColor,
+    required this.label,
+    this.small = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: iconColor, size: 16),
+        const SizedBox(width: 5),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: small ? 11 : 13,
+          ),
+        ),
+      ],
     );
   }
 }
