@@ -32,8 +32,10 @@ import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
 import 'domain/usecases/focus_usecase/focus_usecase.dart';
 import 'domain/usecases/get_all_doctors_by_focus_usecase/get_all_doctors_by_focus_usecase.dart';
 import 'domain/usecases/get_next_appointment_number_usecase/get_next_appointment_number_usecase.dart';
+import 'domain/usecases/get_running_appointment_number_usecase/get_running_appointment_number_usecase.dart';
 import 'presentation/pages/appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
+import 'presentation/pages/get_running_appointment_number/cubit/get_running_appointment_number_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -138,12 +140,20 @@ Future<void> initilizeDependencies()async{
     GetNextAppointmentNumberUsecase(),
   );
 
+  sl.registerSingleton<GetRunningAppointmentNumberUsecase>(
+    GetRunningAppointmentNumberUsecase(),
+  );
+
   sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
 
   sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
 
   sl.registerFactory<NextAppointmentNumberCubit>(
     () => NextAppointmentNumberCubit(),
+  );
+
+  sl.registerFactory<GetRunningAppointmentNumberCubit>(
+    () => GetRunningAppointmentNumberCubit(),
   );
 
 }

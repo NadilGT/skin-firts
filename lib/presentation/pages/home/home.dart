@@ -3,16 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/appointment/appointment.dart';
-import 'package:skin_firts/presentation/pages/doctors_list_screen/doctors_list_screen.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_state.dart';
-import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
-import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
 import 'package:skin_firts/service_locator.dart';
-
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
 import '../calender/bloc1/appointments_cubit.dart';
 import 'widgets/calender_schedule_widget.dart';
@@ -54,6 +49,7 @@ class _HomeState extends State<Home> {
   void _getUserName() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      if (!mounted) return;
       setState(() {
         userName = user.displayName;
       });
@@ -62,20 +58,16 @@ class _HomeState extends State<Home> {
 
   Future<void> _initFirebaseMessaging() async {
     final messaging = FirebaseMessaging.instance;
-
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
     );
-
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
     }
-
     String? token = await messaging.getToken();
     print('FCM Token: $token');
-
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       print('FCM Token refreshed: $newToken');
     });
@@ -91,133 +83,127 @@ class _HomeState extends State<Home> {
         BlocProvider(
           create: (context) => AppointmentCubits(
             getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
-          )..getAllAppointments(),
+          )..getAllAppointments(
+              params: FirebaseAuth.instance.currentUser?.uid ?? ""),
         ),
       ],
       child: Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
         body: BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
             if (state is DoctorsLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xFF4A90D9),
+                  strokeWidth: 2.5,
+                ),
+              );
             } else if (state is DoctorsLoaded) {
               doctors = state.doctors;
             }
+
             return CustomScrollView(
               slivers: [
+                // ── Header ──────────────────────────────────────────────
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.only(
-                      top: 60,
-                      right: 30,
-                      left: 30,
-                    ),
+                        top: 60, right: 24, left: 24),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            const CircleAvatar(
-                              radius: 24,
-                              backgroundImage: AssetImage(
-                                "assets/images/profile.jpg",
+                            // Avatar with a soft ring
+                            Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFF4A90D9),
+                                  width: 2,
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                radius: 22,
+                                backgroundImage:
+                                    AssetImage("assets/images/profile.jpg"),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 14),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   "Good Morning 👋",
                                   style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey.shade500,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 0.1,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 3),
                                 Text(
                                   userName ?? "User",
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                  style: const TextStyle(
+                                    color: Color(0xFF1C2B4A),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20,
+                                    letterSpacing: -0.4,
                                   ),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MedicineOrderPage(),
-                                  ),
-                                );
-                              },
-                              child: Home._iconButton(
-                                context,
-                                "assets/images/doc.svg",
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const ProfilePage(),
-                                  ),
-                                );
-                              },
-                              child: Home._iconButton(
-                                context,
-                                "assets/images/setting.svg",
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
                 ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
 
-                // Calendar Schedule
+                // ── "Your Schedule" label ────────────────────────────────
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Your Schedule",
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1C2B4A),
+                            letterSpacing: -0.3,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Upcoming appointments",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                         CalendarScheduleWidget(
-                          width: MediaQuery.of(context).size.width - 60,
+                          width: MediaQuery.of(context).size.width - 48,
                         ),
                       ],
                     ),
                   ),
                 ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
-
+                // ── Book Appointment button ──────────────────────────────
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -228,28 +214,36 @@ class _HomeState extends State<Home> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: const Color(0xFF1C2B4A),
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                         elevation: 0,
+                        shadowColor: Colors.transparent,
                       ),
-                      child: const Center(
-                        child: Text(
-                          "Book Appointment",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.calendar_month_rounded,
+                              size: 18, color: Color(0xFF7EB8F7)),
+                          SizedBox(width: 10),
+                          Text(
+                            "Book Appointment",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.1,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                
-                const SliverToBoxAdapter(child: SizedBox(height: 30)),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 40)),
               ],
             );
           },
@@ -257,6 +251,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-
 }

@@ -3,9 +3,9 @@ import 'package:skin_firts/domain/repositories/appointment_repository/appointmen
 import 'package:skin_firts/domain/usecases/usecase/usecase.dart';
 import 'package:skin_firts/service_locator.dart';
 
-class GetAllAppointmentsUsecase implements UseCase<DataState, void> {
+class GetAllAppointmentsUsecase implements UseCase<DataState, String> {
   @override
-  Future<DataState> call({void params}) {
-    return sl<AppointmentRepository>().getAllAppointments();
+  Future<DataState> call({String? params}) {
+    return sl<AppointmentRepository>().getAllAppointments(params ?? "");
   }
 }

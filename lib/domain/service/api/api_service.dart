@@ -9,6 +9,8 @@ import '../../../data/models/find_role_model/find_role_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
 import '../../../data/models/register_user_model/register_user_model.dart';
+import '../../../data/models/running_appointment_number_model/running_appointment_number_model.dart';
+import '../../entity/running_appointment_number_entity/running_appointment_number_entity.dart';
 
 part 'api_service.g.dart';
 
@@ -34,8 +36,10 @@ abstract class ApiService {
     @Body() AppointmentModel appointment,
   );
 
-  @GET('/findAll/appointments')
-  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments();
+  @GET('/findAll/appointments/patient')
+  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
+    @Query("patientId") String patientId,
+  );
 
   @GET('/findAll/focus')
   Future<HttpResponse<List<FocusModel>>> getAllFocus();
@@ -59,5 +63,11 @@ abstract class ApiService {
   @GET('/role/mobile')
   Future<HttpResponse<FindRoleResponseModel>> findRole(
     @Query("firebaseUid") String firebaseUid,
+  );
+
+  @GET('/appointments/running/doctorId')
+  Future<HttpResponse<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
+    @Query("doctorId") String doctorId,
+    @Query("date") String date,
   );
 }

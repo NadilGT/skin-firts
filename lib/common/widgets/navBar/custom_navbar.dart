@@ -5,6 +5,8 @@ import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
 
 import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
 
+import '../../../presentation/pages/find_running_appointment_page/find_running_appointment_page.dart';
+
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
 
@@ -22,7 +24,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _pages = [
     Home(),
-    const MedicineOrderPage(),
+    const FindRunningAppointmentPage(),
     const ProfilePage(),
     const CalendarPage(),
   ];
@@ -115,7 +117,7 @@ class _MainNavigationState extends State<MainNavigation> {
       case 0:
         return Icons.home_rounded;
       case 1:
-        return Icons.message_rounded;
+        return Icons.live_tv_rounded;
       case 2:
         return Icons.person_rounded;
       case 3:
@@ -130,7 +132,7 @@ class _MainNavigationState extends State<MainNavigation> {
       case 0:
         return "Home";
       case 1:
-        return "Order";
+        return "Live Appointment";
       case 2:
         return "Profile";
       case 3:

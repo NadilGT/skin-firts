@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../data/models/day_data_model/day_data.dart';
 
 class DayButton extends StatelessWidget {
@@ -7,7 +6,6 @@ class DayButton extends StatelessWidget {
   final bool isCurrentlySelected;
   final VoidCallback onTap;
 
-  // ignore: use_super_parameters
   const DayButton({
     Key? key,
     required this.dayData,
@@ -17,46 +15,51 @@ class DayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool shouldHighlight = dayData.isSelected || isCurrentlySelected;
-
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 50,
-        height: 70,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeInOut,
+        width: 44,
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: shouldHighlight
-              ? Theme.of(context).primaryColor
-              : Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          color: isCurrentlySelected
+              ? const Color(0xFF4A90D9)
+              : Colors.white.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: isCurrentlySelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF4A90D9).withOpacity(0.45),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : [],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              dayData.day.toString(),
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: shouldHighlight
-                    ? Colors.white
-                    : Theme.of(context).textTheme.bodyLarge?.color,
-              ),
-            ),
             Text(
               dayData.weekday,
               style: TextStyle(
-                fontSize: 12,
-                color: shouldHighlight
-                    ? Colors.white70
-                    : Theme.of(context).textTheme.bodyMedium?.color,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isCurrentlySelected
+                    ? Colors.white.withOpacity(0.8)
+                    : Colors.white.withOpacity(0.45),
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              "${dayData.day}",
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: isCurrentlySelected
+                    ? Colors.white
+                    : Colors.white.withOpacity(0.75),
               ),
             ),
           ],

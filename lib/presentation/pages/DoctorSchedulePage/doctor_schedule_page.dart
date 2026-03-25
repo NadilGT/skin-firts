@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../data/models/appointment/appointment_model.dart';
 import '../calender/bloc/appoinment_cubit.dart';
@@ -405,6 +406,14 @@ class _BookingDialogState extends State<_BookingDialog> {
     emailController = TextEditingController();
     notesController = TextEditingController();
     formKey = GlobalKey<FormState>();
+
+    // Pre-fill user information from Firebase Auth
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      patientIdController.text = user.uid;
+      patientNameController.text = user.displayName ?? '';
+      emailController.text = user.email ?? '';
+    }
   }
 
   @override
@@ -512,9 +521,10 @@ class _BookingDialogState extends State<_BookingDialog> {
                     // Patient ID Field
                     TextFormField(
                       controller: patientIdController,
+                      readOnly: true, // Make it read-only as UID should not be changed
                       style: TextStyle(color: theme.textTheme.bodyLarge?.color),
                       decoration: InputDecoration(
-                        labelText: 'Patient ID *',
+                        labelText: 'Patient ID',
                         labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                         hintText: 'Enter patient ID',
                         hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
@@ -522,6 +532,8 @@ class _BookingDialogState extends State<_BookingDialog> {
                           Icons.badge,
                           color: theme.primaryColor,
                         ),
+                        filled: true,
+                        fillColor: theme.disabledColor.withOpacity(0.05),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: colorScheme.outline),

@@ -133,16 +133,18 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments() async {
+  Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
+    String patientId,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'patientId': patientId};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<PaginatedAppointmentsModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/findAll/appointments',
+            '/findAll/appointments/patient',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -311,6 +313,41 @@ class _ApiService implements ApiService {
     late FindRoleResponseModel _value;
     try {
       _value = FindRoleResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<RunningAppointmentNumberModel>>
+  getRunningAppointmentNumber(String doctorId, String date) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'doctorId': doctorId,
+      r'date': date,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options =
+        _setStreamType<HttpResponse<RunningAppointmentNumberModel>>(
+          Options(method: 'GET', headers: _headers, extra: _extra)
+              .compose(
+                _dio.options,
+                '/appointments/running/doctorId',
+                queryParameters: queryParameters,
+                data: _data,
+              )
+              .copyWith(
+                baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
+              ),
+        );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late RunningAppointmentNumberModel _value;
+    try {
+      _value = RunningAppointmentNumberModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
