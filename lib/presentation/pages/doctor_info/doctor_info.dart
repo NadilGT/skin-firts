@@ -12,7 +12,8 @@ import 'package:skin_firts/service_locator.dart';
 import '../../../common/widgets/appBar/app_bar.dart';
 import '../../../core/storage/data_state.dart';
 import '../../../data/models/doctor_info_model/doctor_info_model.dart';
-import '../../../domain/repositories/doctor_schedule/DoctorScheduleRepository.dart';
+import '../../../domain/repositories/doctor_schedule_repository/doctor_schedule_repository.dart';
+import '../../../domain/usecases/get_doctor_schedule_usecase/get_doctor_schedule_usecase.dart';
 import '../DoctorSchedulePage/doctor_schedule_page.dart' show DoctorSchedulePage;
 import '../calender/bloc/appoinment_cubit.dart';
 import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
@@ -268,14 +269,10 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                       ),
                                     );
                                     try {
-                                      final repository =
-                                          DoctorScheduleRepository(
-                                              baseUrl: ApiConstants.baseURL);
                                       final scheduleResponse =
-                                          await repository.getDoctorSchedule(
-                                              doctorInfo!.name);
+                                          await sl<GetDoctorScheduleUsecase>().call(params: doctorInfo!.doctor_id);
                                       if (mounted) Navigator.pop(context);
-                                      if (mounted) {
+                                      if (scheduleResponse is DataSuccess && mounted) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -294,11 +291,16 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                                 doctorName: doctorInfo!.name,
                                                 doctorSpecialty: doctorInfo!.special,
                                                 doctorImage: doctorInfo!.profile_pic,
-                                                doctorSchedule: scheduleResponse.schedules,
+                                                doctorSchedule: scheduleResponse.data,
                                               ),
                                             ),
                                           ),
                                         );
+                                      } else if (scheduleResponse is DataFailed && mounted) {
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          content: Text('Failed to load schedule: ${scheduleResponse.error}'),
+                                          backgroundColor: Theme.of(context).colorScheme.error,
+                                        ));
                                       }
                                     } catch (e) {
                                       if (mounted) Navigator.pop(context);

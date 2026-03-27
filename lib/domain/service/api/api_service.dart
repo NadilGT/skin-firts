@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../../../data/models/find_role_model/find_role_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
@@ -69,5 +70,10 @@ abstract class ApiService {
   Future<HttpResponse<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+  );
+
+  @GET('/doctor-weekly-schedule/available-dates')
+  Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
+    @Query("doctorId") String doctorId,
   );
 }

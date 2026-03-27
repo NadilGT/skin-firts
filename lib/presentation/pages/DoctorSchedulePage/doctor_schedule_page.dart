@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../calender/bloc/appoinment_cubit.dart';
 import '../calender/bloc/appointment_state.dart';
 import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
@@ -16,7 +17,7 @@ class DoctorSchedulePage extends StatefulWidget {
   final String doctorName;
   final String doctorSpecialty;
   final String doctorImage;
-  final Map<DateTime, List<String>> doctorSchedule;
+  final DoctorScheduleResponseModel doctorSchedule;
 
   const DoctorSchedulePage({
     super.key,
@@ -37,20 +38,43 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
 
   late DateTime _focusedDay;
   late DateTime _selectedDay;
+  late final Set<DateTime> _availableDatesSet;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
+    
+    // Parse and normalize available dates
+    final dates = widget.doctorSchedule.availableDates
+        .map((e) => DateTime.tryParse(e.date))
+        .whereType<DateTime>()
+        .map((e) => DateTime(e.year, e.month, e.day))
+        .toList();
+    dates.sort();
+    _availableDatesSet = dates.toSet();
+
     _focusedDay = DateTime.now();
-    _selectedDay = DateTime.now();
+    final normalizedToday = DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day);
+    
+    // Initialize selected day to the first available date if today is not available
+    if (_availableDatesSet.contains(normalizedToday)) {
+      _selectedDay = normalizedToday;
+    } else if (_availableDatesSet.isNotEmpty) {
+      _selectedDay = _availableDatesSet.first;
+      _focusedDay = _selectedDay;
+    } else {
+      _selectedDay = normalizedToday;
+    }
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
-        widget.doctorId,
-        _selectedDay.toString().split(' ')[0],
-      );
+      if (_availableDatesSet.contains(DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day))) {
+        context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
+          widget.doctorId,
+          _selectedDay.toString().split(' ')[0],
+        );
+      }
     });
   }
 
@@ -63,7 +87,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
 
   // ignore: unused_element
   List<DateTime> _getScheduledDays() {
-    return widget.doctorSchedule.keys.toList();
+    return _availableDatesSet.toList();
   }
 
   @override
@@ -216,6 +240,9 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                     weekendTextStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                   ),
                   onDaySelected: (selectedDay, focusedDay) {
+                    final normalizedDay = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+                    if (!_availableDatesSet.contains(normalizedDay)) return;
+
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
@@ -225,9 +252,13 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                       selectedDay.toString().split(' ')[0],
                     );
                   },
+                  enabledDayPredicate: (day) {
+                    final normalizedDay = DateTime(day.year, day.month, day.day);
+                    return _availableDatesSet.contains(normalizedDay);
+                  },
                   eventLoader: (day) {
                     final normalizedDay = DateTime(day.year, day.month, day.day);
-                    return widget.doctorSchedule[normalizedDay] ?? [];
+                    return _availableDatesSet.contains(normalizedDay) ? [true] : [];
                   },
                 ),
               ),

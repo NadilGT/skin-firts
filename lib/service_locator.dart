@@ -15,18 +15,22 @@ import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
+import 'package:skin_firts/domain/usecases/get_doctor_schedule_usecase/get_doctor_schedule_usecase.dart' show GetDoctorScheduleUsecase;
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
 import 'package:skin_firts/domain/usecases/sign_up_usecase/sign_up_use_case.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.dart';
+import 'package:skin_firts/presentation/pages/doctor_info/doctor_schedule_cubit/doctor_schedule_cubit.dart' show DoctorScheduleCubit;
 
 import 'core/storage/shared_pref_manager.dart';
 import 'data/repository_impl/appointment_repository_impl/appointment_repository_impl.dart';
 import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
+import 'data/repository_impl/doctor_schedule_repository_impl/doctor_schedule_repository_impl.dart';
 import 'data/repository_impl/focus_repository_impl/focus_repository_impl.dart';
 import 'domain/repositories/appointment_repository/appointment_repository.dart';
 import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
+import 'domain/repositories/doctor_schedule_repository/doctor_schedule_repository.dart';
 import 'domain/repositories/focus_repository/focus_repository.dart';
 import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
 import 'domain/usecases/focus_usecase/focus_usecase.dart';
@@ -144,6 +148,14 @@ Future<void> initilizeDependencies()async{
     GetRunningAppointmentNumberUsecase(),
   );
 
+  sl.registerSingleton<GetDoctorScheduleUsecase>(
+    GetDoctorScheduleUsecase(),
+  );
+
+  sl.registerSingleton<DoctorScheduleRepository>(
+    DoctorScheduleRepositoryImpl(),
+  );
+
   sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
 
   sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
@@ -154,6 +166,10 @@ Future<void> initilizeDependencies()async{
 
   sl.registerFactory<GetRunningAppointmentNumberCubit>(
     () => GetRunningAppointmentNumberCubit(),
+  );
+
+  sl.registerFactory<DoctorScheduleCubit>(
+    () => DoctorScheduleCubit(),
   );
 
 }
