@@ -14,6 +14,10 @@ class AppointmentModel extends Appointment {
   @JsonKey(includeFromJson: true, includeToJson: false)
   final DateTime? updatedAt;
 
+  @override
+  @JsonKey(toJson: _dateToJson, fromJson: _dateFromJson)
+  final DateTime appointmentDate;
+
   const AppointmentModel({
     this.id,
     this.createdAt,
@@ -27,17 +31,20 @@ class AppointmentModel extends Appointment {
     required super.doctorId,
     required super.doctorName,
     super.doctorSpecialty,
-    required super.appointmentDate,
-    super.timeSlot,
+    required this.appointmentDate,
     super.notes,
     super.status = 'pending',
-  });
+  }) : super(appointmentDate: appointmentDate);
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) =>
       _$AppointmentModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppointmentModelToJson(this);
 }
+
+String _dateToJson(DateTime date) => date.toIso8601String().split('T')[0];
+DateTime _dateFromJson(String date) => DateTime.parse(date);
+
 
 class PaginatedAppointmentsModel extends PaginatedAppointments {
   const PaginatedAppointmentsModel({

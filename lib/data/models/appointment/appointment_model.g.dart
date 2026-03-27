@@ -24,8 +24,7 @@ AppointmentModel _$AppointmentModelFromJson(Map<String, dynamic> json) =>
       doctorId: json['doctorId'] as String,
       doctorName: json['doctorName'] as String,
       doctorSpecialty: json['doctorSpecialty'] as String?,
-      appointmentDate: DateTime.parse(json['appointmentDate'] as String),
-      timeSlot: json['timeSlot'] as String?,
+      appointmentDate: _dateFromJson(json['appointmentDate'] as String),
       notes: json['notes'] as String?,
       status: json['status'] as String? ?? 'pending',
     );
@@ -41,8 +40,7 @@ Map<String, dynamic> _$AppointmentModelToJson(AppointmentModel instance) =>
       'doctorId': instance.doctorId,
       'doctorName': instance.doctorName,
       'doctorSpecialty': instance.doctorSpecialty,
-      'appointmentDate': instance.appointmentDate.toIso8601String(),
-      'timeSlot': instance.timeSlot,
       'notes': instance.notes,
       'status': instance.status,
+      'appointmentDate': _dateToJson(instance.appointmentDate),
     };

@@ -45,7 +45,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     super.initState();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
-    
+
     // Parse and normalize available dates
     final dates = widget.doctorSchedule.availableDates
         .map((e) => DateTime.tryParse(e.date))
@@ -56,8 +56,12 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     _availableDatesSet = dates.toSet();
 
     _focusedDay = DateTime.now();
-    final normalizedToday = DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day);
-    
+    final normalizedToday = DateTime(
+      _focusedDay.year,
+      _focusedDay.month,
+      _focusedDay.day,
+    );
+
     // Initialize selected day to the first available date if today is not available
     if (_availableDatesSet.contains(normalizedToday)) {
       _selectedDay = normalizedToday;
@@ -67,9 +71,11 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
     } else {
       _selectedDay = normalizedToday;
     }
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_availableDatesSet.contains(DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day))) {
+      if (_availableDatesSet.contains(
+        DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day),
+      )) {
         context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
           widget.doctorId,
           _selectedDay.toString().split(' ')[0],
@@ -94,15 +100,17 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: theme.appBarTheme.iconTheme?.color),
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.iconTheme?.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -236,29 +244,49 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                       shape: BoxShape.circle,
                     ),
                     outsideDaysVisible: false,
-                    defaultTextStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                    weekendTextStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
+                    defaultTextStyle: TextStyle(
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
+                    weekendTextStyle: TextStyle(
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   onDaySelected: (selectedDay, focusedDay) {
-                    final normalizedDay = DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
+                    final normalizedDay = DateTime(
+                      selectedDay.year,
+                      selectedDay.month,
+                      selectedDay.day,
+                    );
                     if (!_availableDatesSet.contains(normalizedDay)) return;
 
                     setState(() {
                       _selectedDay = selectedDay;
                       _focusedDay = focusedDay;
                     });
-                    context.read<NextAppointmentNumberCubit>().getNextAppointmentNumber(
-                      widget.doctorId,
-                      selectedDay.toString().split(' ')[0],
-                    );
+                    context
+                        .read<NextAppointmentNumberCubit>()
+                        .getNextAppointmentNumber(
+                          widget.doctorId,
+                          selectedDay.toString().split(' ')[0],
+                        );
                   },
                   enabledDayPredicate: (day) {
-                    final normalizedDay = DateTime(day.year, day.month, day.day);
+                    final normalizedDay = DateTime(
+                      day.year,
+                      day.month,
+                      day.day,
+                    );
                     return _availableDatesSet.contains(normalizedDay);
                   },
                   eventLoader: (day) {
-                    final normalizedDay = DateTime(day.year, day.month, day.day);
-                    return _availableDatesSet.contains(normalizedDay) ? [true] : [];
+                    final normalizedDay = DateTime(
+                      day.year,
+                      day.month,
+                      day.day,
+                    );
+                    return _availableDatesSet.contains(normalizedDay)
+                        ? [true]
+                        : [];
                   },
                 ),
               ),
@@ -280,13 +308,18 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    BlocBuilder<NextAppointmentNumberCubit, NextAppointmentNumberState>(
+                    BlocBuilder<
+                      NextAppointmentNumberCubit,
+                      NextAppointmentNumberState
+                    >(
                       builder: (context, state) {
                         if (state is NextAppointmentNumberLoading) {
                           return Container(
                             padding: const EdgeInsets.all(40),
                             alignment: Alignment.center,
-                            child: CircularProgressIndicator(color: theme.primaryColor),
+                            child: CircularProgressIndicator(
+                              color: theme.primaryColor,
+                            ),
                           );
                         } else if (state is NextAppointmentNumberLoaded) {
                           return Container(
@@ -294,7 +327,10 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                             decoration: BoxDecoration(
                               color: theme.primaryColor.withOpacity(0.05),
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: theme.primaryColor.withOpacity(0.3), width: 1.5),
+                              border: Border.all(
+                                color: theme.primaryColor.withOpacity(0.3),
+                                width: 1.5,
+                              ),
                             ),
                             child: Center(
                               child: Column(
@@ -309,7 +345,10 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    state.nextAppointmentNumber.nextAppointmentNumber.toString(),
+                                    state
+                                        .nextAppointmentNumber
+                                        .nextAppointmentNumber
+                                        .toString(),
                                     style: TextStyle(
                                       fontSize: 64,
                                       fontWeight: FontWeight.w900,
@@ -321,15 +360,28 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: theme.primaryColor,
                                       foregroundColor: colorScheme.onPrimary,
-                                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 32,
+                                        vertical: 12,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
                                     onPressed: () {
-                                      _showBookingConfirmation(state.nextAppointmentNumber.nextAppointmentNumber);
+                                      _showBookingConfirmation(
+                                        state
+                                            .nextAppointmentNumber
+                                            .nextAppointmentNumber,
+                                      );
                                     },
-                                    child: const Text('Book Appointment', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                    child: const Text(
+                                      'Book Appointment',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -344,16 +396,22 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.error_outline, color: colorScheme.error),
+                                Icon(
+                                  Icons.error_outline,
+                                  color: colorScheme.error,
+                                ),
                                 const SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('Error: ${state.error}', style: TextStyle(color: colorScheme.error)),
+                                  child: Text(
+                                    'Error: ${state.error}',
+                                    style: TextStyle(color: colorScheme.error),
+                                  ),
                                 ),
                               ],
                             ),
                           );
                         }
-                        
+
                         return Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
@@ -461,7 +519,7 @@ class _BookingDialogState extends State<_BookingDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return BlocProvider.value(
       value: widget.appointmentCubit,
       child: BlocConsumer<AppointmentCubit, AppointmentState>(
@@ -480,340 +538,552 @@ class _BookingDialogState extends State<_BookingDialog> {
         builder: (context, state) {
           final isLoading = state is AppointmentLoading;
 
-          return AlertDialog(
-            backgroundColor: colorScheme.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 24,
             ),
-            title: Text(
-              'Confirm Appointment',
-              style: TextStyle(color: theme.textTheme.titleLarge?.color),
-            ),
-            content: Form(
-              key: formKey,
-              child: SingleChildScrollView(
+            child: Container(
+              decoration: BoxDecoration(
+                color: colorScheme.brightness == Brightness.dark
+                    ? const Color(0xFF1E2A3A)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1C2B4A).withOpacity(0.18),
+                    blurRadius: 40,
+                    offset: const Offset(0, 16),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(28),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Appointment Details
+                    // ── Header strip ──────────────────────────────────────────
                     Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: theme.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(22, 20, 22, 20),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF1C2B4A), Color(0xFF2E4A7A)],
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Doctor: ${widget.doctorName}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: theme.textTheme.bodyLarge?.color,
-                            ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.12),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.2),
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.calendar_month_rounded,
+                                  color: Color(0xFF7EB8F7),
+                                  size: 18,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              const Text(
+                                'Confirm Appointment',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Date: ${widget.selectedDay.toString().split(' ')[0]}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: theme.textTheme.bodyMedium?.color,
+                          const SizedBox(height: 16),
+
+                          // Appointment summary chips
+                          Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.10),
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.15),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Appointment Number: ${widget.appointmentNumber}',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: theme.primaryColor,
+                            child: Column(
+                              children: [
+                                _DialogInfoRow(
+                                  icon: Icons.person_rounded,
+                                  label: 'Doctor',
+                                  value: widget.doctorName,
+                                  light: true,
+                                ),
+                                const SizedBox(height: 8),
+                                _DialogInfoRow(
+                                  icon: Icons.calendar_today_rounded,
+                                  label: 'Date',
+                                  value: widget.selectedDay.toString().split(
+                                    ' ',
+                                  )[0],
+                                  light: true,
+                                ),
+                                const SizedBox(height: 8),
+                                _DialogInfoRow(
+                                  icon: Icons.tag_rounded,
+                                  label: 'Appt. #',
+                                  value: widget.appointmentNumber.toString(),
+                                  light: true,
+                                  accent: true,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Divider(color: colorScheme.outlineVariant),
-                    const SizedBox(height: 16),
 
-                    // Patient Information Section
-                    Text(
-                      'Patient Information',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: theme.textTheme.titleMedium?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    // ── Form body ─────────────────────────────────────────────
+                    Flexible(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(22, 22, 22, 8),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Section label
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 4,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      color: theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'Patient Information',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF1C2B4A),
+                                      letterSpacing: -0.1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
 
-                    // Patient ID Field
-                    TextFormField(
-                      controller: patientIdController,
-                      readOnly: true, // Make it read-only as UID should not be changed
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                      decoration: InputDecoration(
-                        labelText: 'Patient ID',
-                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                        hintText: 'Enter patient ID',
-                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
-                        prefixIcon: Icon(
-                          Icons.badge,
-                          color: theme.primaryColor,
-                        ),
-                        filled: true,
-                        fillColor: theme.disabledColor.withOpacity(0.05),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: theme.primaryColor,
-                            width: 2,
+                              // Patient ID
+                              _DialogField(
+                                controller: patientIdController,
+                                readOnly: true,
+                                label: 'Patient ID',
+                                hint: 'Enter patient ID',
+                                icon: Icons.badge_rounded,
+                                primaryColor: theme.primaryColor,
+                                colorScheme: colorScheme,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Patient ID is required';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Full Name
+                              _DialogField(
+                                controller: patientNameController,
+                                label: 'Full Name *',
+                                hint: 'Enter patient name',
+                                icon: Icons.person_outline_rounded,
+                                primaryColor: theme.primaryColor,
+                                colorScheme: colorScheme,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Patient name is required';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Email
+                              _DialogField(
+                                controller: emailController,
+                                label: 'Email *',
+                                hint: 'Enter your email',
+                                icon: Icons.email_outlined,
+                                keyboardType: TextInputType.emailAddress,
+                                primaryColor: theme.primaryColor,
+                                colorScheme: colorScheme,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Email is required';
+                                  }
+                                  if (!RegExp(
+                                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                                  ).hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Phone
+                              _DialogField(
+                                controller: phoneController,
+                                label: 'Phone Number (Optional)',
+                                hint: 'Enter your phone number',
+                                icon: Icons.phone_outlined,
+                                keyboardType: TextInputType.phone,
+                                primaryColor: theme.primaryColor,
+                                colorScheme: colorScheme,
+                                validator: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    if (!RegExp(
+                                      r'^\+?[\d\s-]{10,}$',
+                                    ).hasMatch(value)) {
+                                      return 'Please enter a valid phone number';
+                                    }
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Notes
+                              _DialogField(
+                                controller: notesController,
+                                label: 'Notes (Optional)',
+                                hint: 'Any additional information',
+                                icon: Icons.notes_rounded,
+                                maxLines: 3,
+                                primaryColor: theme.primaryColor,
+                                colorScheme: colorScheme,
+                              ),
+
+                              const SizedBox(height: 8),
+                            ],
                           ),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Patient ID is required';
-                        }
-                        return null;
-                      },
                     ),
-                    const SizedBox(height: 12),
 
-                    // Patient Name Field
-                    TextFormField(
-                      controller: patientNameController,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                      decoration: InputDecoration(
-                        labelText: 'Full Name *',
-                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                        hintText: 'Enter patient name',
-                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
-                        prefixIcon: Icon(
-                          Icons.person_outline,
-                          color: theme.primaryColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: theme.primaryColor,
-                            width: 2,
-                          ),
+                    // ── Action buttons ────────────────────────────────────────
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: Colors.grey.withOpacity(0.10)),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Patient name is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Email Field
-                    TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                      decoration: InputDecoration(
-                        labelText: 'Email *',
-                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                        hintText: 'Enter your email',
-                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: theme.primaryColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: theme.primaryColor,
-                            width: 2,
+                      child: Row(
+                        children: [
+                          // Cancel
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: isLoading
+                                  ? null
+                                  : () => Navigator.pop(context),
+                              child: Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF1C2B4A,
+                                  ).withOpacity(0.06),
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                    color: const Color(
+                                      0xFF1C2B4A,
+                                    ).withOpacity(0.12),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Email is required';
-                        }
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
+                          const SizedBox(width: 12),
 
-                    // Phone Number Field
-                    TextFormField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number (Optional)',
-                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                        hintText: 'Enter your phone number',
-                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
-                        prefixIcon: Icon(
-                          Icons.phone,
-                          color: theme.primaryColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: theme.primaryColor,
-                            width: 2,
+                          // Confirm
+                          Expanded(
+                            flex: 2,
+                            child: GestureDetector(
+                              onTap: isLoading
+                                  ? null
+                                  : () {
+                                      if (formKey.currentState!.validate()) {
+                                        final appointment = AppointmentModel(
+                                          appointmentId: '',
+                                          appointmentNumber:
+                                              widget.appointmentNumber,
+                                          patientId: patientIdController.text
+                                              .trim(),
+                                          patientName: patientNameController
+                                              .text
+                                              .trim(),
+                                          patientEmail: emailController.text
+                                              .trim(),
+                                          patientPhone:
+                                              phoneController.text
+                                                  .trim()
+                                                  .isEmpty
+                                              ? null
+                                              : phoneController.text.trim(),
+                                          doctorId: widget.doctorId,
+                                          doctorName: widget.doctorName,
+                                          doctorSpecialty:
+                                              widget.doctorSpecialty.isEmpty
+                                              ? null
+                                              : widget.doctorSpecialty,
+                                          appointmentDate: widget.selectedDay,
+                                          notes:
+                                              notesController.text
+                                                  .trim()
+                                                  .isEmpty
+                                              ? null
+                                              : notesController.text.trim(),
+                                          status: 'pending',
+                                        );
+                                        widget.appointmentCubit
+                                            .createAppointment(appointment);
+                                      }
+                                    },
+                              child: Container(
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  gradient: isLoading
+                                      ? null
+                                      : const LinearGradient(
+                                          colors: [
+                                            Color(0xFF1C2B4A),
+                                            Color(0xFF2E4A7A),
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                  color: isLoading
+                                      ? const Color(0xFF1C2B4A).withOpacity(0.5)
+                                      : null,
+                                  borderRadius: BorderRadius.circular(14),
+                                  boxShadow: isLoading
+                                      ? []
+                                      : [
+                                          BoxShadow(
+                                            color: const Color(
+                                              0xFF1C2B4A,
+                                            ).withOpacity(0.28),
+                                            blurRadius: 14,
+                                            offset: const Offset(0, 5),
+                                          ),
+                                        ],
+                                ),
+                                child: Center(
+                                  child: isLoading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.check_rounded,
+                                              color: Colors.white,
+                                              size: 16,
+                                            ),
+                                            SizedBox(width: 6),
+                                            Text(
+                                              'Confirm',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value != null && value.isNotEmpty) {
-                          if (!RegExp(r'^\+?[\d\s-]{10,}$').hasMatch(value)) {
-                            return 'Please enter a valid phone number';
-                          }
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Notes Field
-                    TextFormField(
-                      controller: notesController,
-                      maxLines: 3,
-                      style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                      decoration: InputDecoration(
-                        labelText: 'Notes (Optional)',
-                        labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                        hintText: 'Any additional information',
-                        hintStyle: TextStyle(color: theme.textTheme.bodySmall?.color),
-                        prefixIcon: Icon(
-                          Icons.note_outlined,
-                          color: theme.primaryColor,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: theme.primaryColor,
-                            width: 2,
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            actions: [
-              TextButton(
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        Navigator.pop(context);
-                      },
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(color: theme.textTheme.bodyMedium?.color),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        if (formKey.currentState!.validate()) {
-                          final appointment = AppointmentModel(
-                            appointmentId: '',
-                            appointmentNumber: widget.appointmentNumber,
-                            patientId: patientIdController.text.trim(),
-                            patientName: patientNameController.text.trim(),
-                            patientEmail: emailController.text.trim(),
-                            patientPhone: phoneController.text.trim().isEmpty
-                                ? null
-                                : phoneController.text.trim(),
-                            doctorId: widget.doctorId,
-                            doctorName: widget.doctorName,
-                            doctorSpecialty: widget.doctorSpecialty.isEmpty
-                                ? null
-                                : widget.doctorSpecialty,
-                            appointmentDate: widget.selectedDay,
-                            timeSlot: null,
-                            notes: notesController.text.trim().isEmpty
-                                ? null
-                                : notesController.text.trim(),
-                            status: 'pending',
-                          );
-
-                          widget.appointmentCubit.createAppointment(appointment);
-                        }
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.primaryColor,
-                  foregroundColor: colorScheme.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: isLoading
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          color: colorScheme.onPrimary,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Confirm',
-                        style: TextStyle(color: colorScheme.onPrimary),
-                      ),
-              ),
-            ],
           );
         },
       ),
+    );
+  }
+}
+
+// ── Dialog info row (used in the header summary) ─────────────────────────────
+class _DialogInfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool light;
+  final bool accent;
+
+  const _DialogInfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.light = false,
+    this.accent = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 13,
+          color: accent
+              ? const Color(0xFF7EB8F7)
+              : Colors.white.withOpacity(0.55),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          '$label: ',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withOpacity(0.55),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 12,
+              color: accent ? const Color(0xFF7EB8F7) : Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Reusable dialog text field ────────────────────────────────────────────────
+class _DialogField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final IconData icon;
+  final bool readOnly;
+  final int maxLines;
+  final TextInputType? keyboardType;
+  final Color primaryColor;
+  final ColorScheme colorScheme;
+  final String? Function(String?)? validator;
+
+  const _DialogField({
+    required this.controller,
+    required this.label,
+    required this.hint,
+    required this.icon,
+    required this.primaryColor,
+    required this.colorScheme,
+    this.readOnly = false,
+    this.maxLines = 1,
+    this.keyboardType,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      style: const TextStyle(
+        fontSize: 13,
+        color: Color(0xFF1C2B4A),
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          color: Colors.grey.shade500,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        hintText: hint,
+        hintStyle: TextStyle(
+          color: Colors.grey.shade400,
+          fontSize: 13,
+        ),
+        prefixIcon: Icon(icon, color: primaryColor, size: 18),
+        filled: true,
+        fillColor: readOnly
+            ? const Color(0xFF1C2B4A).withOpacity(0.04)
+            : const Color(0xFFF5F7FA),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: primaryColor, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+              color: colorScheme.error.withOpacity(0.6), width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: maxLines > 1 ? 14 : 0,
+        ),
+      ),
+      validator: validator,
     );
   }
 }

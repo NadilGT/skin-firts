@@ -35,20 +35,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   final _notesController = TextEditingController();
 
   DateTime? _selectedDate;
-  String? _selectedTimeSlot;
 
-  final List<String> _timeSlots = [
-    '08:00 AM',
-    '09:00 AM',
-    '10:00 AM',
-    '11:00 AM',
-    '12:00 PM',
-    '01:00 PM',
-    '02:00 PM',
-    '03:00 PM',
-    '04:00 PM',
-    '05:00 PM',
-  ];
 
   @override
   void initState() {
@@ -116,15 +103,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
         return;
       }
 
-      if (_selectedTimeSlot == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a time slot'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
 
       final appointment = AppointmentModel(
         appointmentId: '',
@@ -141,7 +119,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
             ? null 
             : _doctorSpecialtyController.text.trim(),
         appointmentDate: _selectedDate!,
-        timeSlot: _selectedTimeSlot!,
         notes: _notesController.text.trim().isEmpty 
             ? null 
             : _notesController.text.trim(),
@@ -395,89 +372,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         ),
                         const SizedBox(height: 12),
 
-                        // Time Slot Picker
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Colors.grey[300]!,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.access_time,
-                                    color: Color(0xFF2E5BFF),
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    'Select Time Slot',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: _timeSlots.map((slot) {
-                                  final isSelected = _selectedTimeSlot == slot;
-                                  return InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _selectedTimeSlot = slot;
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? const Color(0xFF2E5BFF)
-                                            : Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: isSelected
-                                              ? const Color(0xFF2E5BFF)
-                                              : Colors.grey[300]!,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        slot,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
                         const SizedBox(height: 12),
 
                         // Notes Field

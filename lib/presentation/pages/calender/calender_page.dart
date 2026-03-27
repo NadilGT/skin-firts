@@ -134,15 +134,6 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
     }
   }
 
-  String _formatTime(String timeSlot) {
-    try {
-      if (timeSlot.contains('AM') || timeSlot.contains('PM')) return timeSlot;
-      final time = DateFormat('HH:mm').parse(timeSlot);
-      return DateFormat('hh:mm a').format(time);
-    } catch (e) {
-      return timeSlot;
-    }
-  }
 
   void _navigateToBookAppointment() async {
     final result = await Navigator.push(
@@ -732,9 +723,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  appointment.timeSlot != null
-                                      ? _formatTime(appointment.timeSlot!)
-                                      : '#${appointment.appointmentNumber}',
+                                  '#${appointment.appointmentNumber}',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey.shade500,
@@ -908,9 +897,6 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
               'Date',
               DateFormat('MMM dd, yyyy').format(appointment.appointmentDate),
             ),
-            if (appointment.timeSlot != null)
-              _buildDetailRow(Icons.access_time_rounded, 'Time',
-                  _formatTime(appointment.timeSlot!)),
             _buildDetailRow(Icons.tag_rounded, 'Appointment #',
                 appointment.appointmentNumber.toString()),
             if (appointment.notes != null && appointment.notes!.isNotEmpty)
