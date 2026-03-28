@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in.dart';
 
+import '../check_doctor_available_screen/check_doctor_available_screen.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -169,15 +171,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   icon: Icons.person_outline_rounded,
                   title: 'Profile',
-                  onTap: () {},
+                  onTap: () {
+                    
+                  },
                 ),
                 _Divider(),
                 _buildMenuItem(
                   context,
                   icon: Icons.favorite_outline_rounded,
-                  title: 'Favorites',
+                  title: 'Check Doctor Availability',
                   iconColor: Colors.pinkAccent.shade100,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CheckDoctorAvailableScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _Divider(),
                 _buildMenuItem(

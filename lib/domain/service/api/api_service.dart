@@ -5,13 +5,13 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/doctor_availability_model/doctor_availability_model.dart';
 import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../../../data/models/find_role_model/find_role_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
 import '../../../data/models/register_user_model/register_user_model.dart';
 import '../../../data/models/running_appointment_number_model/running_appointment_number_model.dart';
-import '../../entity/running_appointment_number_entity/running_appointment_number_entity.dart';
 
 part 'api_service.g.dart';
 
@@ -75,5 +75,11 @@ abstract class ApiService {
   @GET('/doctor-weekly-schedule/available-dates')
   Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
     @Query("doctorId") String doctorId,
+  );
+
+  @GET('/doctor-availability/check')
+  Future<HttpResponse<DoctorAvailabilityModel>> getDoctorAvailability(
+    @Query("doctorId") String doctorId,
+    @Query("date") String date,
   );
 }
