@@ -6,8 +6,8 @@ class DoctorAvailabilityEntity extends Equatable {
   final String doctorId;
   final String date;
   final bool isAvailable;
-  final String estimatedStartTime;
-  final int maxPatients;
+  final String? estimatedStartTime;
+  final int? maxPatients;
   final String notes;
   final String createdAt;
   final String updatedAt;
@@ -18,8 +18,8 @@ class DoctorAvailabilityEntity extends Equatable {
     required this.doctorId,
     required this.date,
     required this.isAvailable,
-    required this.estimatedStartTime,
-    required this.maxPatients,
+    this.estimatedStartTime,
+    this.maxPatients,
     required this.notes,
     required this.createdAt,
     required this.updatedAt,

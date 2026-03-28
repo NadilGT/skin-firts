@@ -178,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _Divider(),
                 _buildMenuItem(
                   context,
-                  icon: Icons.favorite_outline_rounded,
+                  icon: Icons.calendar_today_outlined,
                   title: 'Check Doctor Availability',
                   iconColor: Colors.pinkAccent.shade100,
                   onTap: () {

@@ -606,7 +606,7 @@ class _SeeDoctorAvailableScreenState extends State<SeeDoctorAvailableScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isAvailable ? "Doctor is Available" : "Not Available",
+                    isAvailable ? "Doctor is Available" : "Not available this doctor",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -648,23 +648,26 @@ class _SeeDoctorAvailableScreenState extends State<SeeDoctorAvailableScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              _detailRow(
-                icon: Icons.access_time_rounded,
-                label: "Estimated Start Time",
-                value: data.estimatedStartTime ?? "—",
-                primaryColor: primaryColor,
-                textColor: textColor,
-                subtitleColor: subtitleColor,
-              ),
-              _divider(isDarkMode),
-              _detailRow(
-                icon: Icons.people_alt_rounded,
-                label: "Max Patients",
-                value: "${data.maxPatients ?? 0} patients",
-                primaryColor: primaryColor,
-                textColor: textColor,
-                subtitleColor: subtitleColor,
-              ),
+              if (isAvailable) ...[
+                _detailRow(
+                  icon: Icons.access_time_rounded,
+                  label: "Estimated Start Time",
+                  value: data.estimatedStartTime ?? "—",
+                  primaryColor: primaryColor,
+                  textColor: textColor,
+                  subtitleColor: subtitleColor,
+                ),
+                _divider(isDarkMode),
+                _detailRow(
+                  icon: Icons.people_alt_rounded,
+                  label: "Max Patients",
+                  value: "${data.maxPatients ?? 0} patients",
+                  primaryColor: primaryColor,
+                  textColor: textColor,
+                  subtitleColor: subtitleColor,
+                ),
+                _divider(isDarkMode),
+              ],
               if ((data.notes as String).isNotEmpty) ...[
                 _divider(isDarkMode),
                 _detailRow(
