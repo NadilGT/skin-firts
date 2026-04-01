@@ -12,6 +12,7 @@ import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
 import '../../../data/models/register_user_model/register_user_model.dart';
 import '../../../data/models/running_appointment_number_model/running_appointment_number_model.dart';
+import '../../../data/models/save_fcm_token_model/save_fcm_token_model.dart';
 
 part 'api_service.g.dart';
 
@@ -81,5 +82,10 @@ abstract class ApiService {
   Future<HttpResponse<DoctorAvailabilityModel>> getDoctorAvailability(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+  );
+
+  @POST('/api/users/save-token')
+  Future<HttpResponse<dynamic>> saveFcmToken(
+    @Body() SaveFcmTokenModel saveFcmTokenModel,
   );
 }

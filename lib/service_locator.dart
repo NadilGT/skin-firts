@@ -48,6 +48,9 @@ import 'presentation/providers/notification_provider.dart';
 import 'data/datasources/fcm_datasource.dart';
 import 'data/repository_impl/notification_repository_impl/notification_repository_impl.dart';
 import 'domain/repositories/notification_repository/notification_repository.dart';
+import 'data/repository_impl/save_fcm_token_repository_impl/save_fcm_token_repository_impl.dart';
+import 'domain/repositories/save_fcm_token_repositoy/save_fcm_token_repositoy.dart';
+import 'domain/usecases/save_fcm_token_usecase/save_fcm_token_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -200,8 +203,16 @@ Future<void> initilizeDependencies()async{
     NotificationRepositoryImpl(sl()),
   );
 
+  sl.registerSingleton<SaveFcmTokenRepository>(
+    SaveFcmTokenRepositoryImpl(),
+  );
+
+  sl.registerSingleton<SaveFcmTokenUseCase>(
+    SaveFcmTokenUseCase(),
+  );
+
   sl.registerSingleton<NotificationProvider>(
-    NotificationProvider(sl()),
+    NotificationProvider(sl(), sl()),
   );
 
 }
