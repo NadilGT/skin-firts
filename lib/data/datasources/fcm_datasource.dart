@@ -1,7 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 import '../../../main.dart';
+import '../../core/services/local_notification_service.dart';
+import '../../presentation/pages/calender/calender_page.dart';
 
 class FCMDataSource {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -21,6 +22,14 @@ class FCMDataSource {
   void listenForeground() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("Foreground Notification: ${message.notification?.title}");
+
+      if (message.notification != null) {
+        LocalNotificationService.showNotification(
+          title: message.notification!.title ?? "New Notification",
+          body: message.notification!.body ?? "",
+          payload: message.data['type'],
+        );
+      }
     });
   }
 
@@ -29,13 +38,13 @@ class FCMDataSource {
       final type = message.data['type'];
       print("Notification Clicked: $type");
 
-      if (type == "APPOINTMENT_CONFIRMED") {
-        // Navigate to appointment screen
-        if (navigatorKey.currentContext != null) {
-          // Assuming AppointmentScreen is the target. We navigate to a generic placeholder or actual screen.
-          print("Go to appointment details");
-          // navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => const AppointmentScreen()));
-        }
+      // Navigate to Calendar Page
+      final context = navigatorKey.currentContext;
+      if (context != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CalendarPage()),
+        );
       }
     });
   }
