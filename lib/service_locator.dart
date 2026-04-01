@@ -44,6 +44,10 @@ import 'presentation/pages/appointment/next_appointment_number_cubit/next_appoin
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 import 'presentation/pages/check_doctor_available_screen/get_doctor_availability_cubit/get_doctor_availability_cubit.dart';
 import 'presentation/pages/get_running_appointment_number/cubit/get_running_appointment_number_cubit.dart';
+import 'presentation/providers/notification_provider.dart';
+import 'data/datasources/fcm_datasource.dart';
+import 'data/repository_impl/notification_repository_impl/notification_repository_impl.dart';
+import 'domain/repositories/notification_repository/notification_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -186,6 +190,18 @@ Future<void> initilizeDependencies()async{
 
   sl.registerFactory<GetDoctorAvailabilityCubit>(
     () => GetDoctorAvailabilityCubit(),
+  );
+
+  sl.registerSingleton<FCMDataSource>(
+    FCMDataSource(),
+  );
+
+  sl.registerSingleton<NotificationRepository>(
+    NotificationRepositoryImpl(sl()),
+  );
+
+  sl.registerSingleton<NotificationProvider>(
+    NotificationProvider(sl()),
   );
 
 }

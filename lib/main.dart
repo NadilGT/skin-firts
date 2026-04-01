@@ -7,13 +7,27 @@ import 'package:skin_firts/core/theme/app_theme.dart';
 import 'package:skin_firts/firebase_options.dart';
 import 'package:skin_firts/presentation/pages/splash_screen/splash_screen.dart';
 import 'package:skin_firts/service_locator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:skin_firts/presentation/providers/notification_provider.dart';
 
 import 'core/storage/shared_pref_manager.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Background message: ${message.messageId}");
+}
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initilizeDependencies();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final notificationProvider = sl<NotificationProvider>();
+  await notificationProvider.init();
 
   final sharedPrefManager = SharedPrefManager();
 
@@ -45,6 +59,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
+            navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
