@@ -10,6 +10,7 @@ import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../../../data/models/find_role_model/find_role_model.dart';
 import '../../../data/models/focus_model/focus_model.dart';
 import '../../../data/models/next_appointment_number_model/next_appointment_number_model.dart';
+import '../../../data/models/notification_model/notification_model.dart';
 import '../../../data/models/register_user_model/register_user_model.dart';
 import '../../../data/models/running_appointment_number_model/running_appointment_number_model.dart';
 import '../../../data/models/save_fcm_token_model/save_fcm_token_model.dart';
@@ -87,5 +88,12 @@ abstract class ApiService {
   @POST('/api/users/save-token')
   Future<HttpResponse<dynamic>> saveFcmToken(
     @Body() SaveFcmTokenModel saveFcmTokenModel,
+  );
+
+  @GET('/api/notifications')
+  Future<HttpResponse<NotificationPaginationResponseModel>> getNotifications(
+    @Query("userId") String userId,
+    @Query("lastId") String? lastId,
+    @Query("limit") int limit,
   );
 }
