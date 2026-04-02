@@ -6,6 +6,7 @@ import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in.dart';
 
 import '../check_doctor_available_screen/check_doctor_available_screen.dart';
+import '../notification/notification.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -193,9 +194,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 _Divider(),
                 _buildMenuItem(
                   context,
-                  icon: Icons.account_balance_wallet_outlined,
-                  title: 'Payment Method',
-                  onTap: () {},
+                  icon: Icons.notification_add,
+                  title: 'Notifications',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

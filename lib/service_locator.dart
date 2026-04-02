@@ -39,11 +39,13 @@ import 'domain/usecases/focus_usecase/focus_usecase.dart';
 import 'domain/usecases/get_all_doctors_by_focus_usecase/get_all_doctors_by_focus_usecase.dart';
 import 'domain/usecases/get_doctor_availability_usecase/get_doctor_availability_usecase.dart';
 import 'domain/usecases/get_next_appointment_number_usecase/get_next_appointment_number_usecase.dart';
+import 'domain/usecases/get_notofication_usecase/get_notofication_usecase.dart';
 import 'domain/usecases/get_running_appointment_number_usecase/get_running_appointment_number_usecase.dart';
 import 'presentation/pages/appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
 import 'presentation/pages/calender/bloc/appoinment_cubit.dart';
 import 'presentation/pages/check_doctor_available_screen/get_doctor_availability_cubit/get_doctor_availability_cubit.dart';
 import 'presentation/pages/get_running_appointment_number/cubit/get_running_appointment_number_cubit.dart';
+import 'presentation/pages/notification/get_notifications_cubit/get_notifications_cubit.dart';
 import 'presentation/providers/notification_provider.dart';
 import 'data/datasources/fcm_datasource.dart';
 import 'data/repository_impl/notification_repository_impl/notification_repository_impl.dart';
@@ -213,6 +215,14 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<NotificationProvider>(
     NotificationProvider(sl(), sl()),
+  );
+
+  sl.registerSingleton<GetNotoficationUsecase>(
+    GetNotoficationUsecase(),
+  );
+
+  sl.registerFactory<GetNotificationsCubit>(
+    () => GetNotificationsCubit(),
   );
 
 }
