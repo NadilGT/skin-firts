@@ -20,6 +20,7 @@ import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
 import 'package:skin_firts/domain/usecases/sign_up_usecase/sign_up_use_case.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
+import 'package:skin_firts/common/bloc/locale_cubit.dart';
 import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/doctor_schedule_cubit/doctor_schedule_cubit.dart' show DoctorScheduleCubit;
 
@@ -139,6 +140,10 @@ Future<void> initilizeDependencies()async{
 
   sl.registerSingleton<ThemeCubit>(
     ThemeCubit(),
+  );
+
+  sl.registerSingleton<LocaleCubit>(
+    LocaleCubit(),
   );
 
   sl.registerSingleton<FocusRepository>(

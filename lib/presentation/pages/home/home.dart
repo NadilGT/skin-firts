@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/appointment/appointment.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
@@ -75,6 +76,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -135,7 +137,7 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Good Morning 👋",
+                                  loc.goodMorning,
                                   style: TextStyle(
                                     color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
                                     fontSize: 13,
@@ -172,7 +174,7 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Your Schedule",
+                          loc.yourSchedule,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -182,7 +184,7 @@ class _HomeState extends State<Home> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          "Upcoming appointments",
+                          loc.upcomingAppointments,
                           style: TextStyle(
                             fontSize: 13,
                             color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
@@ -223,15 +225,15 @@ class _HomeState extends State<Home> {
                         elevation: 0,
                         shadowColor: Colors.transparent,
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.calendar_month_rounded,
+                          const Icon(Icons.calendar_month_rounded,
                               size: 18, color: Color(0xFF7EB8F7)),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Text(
-                            "Book Appointment",
-                            style: TextStyle(
+                            loc.bookAppointment,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.1,

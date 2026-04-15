@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 
 import '../../../../domain/entity/focus_entity/focus_entity.dart';
 import '../appointment/doctors_by_focus_cubit/doctors_by_focus_cubit.dart';
@@ -22,6 +23,7 @@ class _CheckDoctorAvailableScreenState
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
     final cardColor = Theme.of(context).cardColor;
@@ -41,9 +43,9 @@ class _CheckDoctorAvailableScreenState
             ? Theme.of(context).scaffoldBackgroundColor
             : const Color(0xFFF5F7FA),
         appBar: AppBar(
-          title: const Text(
-            'Check Availability',
-            style: TextStyle(
+          title: Text(
+            loc.checkAvailability,
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 18,
               letterSpacing: -0.3,
@@ -120,9 +122,9 @@ class _CheckDoctorAvailableScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Header ───────────────────────────────────────────
-                  const Text(
-                    "Find an available\ndoctor",
-                    style: TextStyle(
+                  Text(
+                    loc.findAvailableDoctor,
+                    style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF1C2B4A),
@@ -132,7 +134,7 @@ class _CheckDoctorAvailableScreenState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Select a focus area, then choose a doctor\nto check their availability.",
+                    loc.findAvailableDoctorSub,
                     style: TextStyle(
                       fontSize: 14,
                       color: subtitleColor,
@@ -176,7 +178,7 @@ class _CheckDoctorAvailableScreenState
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              'Select Focus',
+                              loc.selectFocus,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
@@ -226,7 +228,7 @@ class _CheckDoctorAvailableScreenState
                                   color: primaryColor,
                                 ),
                                 hint: Text(
-                                  'Choose a focus...',
+                                  loc.chooseAFocus,
                                   style: TextStyle(
                                     color: subtitleColor,
                                     fontSize: 14,
@@ -338,7 +340,7 @@ class _CheckDoctorAvailableScreenState
                                   ),
                                   const SizedBox(height: 14),
                                   Text(
-                                    "No doctors available",
+                                    loc.noDoctorsAvailable,
                                     style: TextStyle(
                                       color: textColor,
                                       fontSize: 15,
@@ -347,7 +349,7 @@ class _CheckDoctorAvailableScreenState
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "Try selecting a different focus",
+                                    loc.tryDifferentFocus,
                                     style: TextStyle(
                                       color: subtitleColor,
                                       fontSize: 13,
@@ -368,7 +370,7 @@ class _CheckDoctorAvailableScreenState
                               child: Row(
                                 children: [
                                   Text(
-                                    "Select a Doctor",
+                                    loc.selectADoctor,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -548,7 +550,7 @@ class _CheckDoctorAvailableScreenState
                                               ),
                                               const SizedBox(width: 4),
                                               Text(
-                                                "Check",
+                                                loc.check,
                                                 style: TextStyle(
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w700,

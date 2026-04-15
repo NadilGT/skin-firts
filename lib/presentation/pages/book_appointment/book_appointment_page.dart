@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
 import '../../../data/models/appointment/appointment_model.dart';
 import '../calender/bloc/appoinment_cubit.dart';
 import '../calender/bloc/appointment_state.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 
 class BookAppointmentPage extends StatefulWidget {
   final String? doctorId;
@@ -131,6 +131,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -140,9 +141,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
           icon: const Icon(Icons.arrow_back, color: Color(0xFF2E5BFF)),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Book Appointment',
-          style: TextStyle(
+        title: Text(
+          loc.bookAppointmentTitle,
+          style: const TextStyle(
             color: Color(0xFF2E5BFF),
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -183,9 +184,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Patient Information Section
-                        const Text(
-                          'Patient Information',
-                          style: TextStyle(
+                        Text(
+                          loc.patientInfoSection,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -248,9 +249,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         const SizedBox(height: 20),
 
                         // Doctor Information Section
-                        const Text(
-                          'Doctor Information',
-                          style: TextStyle(
+                        Text(
+                          loc.doctorInfoSection,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -294,9 +295,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         const SizedBox(height: 20),
 
                         // Appointment Details Section
-                        const Text(
-                          'Appointment Details',
-                          style: TextStyle(
+                        Text(
+                          loc.appointmentDetails,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -336,7 +337,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Appointment Date',
+                                        loc.appointmentDate,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey[600],
@@ -345,7 +346,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                       const SizedBox(height: 4),
                                       Text(
                                         _selectedDate == null
-                                            ? 'Select Date'
+                                            ? loc.selectDateHint
                                             : DateFormat('EEEE, MMM dd, yyyy')
                                                 .format(_selectedDate!),
                                         style: TextStyle(
@@ -396,7 +397,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                             elevation: 2,
                           ),
                           child: Text(
-                            isLoading ? 'Booking...' : 'Book Appointment',
+                            isLoading ? loc.booking : loc.bookAppointmentTitle,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

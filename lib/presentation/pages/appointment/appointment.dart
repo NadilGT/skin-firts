@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/entity/focus_entity/focus_entity.dart';
@@ -20,6 +21,7 @@ class _AppointmentState extends State<AppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
     final cardColor = Theme.of(context).cardColor;
@@ -38,9 +40,9 @@ class _AppointmentState extends State<AppointmentPage> {
         backgroundColor:
             isDarkMode ? Theme.of(context).scaffoldBackgroundColor : const Color(0xFFF5F7FA),
         appBar: AppBar(
-          title: const Text(
-            'Book Appointment',
-            style: TextStyle(
+          title: Text(
+            loc.bookAppointment,
+            style: const TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 18,
               letterSpacing: -0.3,
@@ -117,9 +119,9 @@ class _AppointmentState extends State<AppointmentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Header ───────────────────────────────────────────
-                  const Text(
-                    "What do you need\nhelp with?",
-                    style: TextStyle(
+                  Text(
+                    loc.whatDoYouNeed,
+                    style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF1C2B4A),
@@ -129,7 +131,7 @@ class _AppointmentState extends State<AppointmentPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Select a primary focus to match you\nwith the right specialist.",
+                    loc.selectFocusSubtitle,
                     style: TextStyle(
                       fontSize: 14,
                       color: subtitleColor,
@@ -172,7 +174,7 @@ class _AppointmentState extends State<AppointmentPage> {
                             ),
                             const SizedBox(width: 12),
                             Text(
-                              'Select Focus',
+                              loc.selectFocus,
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
@@ -221,7 +223,7 @@ class _AppointmentState extends State<AppointmentPage> {
                                   color: primaryColor,
                                 ),
                                 hint: Text(
-                                  'Choose a focus...',
+                                  loc.chooseAFocus,
                                   style: TextStyle(
                                     color: subtitleColor,
                                     fontSize: 14,
@@ -330,7 +332,7 @@ class _AppointmentState extends State<AppointmentPage> {
                                   ),
                                   const SizedBox(height: 14),
                                   Text(
-                                    "No doctors available",
+                                    loc.noDoctorsAvailable,
                                     style: TextStyle(
                                       color: textColor,
                                       fontSize: 15,
@@ -339,7 +341,7 @@ class _AppointmentState extends State<AppointmentPage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "Try selecting a different focus",
+                                    loc.tryDifferentFocus,
                                     style: TextStyle(
                                       color: subtitleColor,
                                       fontSize: 13,
@@ -360,7 +362,7 @@ class _AppointmentState extends State<AppointmentPage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    "Available Specialists",
+                                    loc.availableSpecialists,
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,

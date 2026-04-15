@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:skin_firts/common/widgets/appBar/app_bar.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
 import 'package:skin_firts/presentation/pages/doctor_info/doctor_info.dart';
@@ -23,11 +24,12 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return BlocProvider(
       create: (context) => DoctorsCubit()..getDoctors(),
       child: Scaffold(
         appBar: BasicAppbar(
-          title: Text("Doctors"),
+          title: Text(loc.doctors),
           action: Row(
             children: [
               _appBarIcon(Icons.search),
@@ -54,7 +56,7 @@ class _DoctorsListScreenState extends State<DoctorsListScreen> {
                 children: [
                   Row(
                     children: [
-                      Text("Sort By"),
+                      Text(loc.sortBy),
                       SizedBox(width: 5),
                       _appBarIconText("A--Z"),
                       SizedBox(width: 5),

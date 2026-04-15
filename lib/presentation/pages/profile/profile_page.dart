@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skin_firts/common/bloc/locale_cubit.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:skin_firts/presentation/pages/sign_in/sign_in.dart';
 
 import '../check_doctor_available_screen/check_doctor_available_screen.dart';
@@ -31,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (!mounted) return;
       final updatedUser = FirebaseAuth.instance.currentUser;
       setState(() {
-        _userName = updatedUser?.displayName ?? 'No name';
+        _userName = updatedUser?.displayName ?? AppLocalizations('en').noName;
       });
     }
   }
@@ -40,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: isDark
@@ -50,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'My Profile',
+          loc.myProfile,
           style: TextStyle(
             color: isDark ? Colors.white : const Color(0xFF1C2B4A),
             fontSize: 17,
@@ -165,22 +168,20 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 28),
 
             // ── Menu group 1: Account ────────────────────────────────
-            _SectionLabel(label: 'Account'),
+            _SectionLabel(label: loc.account),
             _MenuCard(
               children: [
                 _buildMenuItem(
                   context,
                   icon: Icons.person_outline_rounded,
-                  title: 'Profile',
-                  onTap: () {
-                    
-                  },
+                  title: loc.profile,
+                  onTap: () {},
                 ),
                 _Divider(),
                 _buildMenuItem(
                   context,
                   icon: Icons.calendar_today_outlined,
-                  title: 'Check Doctor Availability',
+                  title: loc.checkDoctorAvailability,
                   iconColor: Colors.pinkAccent.shade100,
                   onTap: () {
                     Navigator.push(
@@ -195,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _buildMenuItem(
                   context,
                   icon: Icons.notification_add,
-                  title: 'Notifications',
+                  title: loc.notifications,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -211,20 +212,17 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
 
             // ── Menu group 2: Preferences ────────────────────────────
-            _SectionLabel(label: 'Preferences'),
+            _SectionLabel(label: loc.preferences),
             _MenuCard(
               children: [
-                _buildMenuItem(
-                  context,
-                  icon: Icons.lock_outline_rounded,
-                  title: 'Privacy Policy',
-                  onTap: () {},
-                ),
+                // ── Language toggle (EN ↔ සිංහල) ────────────────────
+                _buildLanguageToggle(context, loc),
+
                 _Divider(),
                 _buildMenuItem(
                   context,
                   icon: Icons.settings_outlined,
-                  title: 'Settings',
+                  title: loc.settings,
                   onTap: () {},
                 ),
                 _Divider(),
@@ -255,7 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
-                          'Dark Mode',
+                          loc.darkMode,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -285,7 +283,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _buildMenuItem(
                   context,
                   icon: Icons.help_outline_rounded,
-                  title: 'Help',
+                  title: loc.help,
                   onTap: () {},
                 ),
               ],
@@ -334,10 +332,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(width: 14),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Logout',
-                          style: TextStyle(
+                          loc.logout,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.redAccent,
@@ -409,6 +407,148 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Language toggle row — EN pill ⟷ සිංහල pill with animated switch.
+  Widget _buildLanguageToggle(BuildContext context, AppLocalizations loc) {
+    final isSinhala = context.watch<LocaleCubit>().state.isSinhala;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = Theme.of(context).primaryColor;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          // Icon box
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: primaryColor.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.language_rounded,
+              color: primaryColor,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 14),
+
+          // Label + active language badge
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  loc.language,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Colors.white : const Color(0xFF1C2B4A),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: Text(
+                    isSinhala ? 'සිංහල' : 'English',
+                    key: ValueKey(isSinhala),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: primaryColor,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // EN / සි pill toggle
+          GestureDetector(
+            onTap: () => context.read<LocaleCubit>().toggleLocale(),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              width: 72,
+              height: 34,
+              decoration: BoxDecoration(
+                color: isSinhala
+                    ? primaryColor
+                    : primaryColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(34),
+                border: Border.all(
+                  color: primaryColor.withOpacity(0.35),
+                  width: 1.2,
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Background labels
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'EN',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: isSinhala
+                                ? Colors.white.withOpacity(0.55)
+                                : primaryColor,
+                          ),
+                        ),
+                        Text(
+                          'සි',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: isSinhala
+                                ? Colors.white
+                                : primaryColor.withOpacity(0.45),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Sliding thumb
+                  AnimatedAlign(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    alignment: isSinhala
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3),
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: isSinhala ? Colors.white : primaryColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
