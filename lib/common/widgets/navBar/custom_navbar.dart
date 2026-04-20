@@ -6,6 +6,7 @@ import 'package:skin_firts/presentation/pages/profile/profile_page.dart';
 import 'package:skin_firts/presentation/pages/messages/messages_page.dart';
 
 import '../../../presentation/pages/find_running_appointment_page/find_running_appointment_page.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
@@ -93,7 +94,7 @@ class _MainNavigationState extends State<MainNavigation> {
                       if (isSelected) ...[
                         const SizedBox(width: 8),
                         Text(
-                          _getLabelForIndex(index),
+                          _getLabelForIndex(context, index),
                           style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
@@ -127,18 +128,19 @@ class _MainNavigationState extends State<MainNavigation> {
     }
   }
 
-  String _getLabelForIndex(int index) {
+  String _getLabelForIndex(BuildContext context, int index) {
+    final loc = AppLocalizations.of(context);
     switch (index) {
       case 0:
-        return "Home";
+        return loc.navHome;
       case 1:
-        return "Live Appointment";
+        return loc.navLiveAppointment;
       case 2:
-        return "Profile";
+        return loc.navProfile;
       case 3:
-        return "Calendar";
+        return loc.navCalendar;
       default:
-        return "Home";
+        return loc.navHome;
     }
   }
 }

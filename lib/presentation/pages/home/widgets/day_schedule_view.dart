@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../data/models/appointment/appointment_model.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class DayScheduleView extends StatelessWidget {
   final List<AppointmentModel> appointments;
@@ -45,6 +46,7 @@ class DayScheduleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     if (appointments.isEmpty) {
       return Center(
         child: Column(
@@ -65,7 +67,7 @@ class DayScheduleView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
               Text(
-                'No appointments',
+                loc.noAppointments,
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -174,7 +176,7 @@ class DayScheduleView extends StatelessWidget {
                                   ),
                                 ),
                                 child: Text(
-                                  appointment.status.toUpperCase(),
+                                  loc.translateStatus(appointment.status).toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w700,
@@ -226,7 +228,7 @@ class DayScheduleView extends StatelessWidget {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  'Dr. ${appointment.doctorName}',
+                                  loc.doctorPrefix(appointment.doctorName),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,

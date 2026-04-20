@@ -199,6 +199,12 @@ class AppLocalizations {
   String errorText(String error) => isSinhala ? 'දෝෂය: $error' : 'Error: $error';
   String get apptNumberShort => isSinhala ? 'හමුවීම් #' : 'Appt. #';
 
+  // ── Navbar ────────────────────────────────────────────────────────
+  String get navHome => isSinhala ? 'ගෙදර' : 'Home';
+  String get navLiveAppointment => isSinhala ? 'සජීවී හමුවීම' : 'Live Appointment';
+  String get navProfile => isSinhala ? 'පැතිකඩ' : 'Profile';
+  String get navCalendar => isSinhala ? 'දින දර්ශනය' : 'Calendar';
+
   // ── Focus Translation ─────────────────────────────────────────────
   String translateFocus(String focusName) {
     if (!isSinhala) return focusName;
@@ -217,4 +223,22 @@ class AppLocalizations {
         return focusName;
     }
   }
+
+  // ── Status Translation ────────────────────────────────────────────
+  String translateStatus(String status) {
+    if (!isSinhala) return status;
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return 'තහවුරු කර ඇත';
+      case 'pending':
+        return 'පොරොත්තුවෙන්';
+      case 'cancelled':
+        return 'අවලංගු කර ඇත';
+      case 'completed':
+        return 'සම්පූර්ණයි';
+      default:
+        return status;
+    }
+  }
+  String doctorPrefix(String name) => isSinhala ? 'වෛද්‍ය $name' : 'Dr. $name';
 }
