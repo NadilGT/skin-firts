@@ -8,6 +8,7 @@ import '../../../data/models/appointment/appointment_model.dart';
 import '../../../domain/usecases/appointment_usecase/appointment_usecase.dart';
 import '../../../domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import '../../../service_locator.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../book_appointment/book_appointment_page.dart';
 import 'bloc/appoinment_cubit.dart';
 import 'bloc/appointments_cubit.dart';
@@ -156,6 +157,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: isDark
@@ -166,7 +168,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'My Appointments',
+          l10n.myAppointments,
           style: TextStyle(
             color: isDark ? Colors.white : const Color(0xFF1C2B4A),
             fontSize: 17,
@@ -254,9 +256,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Failed to load appointments',
-                      style: TextStyle(
+                    Text(
+                      l10n.failedToLoadAppointments,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
                         color: Color(0xFF1C2B4A),
@@ -285,9 +287,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'Retry',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      child: Text(
+                        l10n.retry,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -308,7 +310,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                   child: Row(
                     children: [
                       _buildSummaryCard(
-                        'Upcoming',
+                        l10n.upcoming,
                         _upcomingAppointments,
                         const Color(0xFF4A90D9),
                         const Color(0xFFDBEAFE),
@@ -316,7 +318,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                       ),
                       const SizedBox(width: 12),
                       _buildSummaryCard(
-                        'Completed',
+                        l10n.completed,
                         _completedAppointments,
                         const Color(0xFF0D9488),
                         const Color(0xFFCCFBF1),
@@ -462,8 +464,8 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                     children: [
                       Text(
                         _selectedDayAppointments.isEmpty
-                            ? 'No appointments'
-                            : '${_selectedDayAppointments.length} Appointment${_selectedDayAppointments.length > 1 ? 's' : ''}',
+                            ? l10n.noAppointments
+                            : l10n.appointmentCount(_selectedDayAppointments.length),
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
@@ -526,9 +528,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                             ),
                           ),
                           const SizedBox(height: 14),
-                          const Text(
-                            'No appointments',
-                            style: TextStyle(
+                          Text(
+                            l10n.noAppointments,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 15,
                               color: Color(0xFF1C2B4A),
@@ -536,7 +538,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Nothing scheduled for this day',
+                            l10n.nothingScheduled,
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey.shade500,
@@ -800,6 +802,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   void _showAppointmentDetails(AppointmentModel appointment) {
     final statusColor = _getStatusColor(appointment.status);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -841,9 +844,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
-                  'Appointment Details',
-                  style: TextStyle(
+                Text(
+                  l10n.appointmentDetails,
+                  style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF1C2B4A),
@@ -886,22 +889,22 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
 
             // Detail rows
             _buildDetailRow(
-                Icons.person_rounded, 'Doctor', appointment.doctorName),
+                Icons.person_rounded, l10n.doctorLabel, appointment.doctorName),
             if (appointment.doctorSpecialty != null)
-              _buildDetailRow(Icons.medical_services_rounded, 'Specialty',
+              _buildDetailRow(Icons.medical_services_rounded, l10n.specialtyLabel,
                   appointment.doctorSpecialty!),
-            _buildDetailRow(Icons.person_outline_rounded, 'Patient',
+            _buildDetailRow(Icons.person_outline_rounded, l10n.patientLabel,
                 appointment.patientName),
             _buildDetailRow(
               Icons.calendar_today_rounded,
-              'Date',
+              l10n.dateLabel,
               DateFormat('MMM dd, yyyy').format(appointment.appointmentDate),
             ),
-            _buildDetailRow(Icons.tag_rounded, 'Appointment #',
+            _buildDetailRow(Icons.tag_rounded, l10n.appointmentNumber,
                 appointment.appointmentNumber.toString()),
             if (appointment.notes != null && appointment.notes!.isNotEmpty)
               _buildDetailRow(
-                  Icons.notes_rounded, 'Notes', appointment.notes!),
+                  Icons.notes_rounded, l10n.notesLabel, appointment.notes!),
 
             const SizedBox(height: 24),
 
@@ -926,9 +929,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      child: Text(
+                        l10n.cancel,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -940,8 +943,8 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                     onPressed: () {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Reschedule feature coming soon'),
+                        SnackBar(
+                          content: Text(l10n.rescheduleFeatureComingSoon),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
@@ -955,9 +958,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text(
-                      'Reschedule',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                    child: Text(
+                      l10n.reschedule,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -1015,14 +1018,15 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
   }
 
   void _showCancelDialog(AppointmentModel appointment) {
+    final l10n = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Cancel Appointment',
-          style: TextStyle(
+        title: Text(
+          l10n.cancelAppointmentTitle,
+          style: const TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 17,
             color: Color(0xFF1C2B4A),
@@ -1030,7 +1034,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
           ),
         ),
         content: Text(
-          'Are you sure you want to cancel your appointment with ${appointment.doctorName}?',
+          l10n.confirmCancelAppointment(appointment.doctorName),
           style: TextStyle(
             color: Colors.grey.shade600,
             fontSize: 14,
@@ -1041,7 +1045,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'No, Keep It',
+              l10n.noKeepIt,
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontWeight: FontWeight.w600,
@@ -1053,8 +1057,7 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text(
-                      'Appointment cancellation feature not available yet.'),
+                  content: Text(l10n.cancelNotAvailable),
                   backgroundColor: Theme.of(context).colorScheme.error,
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -1072,9 +1075,9 @@ class _CalendarPageContentState extends State<CalendarPageContent> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text(
-              'Yes, Cancel',
-              style: TextStyle(fontWeight: FontWeight.w600),
+            child: Text(
+              l10n.yesCancel,
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ],

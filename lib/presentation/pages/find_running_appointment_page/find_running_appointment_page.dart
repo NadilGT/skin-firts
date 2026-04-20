@@ -195,7 +195,7 @@ class _FindRunningAppointmentPageState
                                   return DropdownMenuItem<FocusEntity>(
                                     value: focus,
                                     child: Text(
-                                      focus.name ?? "Unknown",
+                                      loc.translateFocus(focus.name ?? "Unknown"),
                                       style: TextStyle(
                                         color: selectedFocus == focus
                                             ? primaryColor
