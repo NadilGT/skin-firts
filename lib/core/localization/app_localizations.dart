@@ -53,17 +53,17 @@ class AppLocalizations {
       isSinhala ? 'ඔබට කුමන\nඋදව්වක් අවශ්‍යද?' : 'What do you need\nhelp with?';
   String get selectFocusSubtitle =>
       isSinhala
-          ? 'නිවැරදි විශේෂඥ ලබා ගැනීමට\nකේන්ද්‍රය තෝරන්න.'
+          ? 'නිවැරදි විශේෂඥ ලබා ගැනීමට\nවෛද්‍ය විශේෂත්වය තෝරන්න.'
           : 'Select a primary focus to match you\nwith the right specialist.';
-  String get selectFocus => isSinhala ? 'කේන්ද්‍රය තෝරන්න' : 'Select Focus';
+  String get selectFocus => isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න' : 'Select Doctor Specialty';
   String get chooseAFocus =>
-      isSinhala ? 'කේන්ද්‍රයක් තෝරන්න...' : 'Choose a focus...';
+      isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න...' : 'Choose a Doctor Specialty...';
   String get availableSpecialists =>
       isSinhala ? 'ලබා ගත හැකි විශේෂඥයෝ' : 'Available Specialists';
   String get noDoctorsAvailable =>
       isSinhala ? 'වෛද්‍යවරු නොමැත' : 'No doctors available';
   String get tryDifferentFocus =>
-      isSinhala ? 'වෙනත් කේන්ද්‍රයක් උත්සාහ කරන්න' : 'Try selecting a different focus';
+      isSinhala ? 'වෙනත් වෛද්‍ය විශේෂත්වයක් උත්සාහ කරන්න' : 'Try selecting a different Doctor Specialty';
   String get yrs => isSinhala ? 'වසර' : 'yrs';
 
   // ── Doctor ───────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ class AppLocalizations {
   String get careerPath => isSinhala ? 'වෘත්තීය මාර්ගය' : 'Career Path';
   String get highlights => isSinhala ? 'ඉස්මතු කිරීම්' : 'Highlights';
   String get experience => isSinhala ? 'අත්දැකීම' : 'experience';
-  String get focus => isSinhala ? 'අවධානය' : 'Focus';
+  String get focus => isSinhala ? 'වෛද්‍ය විශේෂත්වය' : 'Doctor Specialty';
 
   // ── Check Doctor Availability ────────────────────────────────────
   String get checkAvailability =>
@@ -87,8 +87,8 @@ class AppLocalizations {
       isSinhala ? 'ලබා ගත හැකි\nවෛද්‍යවරයෙකු සොයන්න' : 'Find an available\ndoctor';
   String get findAvailableDoctorSub =>
       isSinhala
-          ? 'කේන්ද්‍ර ක්ෂේත්‍රයක් තෝරා, ඔවුන්ගේ\nලබා ගැනීමේ හැකියාව පරීක්ෂා කිරීමට\nවෛද්‍යවරයෙකු තෝරන්න.'
-          : 'Select a focus area, then choose a doctor\nto check their availability.';
+          ? 'වෛද්‍ය විශේෂත්වයක් තෝරා, ඔවුන්ගේ\nලබා ගැනීමේ හැකියාව පරීක්ෂා කිරීමට\nවෛද්‍යවරයෙකු තෝරන්න.'
+          : 'Select a Doctor Specialty, then choose a doctor\nto check their availability.';
   String get selectADoctor =>
       isSinhala ? 'වෛද්‍යවරයෙකු තෝරන්න' : 'Select a Doctor';
   String get check => isSinhala ? 'පරීක්ෂා කරන්න' : 'Check';
@@ -139,13 +139,13 @@ class AppLocalizations {
 
   // ── Find Running Appointment Page ──────────────────────────────────
   String get findRunningAppointment => isSinhala ? 'දැනට පවතින හමුවීම සොයන්න' : 'Find Running Appointment';
-  String get selectAFocusArea => isSinhala ? 'කේන්ද්‍ර ක්ෂේත්‍රයක් තෝරන්න' : 'Select a Focus Area';
+  String get selectAFocusArea => isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න' : 'Select a Doctor Specialty';
   String get chooseAFocusToSeeDoctors => 
-      isSinhala ? 'දැනට පවතින හමුවීම් ඇති වෛද්‍යවරුන් බැලීමට කේන්ද්‍රයක් තෝරන්න.' : 'Choose a focus to see doctors with currently running appointments.';
+      isSinhala ? 'දැනට පවතින හමුවීම් ඇති වෛද්‍යවරුන් බැලීමට කේන්ද්‍රයක් තෝරන්න.' : 'Choose a Doctor Specialty to see doctors with currently running appointments.';
   String get noDoctorsAvailableForFocus =>
-      isSinhala ? 'මෙම කේන්ද්‍රය සඳහා වෛද්‍යවරුන් නොමැත.' : 'No doctors available for this focus.';
+      isSinhala ? 'මෙම කේන්ද්‍රය සඳහා වෛද්‍යවරුන් නොමැත.' : 'No doctors available for this Doctor Specialty.';
   String get failedToLoadFocus =>
-      isSinhala ? 'කේන්ද්‍රය පූරණය කිරීමට අසමත් විය:' : 'Failed to load focus:';
+      isSinhala ? 'වෛද්‍ය විශේෂත්වය පූරණය කිරීමට අසමත් විය:' : 'Failed to load Doctor Specialty:';
   String get failedToLoadDoctors =>
       isSinhala ? 'වෛද්‍යවරුන් පූරණය කිරීමට අසමත් විය:' : 'Failed to load doctors:';
 
