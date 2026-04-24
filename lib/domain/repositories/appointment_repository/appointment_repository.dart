@@ -11,6 +11,7 @@ abstract class AppointmentRepository  {
   Future<DataState<NextAppointmentNumberModel>> getNextAppointmentNumber(
     String doctorId,
     String date,
+    String? branchId,
   );
   Future<DataState<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
     String doctorId,

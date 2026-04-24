@@ -199,10 +199,15 @@ class _ApiService implements ApiService {
 
   @override
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctorsByFocus(
-    String focus,
+    String focusId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'focus': focus};
+    final queryParameters = <String, dynamic>{
+      r'focusId': focusId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<List<DoctorInfoModel>>>(
@@ -235,12 +240,15 @@ class _ApiService implements ApiService {
   Future<HttpResponse<NextAppointmentNumberModel>> getNextAppointmentNumber(
     String doctorId,
     String date,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'doctorId': doctorId,
       r'date': date,
+      r'branchId': branchId,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<NextAppointmentNumberModel>>(
@@ -364,9 +372,14 @@ class _ApiService implements ApiService {
   @override
   Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
     String doctorId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'doctorId': doctorId};
+    final queryParameters = <String, dynamic>{
+      r'doctorId': doctorId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DoctorScheduleResponseModel>>(

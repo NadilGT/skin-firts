@@ -253,7 +253,7 @@ class _AppointmentState extends State<AppointmentPage> {
                                     context
                                         .read<DoctorsByFocusCubit>()
                                         .getAllDoctorsByFocus(
-                                          selectedFocus!.name ?? "",
+                                          selectedFocus!.focusId ?? "",
                                         );
                                   }
                                 },

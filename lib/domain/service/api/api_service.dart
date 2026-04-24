@@ -51,13 +51,15 @@ abstract class ApiService {
 
   @GET('/findAll/doctors/focus')
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctorsByFocus(
-    @Query("focus") String focus,
+    @Query("focusId") String focusId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/appointment/next-number/doctorId')
   Future<HttpResponse<NextAppointmentNumberModel>> getNextAppointmentNumber(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+    @Query("branchId") String? branchId,
   );
 
   @POST('/register/patient')
@@ -79,6 +81,7 @@ abstract class ApiService {
   @GET('/doctor-weekly-schedule/available-dates')
   Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
     @Query("doctorId") String doctorId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/doctor-availability/check')
