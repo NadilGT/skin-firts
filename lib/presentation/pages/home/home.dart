@@ -85,11 +85,12 @@ class _HomeState extends State<Home> {
                   return ListTile(
                     title: Text(branch.name),
                     onTap: () async {
-                      await sharedPrefManager.saveBranchId(branch.id);
+                      await sharedPrefManager.saveBranchId(branch.branchId);
                       if (mounted) {
                         setState(() {
-                          currentBranchId = branch.id;
+                          currentBranchId = branch.branchId;
                         });
+                        context.read<AppointmentCubits>().getAllAppointments();
                       }
                       Navigator.of(dialogContext).pop();
                     },
@@ -250,11 +251,11 @@ class _HomeState extends State<Home> {
                                   return const SizedBox();
 
                                 final isValid = branches.any(
-                                  (b) => b.id == currentBranchId,
+                                  (b) => b.branchId == currentBranchId,
                                 );
                                 final selectedId = isValid
                                     ? currentBranchId
-                                    : branches.first.id;
+                                    : branches.first.branchId;
 
                                 return DropdownButton<String>(
                                   value: selectedId,
@@ -265,7 +266,7 @@ class _HomeState extends State<Home> {
                                   underline: const SizedBox(),
                                   items: branches.map((branch) {
                                     return DropdownMenuItem<String>(
-                                      value: branch.id,
+                                      value: branch.branchId,
                                       child: Text(
                                         branch.name,
                                         style: TextStyle(
@@ -290,6 +291,7 @@ class _HomeState extends State<Home> {
                                         setState(() {
                                           currentBranchId = newId;
                                         });
+                                        context.read<AppointmentCubits>().getAllAppointments();
                                       }
                                     }
                                   },

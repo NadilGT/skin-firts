@@ -135,9 +135,14 @@ class _ApiService implements ApiService {
   @override
   Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
     String patientId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'patientId': patientId};
+    final queryParameters = <String, dynamic>{
+      r'patientId': patientId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<PaginatedAppointmentsModel>>(

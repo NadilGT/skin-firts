@@ -43,6 +43,7 @@ abstract class ApiService {
   @GET('/findAll/appointments/patient')
   Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
     @Query("patientId") String patientId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/findAll/focus')

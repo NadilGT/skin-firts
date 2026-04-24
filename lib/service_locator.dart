@@ -7,6 +7,7 @@ import 'package:skin_firts/data/repository_impl/find_role_repository_impl/find_r
 import 'package:skin_firts/data/repository_impl/register_user_repository_impl/register_user_repository_impl.dart';
 import 'package:skin_firts/data/repository_impl/toggle_favorite_repository_impl/toggle_favorite_repository_impl.dart';
 import 'package:skin_firts/domain/repositories/auth/auth_firebase_service.dart';
+import 'package:skin_firts/domain/repositories/branch_repository/branch_repository.dart';
 import 'package:skin_firts/domain/repositories/doctor_repository/doctor_repository.dart';
 import 'package:skin_firts/domain/repositories/find_role_repository/find_role_repository.dart';
 import 'package:skin_firts/domain/repositories/register_user_repository/register_user_repository.dart';
@@ -15,17 +16,20 @@ import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/domain/usecases/doctor_info_usecase/doctor_info_use_case.dart';
 import 'package:skin_firts/domain/usecases/doctors_usecase/doctors_use_case.dart';
-import 'package:skin_firts/domain/usecases/get_doctor_schedule_usecase/get_doctor_schedule_usecase.dart' show GetDoctorScheduleUsecase;
+import 'package:skin_firts/domain/usecases/get_doctor_schedule_usecase/get_doctor_schedule_usecase.dart'
+    show GetDoctorScheduleUsecase;
 import 'package:skin_firts/domain/usecases/login_usecase/login_use_case.dart';
 import 'package:skin_firts/domain/usecases/sign_up_usecase/sign_up_use_case.dart';
 import 'package:skin_firts/domain/usecases/toggle_favorite_usecase/toggle_favorite_usecase.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/common/bloc/locale_cubit.dart';
 import 'package:skin_firts/presentation/pages/calender/bloc1/appointments_cubit.dart';
-import 'package:skin_firts/presentation/pages/doctor_info/doctor_schedule_cubit/doctor_schedule_cubit.dart' show DoctorScheduleCubit;
+import 'package:skin_firts/presentation/pages/doctor_info/doctor_schedule_cubit/doctor_schedule_cubit.dart'
+    show DoctorScheduleCubit;
 
 import 'core/storage/shared_pref_manager.dart';
 import 'data/repository_impl/appointment_repository_impl/appointment_repository_impl.dart';
+import 'data/repository_impl/branch_repository_impl/branch_repository_impl.dart';
 import 'data/repository_impl/doctor_availability_repository_impl/doctor_availability_repository_impl.dart';
 import 'data/repository_impl/doctor_info_repository_impl/doctor_info_repository_impl.dart';
 import 'data/repository_impl/doctor_schedule_repository_impl/doctor_schedule_repository_impl.dart';
@@ -36,6 +40,7 @@ import 'domain/repositories/doctor_info_repository/doctor_info_repository.dart';
 import 'domain/repositories/doctor_schedule_repository/doctor_schedule_repository.dart';
 import 'domain/repositories/focus_repository/focus_repository.dart';
 import 'domain/usecases/appointment_usecase/appointment_usecase.dart';
+import 'domain/usecases/branch_usecase/branch_usecase.dart';
 import 'domain/usecases/focus_usecase/focus_usecase.dart';
 import 'domain/usecases/get_all_doctors_by_focus_usecase/get_all_doctors_by_focus_usecase.dart';
 import 'domain/usecases/get_doctor_availability_usecase/get_doctor_availability_usecase.dart';
@@ -57,102 +62,73 @@ import 'domain/usecases/save_fcm_token_usecase/save_fcm_token_usecase.dart';
 
 final sl = GetIt.instance;
 
-Future<void> initilizeDependencies()async{
-
+Future<void> initilizeDependencies() async {
   final sharedPrefManager = SharedPrefManager();
   sl.registerSingleton<SharedPrefManager>(sharedPrefManager);
   await sharedPrefManager.getToken();
 
   // Dio setup
   final dio = Dio();
-  dio.interceptors.add(FirebaseAuthInterceptor(
-    sharedPrefManager: sharedPrefManager,
-  ));
-  dio.interceptors.add(LogInterceptor(
-    request: true,
-    requestHeader: true,
-    requestBody: true,
-    responseHeader: true,
-    responseBody: true,
-    error: true,
-    logPrint: (object) => print(object),
-  ));
+  dio.interceptors.add(
+    FirebaseAuthInterceptor(sharedPrefManager: sharedPrefManager),
+  );
+  dio.interceptors.add(
+    LogInterceptor(
+      request: true,
+      requestHeader: true,
+      requestBody: true,
+      responseHeader: true,
+      responseBody: true,
+      error: true,
+      logPrint: (object) => print(object),
+    ),
+  );
 
   sl.registerSingleton<Dio>(dio);
 
   sl.registerSingleton<ApiService>(ApiService(dio));
 
-  sl.registerSingleton<AuthFirebaseService>(
-    AuthFirebaseServiceImpl()
-  );
+  sl.registerSingleton<AuthFirebaseService>(AuthFirebaseServiceImpl());
 
-  sl.registerSingleton<RegisterUserRepository>(
-    RegisterUserRepositoryImpl()
-  );
+  sl.registerSingleton<RegisterUserRepository>(RegisterUserRepositoryImpl());
 
-  sl.registerSingleton<FindRoleRepository>(
-    FindRoleRepositoryImpl()
-  );
+  sl.registerSingleton<FindRoleRepository>(FindRoleRepositoryImpl());
 
-  sl.registerSingleton<LoginUseCase>(
-    LoginUseCase()
-  );
+  sl.registerSingleton<BranchRepository>(BranchRepositoryImpl());
 
-  sl.registerSingleton<SignUpUseCase>(
-    SignUpUseCase()
-  );
+  sl.registerSingleton<GetAllBranchesUsecase>(GetAllBranchesUsecase());
 
-  sl.registerSingleton<DoctorRepository>(
-    DoctorsRepositoryImpl()
-  );
+  sl.registerSingleton<LoginUseCase>(LoginUseCase());
 
-  sl.registerSingleton<DoctorsUseCase>(
-    DoctorsUseCase()
-  );
+  sl.registerSingleton<SignUpUseCase>(SignUpUseCase());
 
-  sl.registerSingleton<DoctorInfoUseCase>(
-    DoctorInfoUseCase()
-  );
+  sl.registerSingleton<DoctorRepository>(DoctorsRepositoryImpl());
 
-  sl.registerSingleton<DoctorInfoRepository>(
-    DoctorInfoRepositoryImpl()
-  );
+  sl.registerSingleton<DoctorsUseCase>(DoctorsUseCase());
+
+  sl.registerSingleton<DoctorInfoUseCase>(DoctorInfoUseCase());
+
+  sl.registerSingleton<DoctorInfoRepository>(DoctorInfoRepositoryImpl());
 
   sl.registerSingleton<ToggleFavoriteRepository>(
-    ToggleFavoriteRepositoryImpl()
+    ToggleFavoriteRepositoryImpl(),
   );
 
-  sl.registerSingleton<ToggleFavoriteUsecase>(
-    ToggleFavoriteUsecase()
-  );
+  sl.registerSingleton<ToggleFavoriteUsecase>(ToggleFavoriteUsecase());
 
-  sl.registerSingleton<AppointmentRepository>(
-    AppointmentRepositoryImpl(),
-  );
+  sl.registerSingleton<AppointmentRepository>(AppointmentRepositoryImpl());
 
-  sl.registerSingleton<AppointmentUsecase>(
-    AppointmentUsecase(),
-  );
+  sl.registerSingleton<AppointmentUsecase>(AppointmentUsecase());
 
-    sl.registerSingleton<GetAllAppointmentsUsecase>(
-    GetAllAppointmentsUsecase(),
-  );
+  sl.registerSingleton<GetAllAppointmentsUsecase>(GetAllAppointmentsUsecase());
 
-  sl.registerSingleton<ThemeCubit>(
-    ThemeCubit(),
-  );
+  sl.registerSingleton<ThemeCubit>(ThemeCubit());
 
-  sl.registerSingleton<LocaleCubit>(
-    LocaleCubit(),
-  );
+  sl.registerSingleton<LocaleCubit>(LocaleCubit());
 
-  sl.registerSingleton<FocusRepository>(
-    FocusRepositoryImpl(),
-  );
+  sl.registerSingleton<FocusRepository>(FocusRepositoryImpl());
 
-  sl.registerSingleton<FocusUsecase>(
-    FocusUsecase(),
-  );
+  sl.registerSingleton<FocusUsecase>(FocusUsecase());
 
   sl.registerSingleton<GetAllDoctorsByFocusUseCase>(
     GetAllDoctorsByFocusUseCase(),
@@ -166,9 +142,7 @@ Future<void> initilizeDependencies()async{
     GetRunningAppointmentNumberUsecase(),
   );
 
-  sl.registerSingleton<GetDoctorScheduleUsecase>(
-    GetDoctorScheduleUsecase(),
-  );
+  sl.registerSingleton<GetDoctorScheduleUsecase>(GetDoctorScheduleUsecase());
 
   sl.registerSingleton<DoctorScheduleRepository>(
     DoctorScheduleRepositoryImpl(),
@@ -182,9 +156,15 @@ Future<void> initilizeDependencies()async{
     GetDoctorAvailabilityUsecase(),
   );
 
-  sl.registerFactory<AppointmentCubit>(() => AppointmentCubit(appointmentUsecase: AppointmentUsecase()));
+  sl.registerFactory<AppointmentCubit>(
+    () => AppointmentCubit(appointmentUsecase: AppointmentUsecase()),
+  );
 
-  sl.registerFactory<AppointmentCubits>(() => AppointmentCubits(getAllAppointmentsUsecase: GetAllAppointmentsUsecase()));
+  sl.registerFactory<AppointmentCubits>(
+    () => AppointmentCubits(
+      getAllAppointmentsUsecase: GetAllAppointmentsUsecase(),
+    ),
+  );
 
   sl.registerFactory<NextAppointmentNumberCubit>(
     () => NextAppointmentNumberCubit(),
@@ -194,40 +174,25 @@ Future<void> initilizeDependencies()async{
     () => GetRunningAppointmentNumberCubit(),
   );
 
-  sl.registerFactory<DoctorScheduleCubit>(
-    () => DoctorScheduleCubit(),
-  );
+  sl.registerFactory<DoctorScheduleCubit>(() => DoctorScheduleCubit());
 
   sl.registerFactory<GetDoctorAvailabilityCubit>(
     () => GetDoctorAvailabilityCubit(),
   );
 
-  sl.registerSingleton<FCMDataSource>(
-    FCMDataSource(),
-  );
+  sl.registerSingleton<FCMDataSource>(FCMDataSource());
 
   sl.registerSingleton<NotificationRepository>(
     NotificationRepositoryImpl(sl()),
   );
 
-  sl.registerSingleton<SaveFcmTokenRepository>(
-    SaveFcmTokenRepositoryImpl(),
-  );
+  sl.registerSingleton<SaveFcmTokenRepository>(SaveFcmTokenRepositoryImpl());
 
-  sl.registerSingleton<SaveFcmTokenUseCase>(
-    SaveFcmTokenUseCase(),
-  );
+  sl.registerSingleton<SaveFcmTokenUseCase>(SaveFcmTokenUseCase());
 
-  sl.registerSingleton<NotificationProvider>(
-    NotificationProvider(sl(), sl()),
-  );
+  sl.registerSingleton<NotificationProvider>(NotificationProvider(sl(), sl()));
 
-  sl.registerSingleton<GetNotoficationUsecase>(
-    GetNotoficationUsecase(),
-  );
+  sl.registerSingleton<GetNotoficationUsecase>(GetNotoficationUsecase());
 
-  sl.registerFactory<GetNotificationsCubit>(
-    () => GetNotificationsCubit(),
-  );
-
+  sl.registerFactory<GetNotificationsCubit>(() => GetNotificationsCubit());
 }
