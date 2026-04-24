@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/branch_model/branch_model.dart';
 import '../../../data/models/doctor_availability_model/doctor_availability_model.dart';
 import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../../../data/models/find_role_model/find_role_model.dart';
@@ -95,5 +96,10 @@ abstract class ApiService {
     @Query("userId") String userId,
     @Query("lastId") String? lastId,
     @Query("limit") int limit,
+  );
+
+  @GET('/branches')
+  Future<HttpResponse<BranchResponseModel>> findAllBranches(
+    @Query("status") String? status,
   );
 }
