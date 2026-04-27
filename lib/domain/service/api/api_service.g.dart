@@ -52,16 +52,16 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(String name) async {
+  Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(String doctorId) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'name': name};
+    final queryParameters = <String, dynamic>{r'doctor_id': doctorId};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DoctorInfoModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/doctor-info',
+            '/doctor-info/id',
             queryParameters: queryParameters,
             data: _data,
           )

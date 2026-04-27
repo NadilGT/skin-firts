@@ -6,12 +6,15 @@ import 'package:skin_firts/domain/repositories/appointment_repository/appointmen
 import 'package:skin_firts/domain/service/api/api_service.dart';
 import 'package:skin_firts/service_locator.dart';
 
+import 'package:skin_firts/core/storage/shared_pref_manager.dart';
+
 import '../../models/appointment/appointment_model.dart';
 import '../../models/next_appointment_number_model/next_appointment_number_model.dart';
 import '../../models/running_appointment_number_model/running_appointment_number_model.dart';
 
 class AppointmentRepositoryImpl extends AppointmentRepository {
   final ApiService apiService = sl<ApiService>();
+  final SharedPrefManager sharedPrefManager = sl<SharedPrefManager>();
 
   @override
   Future<DataState<Appointment>> createAppointment(
@@ -19,7 +22,28 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
   ) async {
     print("appointment repo wada");
     try {
-      final httpResponse = await apiService.createAppointment(appointment);
+      final branchId = await sharedPrefManager.getBranchId();
+      
+      final appointmentWithBranch = AppointmentModel(
+        id: appointment.id,
+        createdAt: appointment.createdAt,
+        updatedAt: appointment.updatedAt,
+        appointmentId: appointment.appointmentId,
+        appointmentNumber: appointment.appointmentNumber,
+        patientId: appointment.patientId,
+        patientName: appointment.patientName,
+        patientEmail: appointment.patientEmail,
+        patientPhone: appointment.patientPhone,
+        doctorId: appointment.doctorId,
+        doctorName: appointment.doctorName,
+        doctorSpecialty: appointment.doctorSpecialty,
+        appointmentDate: appointment.appointmentDate,
+        notes: appointment.notes,
+        status: appointment.status,
+        branchId: branchId,
+      );
+
+      final httpResponse = await apiService.createAppointment(appointmentWithBranch);
       print("Response status: ${httpResponse.response.statusCode}");
       print("Response data: ${httpResponse.data}");
 

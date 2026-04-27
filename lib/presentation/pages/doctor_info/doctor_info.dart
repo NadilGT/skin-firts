@@ -44,7 +44,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
 
     return BlocProvider(
       create: (context) =>
-          DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
+          DoctorInfoCubit()..getDoctorInfo(widget.doctor.doctor_id),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: BasicAppbar(

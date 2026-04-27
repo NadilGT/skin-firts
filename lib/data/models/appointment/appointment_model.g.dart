@@ -27,6 +27,7 @@ AppointmentModel _$AppointmentModelFromJson(Map<String, dynamic> json) =>
       appointmentDate: _dateFromJson(json['appointmentDate'] as String),
       notes: json['notes'] as String?,
       status: json['status'] as String? ?? 'pending',
+      branchId: json['branchId'] as String?,
     );
 
 Map<String, dynamic> _$AppointmentModelToJson(AppointmentModel instance) =>
@@ -42,5 +43,6 @@ Map<String, dynamic> _$AppointmentModelToJson(AppointmentModel instance) =>
       'doctorSpecialty': instance.doctorSpecialty,
       'notes': instance.notes,
       'status': instance.status,
+      'branchId': instance.branchId,
       'appointmentDate': _dateToJson(instance.appointmentDate),
     };

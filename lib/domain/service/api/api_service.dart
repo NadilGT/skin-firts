@@ -25,9 +25,9 @@ abstract class ApiService {
   @GET('/doctors')
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctors();
 
-  @GET("/doctor-info")
+  @GET("/doctor-info/id")
   Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(
-    @Query("name") String name,
+    @Query("doctor_id") String doctorId,
   );
 
   @PUT("/doctor-info/favorite")

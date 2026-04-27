@@ -260,7 +260,7 @@ class _CheckDoctorAvailableScreenState
                                     context
                                         .read<DoctorsByFocusCubit>()
                                         .getAllDoctorsByFocus(
-                                          selectedFocus!.name ?? "",
+                                          selectedFocus!.focusId ?? "",
                                         );
                                   }
                                 },
