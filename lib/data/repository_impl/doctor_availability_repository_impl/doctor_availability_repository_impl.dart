@@ -16,6 +16,7 @@ class DoctorAvailabilityRepositoryImpl extends DoctorAvailabilityRepository {
       final httpResponse = await _apiService.getDoctorAvailability(
         params.doctorId,
         params.date,
+        params.branchId,
       );
       if (httpResponse.response.statusCode == 200) {
         return DataSuccess(httpResponse.data);

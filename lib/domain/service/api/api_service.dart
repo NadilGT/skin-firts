@@ -88,6 +88,7 @@ abstract class ApiService {
   Future<HttpResponse<DoctorAvailabilityModel>> getDoctorAvailability(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+    @Query("branchId") String? branchId,
   );
 
   @POST('/api/users/save-token')

@@ -1,28 +1,28 @@
 import 'package:equatable/equatable.dart';
 
 class DoctorAvailabilityEntity extends Equatable {
-  final String id;
-  final String doctorAvailabilityId;
+  final String? id;
+  final String? doctorAvailabilityId;
   final String doctorId;
   final String date;
   final bool isAvailable;
   final String? estimatedStartTime;
   final int? maxPatients;
   final String notes;
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
 
   const DoctorAvailabilityEntity({
-    required this.id,
-    required this.doctorAvailabilityId,
+    this.id,
+    this.doctorAvailabilityId,
     required this.doctorId,
     required this.date,
     required this.isAvailable,
     this.estimatedStartTime,
     this.maxPatients,
     required this.notes,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   @override
@@ -43,12 +43,14 @@ class DoctorAvailabilityEntity extends Equatable {
 class DoctorAvailabilityParams extends Equatable {
   final String doctorId;
   final String date;
+  final String? branchId;
 
   const DoctorAvailabilityParams({
     required this.doctorId,
     required this.date,
+    this.branchId,
   });
 
   @override
-  List<Object?> get props => [doctorId, date];
+  List<Object?> get props => [doctorId, date, branchId];
 }
