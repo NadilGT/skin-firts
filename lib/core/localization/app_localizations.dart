@@ -1,0 +1,244 @@
+import 'package:flutter/material.dart';
+
+/// A simple, codegen-free localization helper.
+/// Add new keys here as the app grows.
+class AppLocalizations {
+  final String languageCode;
+  const AppLocalizations(this.languageCode);
+
+  static AppLocalizations of(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    return AppLocalizations(locale.languageCode);
+  }
+
+  bool get isSinhala => languageCode == 'si';
+
+  // ── Profile Page ────────────────────────────────────────────────
+  String get myProfile => isSinhala ? 'මගේ පැතිකඩ' : 'My Profile';
+  String get account => isSinhala ? 'ගිණුම' : 'Account';
+  String get profile => isSinhala ? 'පැතිකඩ' : 'Profile';
+  String get checkDoctorAvailability =>
+      isSinhala ? 'වෛද්‍යවරයා ලබා ගත හැකිද?' : 'Check Doctor Availability';
+  String get notifications => isSinhala ? 'දැනුම්දීම්' : 'Notifications';
+  String get preferences => isSinhala ? 'මනාපයන්' : 'Preferences';
+  String get language => isSinhala ? 'භාෂාව' : 'Language';
+  String get sinhala => isSinhala ? 'සිංහල' : 'Sinhala';
+  String get english => isSinhala ? 'ඉංග්‍රීසි' : 'English';
+  String get settings => isSinhala ? 'සැකසීම්' : 'Settings';
+  String get darkMode => isSinhala ? 'අඳුරු ක්‍රමය' : 'Dark Mode';
+  String get help => isSinhala ? 'උදව්' : 'Help';
+  String get logout => isSinhala ? 'පිටවීම' : 'Logout';
+  String get noName => isSinhala ? 'නමක් නැත' : 'No name';
+  String get loading => isSinhala ? 'පූරණය වෙමින්...' : 'Loading...';
+
+  // ── Home / General ───────────────────────────────────────────────
+  String get home => isSinhala ? 'ගෙදර' : 'Home';
+  String get appointments => isSinhala ? 'හමුවීම්' : 'Appointments';
+  String get messages => isSinhala ? 'පණිවිඩ' : 'Messages';
+  String get goodMorning => isSinhala ? 'සුභ උදෑසනක් 👋' : 'Good Morning 👋';
+  String get yourSchedule => isSinhala ? 'ඔබගේ කාලසටහන' : 'Your Schedule';
+  String get upcomingAppointments =>
+      isSinhala ? 'ළඟදී ඇති හමුවීම්' : 'Upcoming appointments';
+
+  // ── Appointment Page ─────────────────────────────────────────────
+  String get bookAppointment =>
+      isSinhala ? 'හමුවීමක් වෙන් කරන්න' : 'Book Appointment';
+  String get selectDate =>
+      isSinhala ? 'දිනය තෝරන්න' : 'Select Date';
+  String get selectTime =>
+      isSinhala ? 'වේලාව තෝරන්න' : 'Select Time';
+  String get confirm => isSinhala ? 'තහවුරු කරන්න' : 'Confirm';
+  String get cancel => isSinhala ? 'අවලංගු කරන්න' : 'Cancel';
+  String get whatDoYouNeed =>
+      isSinhala ? 'ඔබට කුමන\nඋදව්වක් අවශ්‍යද?' : 'What do you need\nhelp with?';
+  String get selectFocusSubtitle =>
+      isSinhala
+          ? 'නිවැරදි විශේෂඥ ලබා ගැනීමට\nවෛද්‍ය විශේෂත්වය තෝරන්න.'
+          : 'Select a primary focus to match you\nwith the right specialist.';
+  String get selectFocus => isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න' : 'Select Doctor Specialty';
+  String get chooseAFocus =>
+      isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න...' : 'Choose a Doctor Specialty...';
+  String get availableSpecialists =>
+      isSinhala ? 'ලබා ගත හැකි විශේෂඥයෝ' : 'Available Specialists';
+  String get noDoctorsAvailable =>
+      isSinhala ? 'වෛද්‍යවරු නොමැත' : 'No doctors available';
+  String get tryDifferentFocus =>
+      isSinhala ? 'වෙනත් වෛද්‍ය විශේෂත්වයක් උත්සාහ කරන්න' : 'Try selecting a different Doctor Specialty';
+  String get yrs => isSinhala ? 'වසර' : 'yrs';
+
+  // ── Doctor ───────────────────────────────────────────────────────
+  String get doctorList => isSinhala ? 'වෛද්‍යවරුකූ' : 'Doctors';
+  String get doctors => isSinhala ? 'වෛද්‍යවරුකූ' : 'Doctors';
+  String get available => isSinhala ? 'ලබා ගත හැකිය' : 'Available';
+  String get notAvailable => isSinhala ? 'ලබා ගත නොහැකිය' : 'Not Available';
+  String get sortBy => isSinhala ? 'වර්ගීකරණය' : 'Sort By';
+  String get doctorProfile => isSinhala ? 'වෛද්‍ය පැතිකඩ' : 'Doctor Profile';
+  String get scheduleBtn => isSinhala ? 'කාලසටහන' : 'Schedule';
+  String get profileSection => isSinhala ? 'පැතිකඩ' : 'Profile';
+  String get careerPath => isSinhala ? 'වෘත්තීය මාර්ගය' : 'Career Path';
+  String get highlights => isSinhala ? 'ඉස්මතු කිරීම්' : 'Highlights';
+  String get experience => isSinhala ? 'අත්දැකීම' : 'experience';
+  String get focus => isSinhala ? 'වෛද්‍ය විශේෂත්වය' : 'Doctor Specialty';
+
+  // ── Check Doctor Availability ────────────────────────────────────
+  String get checkAvailability =>
+      isSinhala ? 'ලබා ගත හැකිද?' : 'Check Availability';
+  String get findAvailableDoctor =>
+      isSinhala ? 'ලබා ගත හැකි\nවෛද්‍යවරයෙකු සොයන්න' : 'Find an available\ndoctor';
+  String get findAvailableDoctorSub =>
+      isSinhala
+          ? 'වෛද්‍ය විශේෂත්වයක් තෝරා, ඔවුන්ගේ\nලබා ගැනීමේ හැකියාව පරීක්ෂා කිරීමට\nවෛද්‍යවරයෙකු තෝරන්න.'
+          : 'Select a Doctor Specialty, then choose a doctor\nto check their availability.';
+  String get selectADoctor =>
+      isSinhala ? 'වෛද්‍යවරයෙකු තෝරන්න' : 'Select a Doctor';
+  String get check => isSinhala ? 'පරීක්ෂා කරන්න' : 'Check';
+
+  // ── Notifications Page ───────────────────────────────────────────
+  String get notificationsTitle => isSinhala ? 'දැනුම්දීම්' : 'Notifications';
+  String get noNotifications => isSinhala ? 'දැනුම්දීම් නොමැත' : 'No Notifications';
+  String get noNotificationsSub =>
+      isSinhala
+          ? 'රසවත් දෙයක් සිදු වූ විට\nඅපි ඔබට දන්වන්නෙමු!'
+          : "We'll let you know when something\nexciting happens!";
+  String get somethingWentWrong =>
+      isSinhala ? 'යම් දෙයක් වැරදී ගියා' : 'Something went wrong';
+  String get tryAgain => isSinhala ? 'නැවත උත්සාහ කරන්න' : 'Try Again';
+
+  // ── Medicine Order (Messages) Page ───────────────────────────────
+  String get medicineOrder => isSinhala ? 'ඖෂධ ඇණවුම' : 'Medicine Order';
+  String get searchMedicines =>
+      isSinhala ? 'ඖෂධ සොයන්න...' : 'Search medicines...';
+  String get search => isSinhala ? 'සොයන්න' : 'Search';
+  String get retry => isSinhala ? 'නැවත උත්සාහ කරන්න' : 'Retry';
+  String get searchForMedicines =>
+      isSinhala ? 'ඇණවුමට ඖෂධ සොයන්න' : 'Search for medicines to add to order';
+  String get orderCart => isSinhala ? 'ඇණවුම් කරත්තය' : 'Order Cart';
+  String get patientInformation =>
+      isSinhala ? 'රෝගී තොරතුරු' : 'Patient Information';
+  String get cartItems => isSinhala ? 'කරත්තයේ දෑ' : 'Cart Items';
+  String get cartIsEmpty => isSinhala ? 'කරත්තය හිස්ය' : 'Cart is empty';
+  String get totalAmount => isSinhala ? 'මුළු මුදල' : 'Total Amount';
+  String get placeOrder => isSinhala ? 'ඇණවුම ලබා දෙන්න' : 'Place Order';
+  String get orderCreated => isSinhala ? 'ඇණවුම සෑදා ඇත' : 'Order Created';
+  String get outOfStock => isSinhala ? 'තොගය නොමැත' : 'Out of Stock';
+  String get inStock => isSinhala ? 'තොගය ඇත' : 'In Stock';
+
+  // ── Book Appointment Page ────────────────────────────────────────
+  String get bookAppointmentTitle =>
+      isSinhala ? 'හමුවීමක් වෙන් කරන්න' : 'Book Appointment';
+  String get patientInfoSection =>
+      isSinhala ? 'රෝගී තොරතුරු' : 'Patient Information';
+  String get doctorInfoSection =>
+      isSinhala ? 'වෛද්‍ය තොරතුරු' : 'Doctor Information';
+  String get appointmentDetails =>
+      isSinhala ? 'හමුවීමේ විස්තර' : 'Appointment Details';
+  String get appointmentDate =>
+      isSinhala ? 'හමුවීමේ දිනය' : 'Appointment Date';
+  String get selectDateHint => isSinhala ? 'දිනය තෝරන්න' : 'Select Date';
+  String get booking => isSinhala ? 'වෙන් කරමින්...' : 'Booking...';
+
+  // ── Find Running Appointment Page ──────────────────────────────────
+  String get findRunningAppointment => isSinhala ? 'දැනට පවතින හමුවීම සොයන්න' : 'Find Running Appointment';
+  String get selectAFocusArea => isSinhala ? 'වෛද්‍ය විශේෂත්වය තෝරන්න' : 'Select a Doctor Specialty';
+  String get chooseAFocusToSeeDoctors => 
+      isSinhala ? 'දැනට පවතින හමුවීම් ඇති වෛද්‍යවරුන් බැලීමට කේන්ද්‍රයක් තෝරන්න.' : 'Choose a Doctor Specialty to see doctors with currently running appointments.';
+  String get noDoctorsAvailableForFocus =>
+      isSinhala ? 'මෙම කේන්ද්‍රය සඳහා වෛද්‍යවරුන් නොමැත.' : 'No doctors available for this Doctor Specialty.';
+  String get failedToLoadFocus =>
+      isSinhala ? 'වෛද්‍ය විශේෂත්වය පූරණය කිරීමට අසමත් විය:' : 'Failed to load Doctor Specialty:';
+  String get failedToLoadDoctors =>
+      isSinhala ? 'වෛද්‍යවරුන් පූරණය කිරීමට අසමත් විය:' : 'Failed to load doctors:';
+
+  // ── Calendar / Appointments Page ──────────────────────────────────
+  String get myAppointments => isSinhala ? 'මගේ හමුවීම්' : 'My Appointments';
+  String get failedToLoadAppointments => isSinhala ? 'හමුවීම් පූරණය කිරීමට අසමත් විය' : 'Failed to load appointments';
+  String get upcoming => isSinhala ? 'ළඟදී එන' : 'Upcoming';
+  String get completed => isSinhala ? 'අවසන් කළ' : 'Completed';
+  String get noAppointments => isSinhala ? 'හමුවීම් නොමැත' : 'No appointments';
+  String appointmentCount(int count) => isSinhala 
+      ? 'හමුවීම් $count යි' 
+      : '$count Appointment${count > 1 ? 's' : ''}';
+  String get nothingScheduled => isSinhala ? 'මෙම දිනය සඳහා කිසිවක් සැලසුම් කර නොමැත' : 'Nothing scheduled for this day';
+  String get doctorLabel => isSinhala ? 'වෛද්‍යවරයා' : 'Doctor';
+  String get specialtyLabel => isSinhala ? 'විශේෂත්වය' : 'Specialty';
+  String get patientLabel => isSinhala ? 'රෝගියා' : 'Patient';
+  String get dateLabel => isSinhala ? 'දිනය' : 'Date';
+  String get appointmentNumber => isSinhala ? 'හමුවීම් අංකය' : 'Appointment #';
+  String get notesLabel => isSinhala ? 'සටහන්' : 'Notes';
+  String get reschedule => isSinhala ? 'නැවත සැලසුම් කරන්න' : 'Reschedule';
+  String get cancelAppointmentTitle => isSinhala ? 'හමුවීම අවලංගු කරන්න' : 'Cancel Appointment';
+  String confirmCancelAppointment(String doctorName) => isSinhala ? 'ඔබට $doctorName සමඟ ඇති හමුවීම අවලංගු කිරීමට විශ්වාසද?' : 'Are you sure you want to cancel your appointment with $doctorName?';
+  String get noKeepIt => isSinhala ? 'නැහැ, එය තබා ගන්න' : 'No, Keep It';
+  String get yesCancel => isSinhala ? 'ඔව්, අවලංගු කරන්න' : 'Yes, Cancel';
+  String get rescheduleFeatureComingSoon => isSinhala ? 'නැවත සැලසුම් කිරීමේ විශේෂාංගය ඉක්මනින් පැමිණේ' : 'Reschedule feature coming soon';
+  String get cancelNotAvailable => isSinhala ? 'අවලංගු කිරීමේ විශේෂාංගය තවම ලබා ගත නොහැක.' : 'Appointment cancellation feature not available yet.';
+
+  // ── Doctor Schedule Page ─────────────────────────────────────────
+  String get scheduleTitle => isSinhala ? 'කාලසටහන' : 'Schedule';
+  String get appointmentBookedSuccessfully => isSinhala ? 'හමුවීම සාර්ථකව වෙන් කරන ලදී!' : 'Appointment booked successfully!';
+  String failedToBookAppointment(String error) => isSinhala ? 'හමුවීම වෙන් කිරීමට අසමත් විය: $error' : 'Failed to book appointment: $error';
+  String get nextAppointmentNumberTitle => isSinhala ? 'ඊළඟ හමුවීම් අංකය' : 'Next Appointment Number';
+  String get yourNumberWillBe => isSinhala ? 'ඔබගේ අංකය වනුයේ' : 'Your Number Will Be';
+  String get selectDateForNextNumber => isSinhala ? 'ඊළඟ ලබා ගත හැකි අංකය බැලීමට දිනයක් තෝරන්න' : 'Select a date to view the next available number';
+  String get confirmAppointmentTitle => isSinhala ? 'හමුවීම තහවුරු කරන්න' : 'Confirm Appointment';
+  String get patientId => isSinhala ? 'රෝගී හැඳුනුම් අංකය' : 'Patient ID';
+  String get enterPatientId => isSinhala ? 'රෝගී හැඳුනුම් අංකය ඇතුළත් කරන්න' : 'Enter patient ID';
+  String get patientIdRequired => isSinhala ? 'රෝගී හැඳුනුම් අංකය අවශ්‍යයි' : 'Patient ID is required';
+  String get fullNameAsterisk => isSinhala ? 'සම්පූර්ණ නම *' : 'Full Name *';
+  String get enterPatientName => isSinhala ? 'රෝගි නම ඇතුළත් කරන්න' : 'Enter patient name';
+  String get patientNameRequired => isSinhala ? 'රෝගි නම අවශ්‍යයි' : 'Patient name is required';
+  String get emailAsterisk => isSinhala ? 'විද්‍යුත් තැපෑල *' : 'Email *';
+  String get enterYourEmail => isSinhala ? 'ඔබගේ විද්‍යුත් තැපෑල ඇතුළත් කරන්න' : 'Enter your email';
+  String get emailRequired => isSinhala ? 'විද්‍යුත් තැපෑල අවශ්‍යයි' : 'Email is required';
+  String get enterValidEmail => isSinhala ? 'කරුණාකර වලංගු විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න' : 'Please enter a valid email';
+  String get phoneNumberOptional => isSinhala ? 'දුරකථන අංකය (විකල්ප)' : 'Phone Number (Optional)';
+  String get enterYourPhoneNumber => isSinhala ? 'ඔබගේ දුරකථන අංකය ඇතුළත් කරන්න' : 'Enter your phone number';
+  String get enterValidPhoneNumber => isSinhala ? 'කරුණාකර වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න' : 'Please enter a valid phone number';
+  String get notesOptional => isSinhala ? 'සටහන් (විකල්ප)' : 'Notes (Optional)';
+  String get anyAdditionalInformation => isSinhala ? 'වෙනත් කිසියම් අමතර තොරතුරක්' : 'Any additional information';
+  String errorText(String error) => isSinhala ? 'දෝෂය: $error' : 'Error: $error';
+  String get apptNumberShort => isSinhala ? 'හමුවීම් #' : 'Appt. #';
+
+  // ── Navbar ────────────────────────────────────────────────────────
+  String get navHome => isSinhala ? 'ගෙදර' : 'Home';
+  String get navLiveAppointment => isSinhala ? 'සජීවී හමුවීම' : 'Live Appointment';
+  String get navProfile => isSinhala ? 'පැතිකඩ' : 'Profile';
+  String get navCalendar => isSinhala ? 'දින දර්ශනය' : 'Calendar';
+
+  // ── Focus Translation ─────────────────────────────────────────────
+  String translateFocus(String focusName) {
+    if (!isSinhala) return focusName;
+    switch (focusName.toLowerCase()) {
+      case 'general medicine':
+        return 'සාමාන්‍ය වෛද්‍ය';
+      case 'pediatrics':
+        return 'ළමා රෝග';
+      case 'cardiology':
+        return 'හෘද රෝග';
+      case 'dermatology':
+        return 'චර්ම රෝග';
+      case 'new focus':
+        return 'නව කේන්ද්‍රය';
+      default:
+        return focusName;
+    }
+  }
+
+  // ── Status Translation ────────────────────────────────────────────
+  String translateStatus(String status) {
+    if (!isSinhala) return status;
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return 'තහවුරු කර ඇත';
+      case 'pending':
+        return 'පොරොත්තුවෙන්';
+      case 'cancelled':
+        return 'අවලංගු කර ඇත';
+      case 'completed':
+        return 'සම්පූර්ණයි';
+      default:
+        return status;
+    }
+  }
+  String doctorPrefix(String name) => isSinhala ? 'වෛද්‍ය $name' : 'Dr. $name';
+}

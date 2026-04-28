@@ -10,7 +10,7 @@ part of 'api_service.dart';
 
 class _ApiService implements ApiService {
   _ApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://skin-firts.onrender.com';
+    baseUrl ??= 'https://skin-firts-staging-latest.onrender.com';
   }
 
   final Dio _dio;
@@ -52,16 +52,16 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(String name) async {
+  Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(String doctorId) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'name': name};
+    final queryParameters = <String, dynamic>{r'doctor_id': doctorId};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DoctorInfoModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/doctor-info',
+            '/doctor-info/id',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -135,9 +135,14 @@ class _ApiService implements ApiService {
   @override
   Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
     String patientId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'patientId': patientId};
+    final queryParameters = <String, dynamic>{
+      r'patientId': patientId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<PaginatedAppointmentsModel>>(
@@ -194,10 +199,15 @@ class _ApiService implements ApiService {
 
   @override
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctorsByFocus(
-    String focus,
+    String focusId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'focus': focus};
+    final queryParameters = <String, dynamic>{
+      r'focusId': focusId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<List<DoctorInfoModel>>>(
@@ -230,12 +240,15 @@ class _ApiService implements ApiService {
   Future<HttpResponse<NextAppointmentNumberModel>> getNextAppointmentNumber(
     String doctorId,
     String date,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'doctorId': doctorId,
       r'date': date,
+      r'branchId': branchId,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<NextAppointmentNumberModel>>(
@@ -359,9 +372,14 @@ class _ApiService implements ApiService {
   @override
   Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
     String doctorId,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'doctorId': doctorId};
+    final queryParameters = <String, dynamic>{
+      r'doctorId': doctorId,
+      r'branchId': branchId,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DoctorScheduleResponseModel>>(
@@ -390,12 +408,15 @@ class _ApiService implements ApiService {
   Future<HttpResponse<DoctorAvailabilityModel>> getDoctorAvailability(
     String doctorId,
     String date,
+    String? branchId,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'doctorId': doctorId,
       r'date': date,
+      r'branchId': branchId,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DoctorAvailabilityModel>>(
@@ -477,6 +498,37 @@ class _ApiService implements ApiService {
     late NotificationPaginationResponseModel _value;
     try {
       _value = NotificationPaginationResponseModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<BranchResponseModel>> findAllBranches(
+    String? status,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'status': status};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<HttpResponse<BranchResponseModel>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/branches',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late BranchResponseModel _value;
+    try {
+      _value = BranchResponseModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

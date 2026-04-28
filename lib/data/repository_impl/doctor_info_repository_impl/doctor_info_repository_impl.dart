@@ -26,9 +26,9 @@ class DoctorInfoRepositoryImpl extends DoctorInfoRepository{
   }
 
   @override
-  Future<DataState<List<DoctorInfoModel>>> getAllDoctorsByFocus(String focus)async{
+  Future<DataState<List<DoctorInfoModel>>> getAllDoctorsByFocus(String focusId, String? branchId)async{
     try{
-      final httpResponse = await apiService.getAllDoctorsByFocus(focus);
+      final httpResponse = await apiService.getAllDoctorsByFocus(focusId, branchId);
       if(httpResponse.response.statusCode == 200){
         return DataSuccess(httpResponse.data);
       } else {

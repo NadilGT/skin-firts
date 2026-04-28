@@ -13,6 +13,7 @@ class Appointment extends Equatable {
   final DateTime appointmentDate;
   final String? notes;
   final String status;
+  final String? branchId;
 
   const Appointment({
     required this.appointmentId,
@@ -27,6 +28,7 @@ class Appointment extends Equatable {
     required this.appointmentDate,
     this.notes,
     this.status = 'pending',
+    this.branchId,
   });
 
   @override
@@ -43,6 +45,7 @@ class Appointment extends Equatable {
     appointmentDate,
     notes,
     status,
+    branchId,
   ];
 }
 

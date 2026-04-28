@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 
 // Models
@@ -137,6 +138,14 @@ class MedicineOrderPage extends StatefulWidget {
 }
 
 class _MedicineOrderPageState extends State<MedicineOrderPage> {
+  late AppLocalizations loc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loc = AppLocalizations.of(context);
+  }
+
   final _searchController = TextEditingController();
   final _patientNameController = TextEditingController();
   final _contactController = TextEditingController();
@@ -314,11 +323,11 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.green),
-            SizedBox(width: 8),
-            Text('Order Created'),
+            const Icon(Icons.check_circle, color: Colors.green),
+            const SizedBox(width: 8),
+            Text(loc.orderCreated),
           ],
         ),
         content: Column(
@@ -344,7 +353,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Medicine Order'),
+        title: Text(loc.medicineOrder),
         elevation: 0,
         actions: [
           Stack(
@@ -408,7 +417,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search medicines...',
+                hintText: loc.searchMedicines,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -425,7 +434,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
             ),
             child: _isLoading
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : Text('Search', style: TextStyle(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.white)),
+                : Text(loc.search, style: TextStyle(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.white)),
           ),
         ],
       ),
@@ -442,20 +451,20 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
             const SizedBox(height: 16),
             Text(_errorMessage!, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: _searchMedicines, child: const Text('Retry')),
+            ElevatedButton(onPressed: _searchMedicines, child: Text(loc.retry)),
           ],
         ),
       );
     }
 
     if (_searchResults.isEmpty && !_isLoading) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.medication_outlined, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text('Search for medicines to add to order', style: TextStyle(color: Colors.grey)),
+            const Icon(Icons.medication_outlined, size: 64, color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(loc.searchForMedicines, style: const TextStyle(color: Colors.grey)),
           ],
         ),
       );
@@ -517,7 +526,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          medicine.stockQuantity > 0 ? 'In Stock: ${medicine.stockQuantity}' : 'Out of Stock',
+                          medicine.stockQuantity > 0 ? '${loc.inStock}: ${medicine.stockQuantity}' : loc.outOfStock,
                           style: TextStyle(fontSize: 12, color: medicine.stockQuantity > 0 ? Colors.green : Colors.red),
                         ),
                       ),
@@ -600,7 +609,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                 children: [
                   const Icon(Icons.shopping_cart),
                   const SizedBox(width: 12),
-                  const Text('Order Cart', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(loc.orderCart, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const Spacer(),
                   IconButton(onPressed: () => Navigator.pop(ctx), icon: const Icon(Icons.close)),
                 ],
@@ -611,7 +620,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                 controller: controller,
                 padding: const EdgeInsets.all(16),
                 children: [
-                  const Text('Patient Information', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(loc.patientInformation, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   const SizedBox(height: 12),
                   _buildTextField(_patientNameController, 'Patient Name *', Icons.person),
                   _buildTextField(_contactController, 'Contact Number *', Icons.phone),
@@ -621,7 +630,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                   const SizedBox(height: 24),
                   Row(
                     children: [
-                      const Text('Cart Items', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(loc.cartItems, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                       const Spacer(),
                       Text('${_cartItems.length} items', style: TextStyle(color: Colors.grey[600])),
                     ],
@@ -630,11 +639,11 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                   if (_cartItems.isEmpty)
                     Container(
                       padding: const EdgeInsets.all(32),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.shopping_cart_outlined, size: 48, color: Colors.grey),
-                          SizedBox(height: 12),
-                          Text('Cart is empty', style: TextStyle(color: Colors.grey)),
+                          const Icon(Icons.shopping_cart_outlined, size: 48, color: Colors.grey),
+                          const SizedBox(height: 12),
+                          Text(loc.cartIsEmpty, style: const TextStyle(color: Colors.grey)),
                         ],
                       ),
                     )
@@ -655,7 +664,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Total Amount', style: TextStyle(fontSize: 16)),
+                        Text(loc.totalAmount, style: const TextStyle(fontSize: 16)),
                         Text('Rs. ${_totalAmount.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)),
                       ],
@@ -674,7 +683,7 @@ class _MedicineOrderPageState extends State<MedicineOrderPage> {
                         ),
                         child: _isSubmitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                            : const Text('Place Order', style: TextStyle(fontSize: 16)),
+                            : Text(loc.placeOrder, style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],

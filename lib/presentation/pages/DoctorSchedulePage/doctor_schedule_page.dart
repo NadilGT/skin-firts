@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../data/models/appointment/appointment_model.dart';
 import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
+import '../../../core/localization/app_localizations.dart';
 import '../calender/bloc/appoinment_cubit.dart';
 import '../calender/bloc/appointment_state.dart';
 import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
@@ -100,6 +101,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -114,7 +116,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Schedule',
+          l10n.scheduleTitle,
           style: TextStyle(
             color: theme.primaryColor,
             fontSize: 18,
@@ -128,7 +130,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
           if (state is AppointmentCreated) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Appointment booked successfully!'),
+                content: Text(l10n.appointmentBookedSuccessfully),
                 backgroundColor: colorScheme.primary,
                 duration: const Duration(seconds: 3),
               ),
@@ -137,7 +139,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
           } else if (state is AppointmentFailed) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Failed to book appointment: ${state.error}'),
+                content: Text(l10n.failedToBookAppointment(state.error)),
                 backgroundColor: colorScheme.error,
                 duration: const Duration(seconds: 3),
               ),
@@ -300,7 +302,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Next Appointment Number',
+                      l10n.nextAppointmentNumberTitle,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -336,7 +338,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                               child: Column(
                                 children: [
                                   Text(
-                                    'Your Number Will Be',
+                                    l10n.yourNumberWillBe,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -375,9 +377,9 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                                             .nextAppointmentNumber,
                                       );
                                     },
-                                    child: const Text(
-                                      'Book Appointment',
-                                      style: TextStyle(
+                                    child: Text(
+                                      l10n.bookAppointment,
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                       ),
@@ -403,7 +405,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
-                                    'Error: ${state.error}',
+                                    l10n.errorText(state.error),
                                     style: TextStyle(color: colorScheme.error),
                                   ),
                                 ),
@@ -420,7 +422,7 @@ class _DoctorSchedulePageState extends State<DoctorSchedulePage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Select a date to view the next available number',
+                              l10n.selectDateForNextNumber,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: theme.textTheme.bodyMedium?.color,
@@ -519,6 +521,7 @@ class _BookingDialogState extends State<_BookingDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     return BlocProvider.value(
       value: widget.appointmentCubit,
@@ -529,7 +532,7 @@ class _BookingDialogState extends State<_BookingDialog> {
           } else if (state is AppointmentFailed) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Error: ${state.error}'),
+                content: Text(l10n.errorText(state.error)),
                 backgroundColor: colorScheme.error,
               ),
             );
@@ -596,9 +599,9 @@ class _BookingDialogState extends State<_BookingDialog> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Text(
-                                'Confirm Appointment',
-                                style: TextStyle(
+                              Text(
+                                l10n.confirmAppointmentTitle,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w700,
@@ -623,14 +626,14 @@ class _BookingDialogState extends State<_BookingDialog> {
                               children: [
                                 _DialogInfoRow(
                                   icon: Icons.person_rounded,
-                                  label: 'Doctor',
+                                  label: l10n.doctorLabel,
                                   value: widget.doctorName,
                                   light: true,
                                 ),
                                 const SizedBox(height: 8),
                                 _DialogInfoRow(
                                   icon: Icons.calendar_today_rounded,
-                                  label: 'Date',
+                                  label: l10n.dateLabel,
                                   value: widget.selectedDay.toString().split(
                                     ' ',
                                   )[0],
@@ -639,7 +642,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                                 const SizedBox(height: 8),
                                 _DialogInfoRow(
                                   icon: Icons.tag_rounded,
-                                  label: 'Appt. #',
+                                  label: l10n.apptNumberShort,
                                   value: widget.appointmentNumber.toString(),
                                   light: true,
                                   accent: true,
@@ -674,9 +677,9 @@ class _BookingDialogState extends State<_BookingDialog> {
                                     ),
                                   ),
                                   const SizedBox(width: 8),
-                                  const Text(
-                                    'Patient Information',
-                                    style: TextStyle(
+                                  Text(
+                                    l10n.patientInfoSection,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                       color: Color(0xFF1C2B4A),
@@ -691,14 +694,14 @@ class _BookingDialogState extends State<_BookingDialog> {
                               _DialogField(
                                 controller: patientIdController,
                                 readOnly: true,
-                                label: 'Patient ID',
-                                hint: 'Enter patient ID',
+                                label: l10n.patientId,
+                                hint: l10n.enterPatientId,
                                 icon: Icons.badge_rounded,
                                 primaryColor: theme.primaryColor,
                                 colorScheme: colorScheme,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Patient ID is required';
+                                    return l10n.patientIdRequired;
                                   }
                                   return null;
                                 },
@@ -708,14 +711,14 @@ class _BookingDialogState extends State<_BookingDialog> {
                               // Full Name
                               _DialogField(
                                 controller: patientNameController,
-                                label: 'Full Name *',
-                                hint: 'Enter patient name',
+                                label: l10n.fullNameAsterisk,
+                                hint: l10n.enterPatientName,
                                 icon: Icons.person_outline_rounded,
                                 primaryColor: theme.primaryColor,
                                 colorScheme: colorScheme,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Patient name is required';
+                                    return l10n.patientNameRequired;
                                   }
                                   return null;
                                 },
@@ -725,20 +728,20 @@ class _BookingDialogState extends State<_BookingDialog> {
                               // Email
                               _DialogField(
                                 controller: emailController,
-                                label: 'Email *',
-                                hint: 'Enter your email',
+                                label: l10n.emailAsterisk,
+                                hint: l10n.enterYourEmail,
                                 icon: Icons.email_outlined,
                                 keyboardType: TextInputType.emailAddress,
                                 primaryColor: theme.primaryColor,
                                 colorScheme: colorScheme,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Email is required';
+                                    return l10n.emailRequired;
                                   }
                                   if (!RegExp(
                                     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                                   ).hasMatch(value)) {
-                                    return 'Please enter a valid email';
+                                    return l10n.enterValidEmail;
                                   }
                                   return null;
                                 },
@@ -748,8 +751,8 @@ class _BookingDialogState extends State<_BookingDialog> {
                               // Phone
                               _DialogField(
                                 controller: phoneController,
-                                label: 'Phone Number (Optional)',
-                                hint: 'Enter your phone number',
+                                label: l10n.phoneNumberOptional,
+                                hint: l10n.enterYourPhoneNumber,
                                 icon: Icons.phone_outlined,
                                 keyboardType: TextInputType.phone,
                                 primaryColor: theme.primaryColor,
@@ -759,7 +762,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                                     if (!RegExp(
                                       r'^\+?[\d\s-]{10,}$',
                                     ).hasMatch(value)) {
-                                      return 'Please enter a valid phone number';
+                                      return l10n.enterValidPhoneNumber;
                                     }
                                   }
                                   return null;
@@ -770,8 +773,8 @@ class _BookingDialogState extends State<_BookingDialog> {
                               // Notes
                               _DialogField(
                                 controller: notesController,
-                                label: 'Notes (Optional)',
-                                hint: 'Any additional information',
+                                label: l10n.notesOptional,
+                                hint: l10n.anyAdditionalInformation,
                                 icon: Icons.notes_rounded,
                                 maxLines: 3,
                                 primaryColor: theme.primaryColor,
@@ -816,7 +819,7 @@ class _BookingDialogState extends State<_BookingDialog> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Cancel',
+                                    l10n.cancel,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -912,19 +915,19 @@ class _BookingDialogState extends State<_BookingDialog> {
                                             strokeWidth: 2,
                                           ),
                                         )
-                                      : const Row(
+                                      : Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.check_rounded,
                                               color: Colors.white,
                                               size: 16,
                                             ),
-                                            SizedBox(width: 6),
+                                            const SizedBox(width: 6),
                                             Text(
-                                              'Confirm',
-                                              style: TextStyle(
+                                              l10n.confirm,
+                                              style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700,

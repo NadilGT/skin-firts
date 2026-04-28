@@ -5,6 +5,7 @@ import 'package:retrofit/http.dart';
 import 'package:skin_firts/core/constants/api_constants.dart';
 import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart';
 import '../../../data/models/appointment/appointment_model.dart';
+import '../../../data/models/branch_model/branch_model.dart';
 import '../../../data/models/doctor_availability_model/doctor_availability_model.dart';
 import '../../../data/models/doctor_schedule_model/doctor_schedule_model.dart';
 import '../../../data/models/find_role_model/find_role_model.dart';
@@ -24,9 +25,9 @@ abstract class ApiService {
   @GET('/doctors')
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctors();
 
-  @GET("/doctor-info")
+  @GET("/doctor-info/id")
   Future<HttpResponse<DoctorInfoModel>> getDoctorInfo(
-    @Query("name") String name,
+    @Query("doctor_id") String doctorId,
   );
 
   @PUT("/doctor-info/favorite")
@@ -42,6 +43,7 @@ abstract class ApiService {
   @GET('/findAll/appointments/patient')
   Future<HttpResponse<PaginatedAppointmentsModel>> getAllAppointments(
     @Query("patientId") String patientId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/findAll/focus')
@@ -49,13 +51,15 @@ abstract class ApiService {
 
   @GET('/findAll/doctors/focus')
   Future<HttpResponse<List<DoctorInfoModel>>> getAllDoctorsByFocus(
-    @Query("focus") String focus,
+    @Query("focusId") String focusId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/appointment/next-number/doctorId')
   Future<HttpResponse<NextAppointmentNumberModel>> getNextAppointmentNumber(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+    @Query("branchId") String? branchId,
   );
 
   @POST('/register/patient')
@@ -77,12 +81,14 @@ abstract class ApiService {
   @GET('/doctor-weekly-schedule/available-dates')
   Future<HttpResponse<DoctorScheduleResponseModel>> getDoctorSchedule(
     @Query("doctorId") String doctorId,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/doctor-availability/check')
   Future<HttpResponse<DoctorAvailabilityModel>> getDoctorAvailability(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+    @Query("branchId") String? branchId,
   );
 
   @POST('/api/users/save-token')
@@ -95,5 +101,10 @@ abstract class ApiService {
     @Query("userId") String userId,
     @Query("lastId") String? lastId,
     @Query("limit") int limit,
+  );
+
+  @GET('/branches')
+  Future<HttpResponse<BranchResponseModel>> findAllBranches(
+    @Query("status") String? status,
   );
 }

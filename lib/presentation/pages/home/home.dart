@@ -3,6 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
+import 'package:skin_firts/core/storage/shared_pref_manager.dart';
+import 'package:skin_firts/data/models/branch_model/branch_model.dart';
+import 'package:skin_firts/presentation/pages/home/branch_cubit/branch_cubit.dart';
+import 'package:skin_firts/presentation/pages/home/branch_cubit/branch_state.dart';
 import 'package:skin_firts/domain/usecases/appointment_usecase/get_all_appointments_usecase.dart';
 import 'package:skin_firts/presentation/pages/appointment/appointment.dart';
 import 'package:skin_firts/presentation/pages/home/bloc/doctors_cubit.dart';
@@ -38,12 +43,65 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<DoctorInfoModel> doctors = [];
   String? userName;
+  String? currentBranchId;
+  final sharedPrefManager = SharedPrefManager();
 
   @override
   void initState() {
     super.initState();
     _initFirebaseMessaging();
     _getUserName();
+    _getBranchId();
+  }
+
+  void _getBranchId() async {
+    final id = await sharedPrefManager.getBranchId();
+    if (mounted) {
+      setState(() {
+        currentBranchId = id;
+      });
+    }
+  }
+
+  void _showBranchSelectionDialog(
+    BuildContext context,
+    List<BranchModel> branches,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text('Select Branch'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: branches.length,
+                itemBuilder: (context, index) {
+                  final branch = branches[index];
+                  return ListTile(
+                    title: Text(branch.name),
+                    onTap: () async {
+                      await sharedPrefManager.saveBranchId(branch.branchId);
+                      if (mounted) {
+                        setState(() {
+                          currentBranchId = branch.branchId;
+                        });
+                        context.read<AppointmentCubits>().getAllAppointments();
+                      }
+                      Navigator.of(dialogContext).pop();
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _getUserName() {
@@ -75,178 +133,284 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => DoctorsCubit()..getDoctors()),
         BlocProvider(
-          create: (context) => DoctorsCubit()..getDoctors(),
+          create: (context) =>
+              AppointmentCubits(
+                getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
+              )..getAllAppointments(
+                params: FirebaseAuth.instance.currentUser?.uid ?? "",
+              ),
         ),
-        BlocProvider(
-          create: (context) => AppointmentCubits(
-            getAllAppointmentsUsecase: sl<GetAllAppointmentsUsecase>(),
-          )..getAllAppointments(
-              params: FirebaseAuth.instance.currentUser?.uid ?? ""),
-        ),
+        BlocProvider(create: (context) => BranchCubit()..getAllBranches()),
       ],
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: BlocBuilder<DoctorsCubit, DoctorsState>(
-          builder: (context, state) {
-            if (state is DoctorsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xFF4A90D9),
-                  strokeWidth: 2.5,
-                ),
+      child: BlocListener<BranchCubit, BranchState>(
+        listener: (context, state) {
+          if (state is BranchLoaded) {
+            if (currentBranchId == null &&
+                state.branchResponseModel.data.isNotEmpty) {
+              _showBranchSelectionDialog(
+                context,
+                state.branchResponseModel.data,
               );
-            } else if (state is DoctorsLoaded) {
-              doctors = state.doctors;
             }
-
-            return CustomScrollView(
-              slivers: [
-                // ── Header ──────────────────────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 60, right: 24, left: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            // Avatar with a soft ring
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color(0xFF4A90D9),
-                                  width: 2,
-                                ),
-                              ),
-                              child: const CircleAvatar(
-                                radius: 22,
-                                backgroundImage:
-                                    AssetImage("assets/images/profile.jpg"),
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Good Morning 👋",
-                                  style: TextStyle(
-                                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.1,
-                                  ),
-                                ),
-                                const SizedBox(height: 3),
-                                Text(
-                                  userName ?? "User",
-                                  style: TextStyle(
-                                    color: Theme.of(context).textTheme.titleLarge?.color ?? const Color(0xFF1C2B4A),
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20,
-                                    letterSpacing: -0.4,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: BlocBuilder<DoctorsCubit, DoctorsState>(
+            builder: (context, state) {
+              if (state is DoctorsLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF4A90D9),
+                    strokeWidth: 2.5,
                   ),
-                ),
+                );
+              } else if (state is DoctorsLoaded) {
+                doctors = state.doctors;
+              }
 
-                const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-                // ── "Your Schedule" label ────────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Your Schedule",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).textTheme.titleLarge?.color ?? const Color(0xFF1C2B4A),
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "Upcoming appointments",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6) ?? Colors.grey.shade500,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        CalendarScheduleWidget(
-                          width: MediaQuery.of(context).size.width - 48,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-                // ── Book Appointment button ──────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppointmentPage(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Theme.of(context).colorScheme.surface,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
+              return CustomScrollView(
+                slivers: [
+                  // ── Header ──────────────────────────────────────────────
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 60,
+                        right: 24,
+                        left: 24,
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.calendar_month_rounded,
-                              size: 18, color: Color(0xFF7EB8F7)),
-                          SizedBox(width: 10),
-                          Text(
-                            "Book Appointment",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.1,
-                            ),
+                          Row(
+                            children: [
+                              // Avatar with a soft ring
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xFF4A90D9),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const CircleAvatar(
+                                  radius: 22,
+                                  backgroundImage: AssetImage(
+                                    "assets/images/profile.jpg",
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    loc.goodMorning,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.color
+                                              ?.withOpacity(0.6) ??
+                                          Colors.grey.shade500,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.1,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    userName ?? "User",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.titleLarge?.color ??
+                                          const Color(0xFF1C2B4A),
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          BlocBuilder<BranchCubit, BranchState>(
+                            builder: (context, state) {
+                              if (state is BranchLoaded) {
+                                final branches = state.branchResponseModel.data;
+                                if (branches.isEmpty || currentBranchId == null)
+                                  return const SizedBox();
+
+                                final isValid = branches.any(
+                                  (b) => b.branchId == currentBranchId,
+                                );
+                                final selectedId = isValid
+                                    ? currentBranchId
+                                    : branches.first.branchId;
+
+                                return DropdownButton<String>(
+                                  value: selectedId,
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Color(0xFF4A90D9),
+                                  ),
+                                  underline: const SizedBox(),
+                                  items: branches.map((branch) {
+                                    return DropdownMenuItem<String>(
+                                      value: branch.branchId,
+                                      child: Text(
+                                        branch.name,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge?.color ??
+                                              const Color(0xFF1C2B4A),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newId) async {
+                                    if (newId != null &&
+                                        newId != currentBranchId) {
+                                      await sharedPrefManager.saveBranchId(
+                                        newId,
+                                      );
+                                      if (mounted) {
+                                        setState(() {
+                                          currentBranchId = newId;
+                                        });
+                                        context.read<AppointmentCubits>().getAllAppointments();
+                                      }
+                                    }
+                                  },
+                                );
+                              }
+                              return const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Color(0xFF4A90D9),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 40)),
-              ],
-            );
-          },
+                  const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
+                  // ── "Your Schedule" label ────────────────────────────────
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            loc.yourSchedule,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).textTheme.titleLarge?.color ??
+                                  const Color(0xFF1C2B4A),
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            loc.upcomingAppointments,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color
+                                      ?.withOpacity(0.6) ??
+                                  Colors.grey.shade500,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          CalendarScheduleWidget(
+                            width: MediaQuery.of(context).size.width - 48,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
+                  // ── Book Appointment button ──────────────────────────────
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppointmentPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).brightness == Brightness.light
+                              ? const Color(0xFF1C2B4A)
+                              : Theme.of(context).colorScheme.surface,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.calendar_month_rounded,
+                              size: 18,
+                              color: Color(0xFF7EB8F7),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              loc.bookAppointment,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SliverToBoxAdapter(child: SizedBox(height: 40)),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

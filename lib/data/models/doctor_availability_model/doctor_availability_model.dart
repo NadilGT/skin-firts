@@ -6,16 +6,16 @@ part 'doctor_availability_model.g.dart';
 @JsonSerializable()
 class DoctorAvailabilityModel extends DoctorAvailabilityEntity {
   const DoctorAvailabilityModel({
-    required super.id,
-    required super.doctorAvailabilityId,
+    super.id,
+    super.doctorAvailabilityId,
     required super.doctorId,
     required super.date,
     required super.isAvailable,
     super.estimatedStartTime,
     super.maxPatients,
     required super.notes,
-    required super.createdAt,
-    required super.updatedAt,
+    super.createdAt,
+    super.updatedAt,
   });
 
   factory DoctorAvailabilityModel.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +30,7 @@ class DoctorAvailabilityParamsModel extends DoctorAvailabilityParams {
   const DoctorAvailabilityParamsModel({
     required super.doctorId,
     required super.date,
+    super.branchId,
   });
 
   factory DoctorAvailabilityParamsModel.fromJson(Map<String, dynamic> json) =>

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skin_firts/core/constants/color_manager.dart';
@@ -43,6 +44,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final loc = AppLocalizations.of(context);
 
     return BlocProvider.value(
       value: _cubit,
@@ -63,7 +65,7 @@ class _NotificationPageState extends State<NotificationPage> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            "Notifications",
+            loc.notificationsTitle,
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w700,
@@ -155,6 +157,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildError(String message) {
+    final loc = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
 
@@ -176,7 +179,7 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             const SizedBox(height: 24),
             Text(
-              "Something went wrong",
+              loc.somethingWentWrong,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -207,9 +210,9 @@ class _NotificationPageState extends State<NotificationPage> {
                     ),
                   ],
                 ),
-                child: const Text(
-                  "Try Again",
-                  style: TextStyle(
+                child: Text(
+                  loc.tryAgain,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
@@ -224,6 +227,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Widget _buildEmpty() {
+    final loc = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
 
@@ -245,7 +249,7 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             const SizedBox(height: 24),
             Text(
-              "No Notifications",
+              loc.noNotifications,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -254,7 +258,7 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             const SizedBox(height: 10),
             Text(
-              "We'll let you know when something\nexciting happens!",
+              loc.noNotificationsSub,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,

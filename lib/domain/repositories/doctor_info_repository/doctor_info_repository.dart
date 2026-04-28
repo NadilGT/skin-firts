@@ -4,5 +4,5 @@ import 'package:skin_firts/data/models/doctor_info_model/doctor_info_model.dart'
 abstract class DoctorInfoRepository {
   Future<DataState<DoctorInfoModel>> getDoctorInfo(String name);
   
-  Future<DataState<List<DoctorInfoModel>>> getAllDoctorsByFocus(String focus);
+  Future<DataState<List<DoctorInfoModel>>> getAllDoctorsByFocus(String focusId, String? branchId);
 }

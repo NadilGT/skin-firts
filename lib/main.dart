@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:skin_firts/common/bloc/locale_cubit.dart';
 import 'package:skin_firts/common/bloc/theme_cubit.dart';
 import 'package:skin_firts/core/theme/app_theme.dart';
 import 'package:skin_firts/firebase_options.dart';
@@ -56,17 +58,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<ThemeCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ThemeCubit>(create: (_) => sl<ThemeCubit>()),
+        BlocProvider<LocaleCubit>(create: (_) => sl<LocaleCubit>()),
+      ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (context, state) {
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            home: const SplashScreen(),
+        builder: (context, themeState) {
+          return BlocBuilder<LocaleCubit, LocaleState>(
+            builder: (context, localeState) {
+              return MaterialApp(
+                navigatorKey: navigatorKey,
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode:
+                    themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+                locale: localeState.locale,
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('si'),
+                ],
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                home: const SplashScreen(),
+              );
+            },
           );
         },
       ),

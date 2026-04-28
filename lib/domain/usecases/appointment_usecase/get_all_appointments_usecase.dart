@@ -1,11 +1,13 @@
 import 'package:skin_firts/core/storage/data_state.dart';
 import 'package:skin_firts/domain/repositories/appointment_repository/appointment_repository.dart';
 import 'package:skin_firts/domain/usecases/usecase/usecase.dart';
+import 'package:skin_firts/core/storage/shared_pref_manager.dart';
 import 'package:skin_firts/service_locator.dart';
 
 class GetAllAppointmentsUsecase implements UseCase<DataState, String> {
   @override
-  Future<DataState> call({String? params}) {
-    return sl<AppointmentRepository>().getAllAppointments(params ?? "");
+  Future<DataState> call({String? params}) async {
+    final branchId = await sl<SharedPrefManager>().getBranchId();
+    return sl<AppointmentRepository>().getAllAppointments(params ?? "", branchId);
   }
 }

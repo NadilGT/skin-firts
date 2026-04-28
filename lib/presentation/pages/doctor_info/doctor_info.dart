@@ -17,6 +17,7 @@ import '../../../domain/usecases/get_doctor_schedule_usecase/get_doctor_schedule
 import '../DoctorSchedulePage/doctor_schedule_page.dart' show DoctorSchedulePage;
 import '../calender/bloc/appoinment_cubit.dart';
 import '../appointment/next_appointment_number_cubit/next_appointment_number_cubit.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 
 class DoctorInfo extends StatefulWidget {
   final DoctorInfoModel doctor;
@@ -39,28 +40,22 @@ class _DoctorInfoState extends State<DoctorInfo> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    final loc = AppLocalizations.of(context);
 
     return BlocProvider(
       create: (context) =>
-          DoctorInfoCubit()..getDoctorInfo(widget.doctor.name),
+          DoctorInfoCubit()..getDoctorInfo(widget.doctor.doctor_id),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: BasicAppbar(
           title: Text(
-            "Doctor Profile",
+            loc.doctorProfile,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 17,
               color: Theme.of(context).textTheme.titleLarge?.color ?? (Theme.of(context).brightness == Brightness.light ? const Color(0xFF1C2B4A) : Colors.white),
               letterSpacing: -0.3,
             ),
-          ),
-          action: Row(
-            children: [
-              _appBarIcon(Icons.search_rounded),
-              const SizedBox(width: 8),
-              _appBarIcon(Icons.menu_rounded),
-            ],
           ),
         ),
         body: BlocBuilder<DoctorInfoCubit, DoctorInfoState>(
@@ -161,17 +156,17 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                           ),
                                         ],
                                       ),
-                                      const Text(
-                                        'experience',
-                                        style: TextStyle(
+                                      Text(
+                                        loc.experience,
+                                        style: const TextStyle(
                                           color: Colors.white60,
                                           fontSize: 11,
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        'Focus',
-                                        style: TextStyle(
+                                      Text(
+                                        loc.focus,
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 11,
@@ -330,7 +325,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                             size: 16, color: primaryColor),
                                         const SizedBox(width: 8),
                                         Text(
-                                          'Schedule',
+                                          loc.scheduleBtn,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color: Theme.of(context).brightness == Brightness.light ? primaryColor : Colors.white,
@@ -342,13 +337,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              _buildActionButton(Icons.info_outline_rounded,
-                                  () {}),
-                              const SizedBox(width: 8),
-                              _buildActionButton(
-                                  Icons.share_outlined, () {}),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 10),                           
                               _buildActionButton(
                                 isFavorite
                                     ? Icons.favorite_rounded
@@ -383,12 +372,12 @@ class _DoctorInfoState extends State<DoctorInfo> {
                     const SizedBox(height: 20),
 
                     // ── Info sections ────────────────────────────────────
-                    _buildInfoSection('Profile', doctorInfo?.profile ?? "—"),
+                    _buildInfoSection(loc.profileSection, doctorInfo?.profile ?? "—"),
                     const SizedBox(height: 12),
-                    _buildInfoSection('Career Path', doctorInfo?.career ?? "—"),
+                    _buildInfoSection(loc.careerPath, doctorInfo?.career ?? "—"),
                     const SizedBox(height: 12),
                     _buildInfoSection(
-                        'Highlights', doctorInfo?.highlights ?? "—"),
+                        loc.highlights, doctorInfo?.highlights ?? "—"),
                     const SizedBox(height: 20),
                   ],
                 ),

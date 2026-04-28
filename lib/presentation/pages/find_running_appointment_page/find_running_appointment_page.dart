@@ -7,6 +7,7 @@ import '../appointment/doctors_by_focus_cubit/doctors_by_focus_state.dart';
 import '../appointment/focus_bloc/focus_cubit.dart';
 import '../appointment/focus_bloc/focus_state.dart';
 import '../get_running_appointment_number/get_running_appointment_number.dart';
+import 'package:skin_firts/core/localization/app_localizations.dart';
 
 class FindRunningAppointmentPage extends StatefulWidget {
   const FindRunningAppointmentPage({super.key});
@@ -22,6 +23,7 @@ class _FindRunningAppointmentPageState
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final primaryColor = Theme.of(context).primaryColor;
     final cardColor = Theme.of(context).cardColor;
@@ -39,9 +41,9 @@ class _FindRunningAppointmentPageState
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: const Text(
-            'Find Running Appointment',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          title: Text(
+            loc.findRunningAppointment,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           elevation: 0,
@@ -54,7 +56,7 @@ class _FindRunningAppointmentPageState
                 if (state is FocusFailed) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Failed to load focus: ${state.error}'),
+                      content: Text('${loc.failedToLoadFocus} ${state.error}'),
                       backgroundColor: Colors.redAccent,
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -67,7 +69,7 @@ class _FindRunningAppointmentPageState
                 if (state is DoctorsByFocusFailed) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Failed to load doctors: ${state.error}'),
+                      content: Text('${loc.failedToLoadDoctors} ${state.error}'),
                       backgroundColor: Colors.redAccent,
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -88,7 +90,7 @@ class _FindRunningAppointmentPageState
                 children: [
                   // ── Header ──────────────────────────────────────────────
                   Text(
-                    "Select a Focus Area",
+                    loc.selectAFocusArea,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -97,7 +99,7 @@ class _FindRunningAppointmentPageState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Choose a focus to see doctors with currently running appointments.",
+                    loc.chooseAFocusToSeeDoctors,
                     style: TextStyle(
                       fontSize: 14,
                       color: subtitleColor,
@@ -133,7 +135,7 @@ class _FindRunningAppointmentPageState
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              'Select Focus',
+                              loc.selectFocus,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -185,7 +187,7 @@ class _FindRunningAppointmentPageState
                                   color: primaryColor,
                                 ),
                                 hint: Text(
-                                  'Choose a focus...',
+                                  loc.chooseAFocus,
                                   style: TextStyle(color: subtitleColor),
                                 ),
                                 value: selectedFocus,
@@ -193,7 +195,7 @@ class _FindRunningAppointmentPageState
                                   return DropdownMenuItem<FocusEntity>(
                                     value: focus,
                                     child: Text(
-                                      focus.name ?? "Unknown",
+                                      loc.translateFocus(focus.name ?? "Unknown"),
                                       style: TextStyle(
                                         color: selectedFocus == focus
                                             ? primaryColor
@@ -256,7 +258,7 @@ class _FindRunningAppointmentPageState
                               padding:
                                   const EdgeInsets.symmetric(vertical: 40),
                               child: Text(
-                                "No doctors available for this focus.",
+                                loc.noDoctorsAvailableForFocus,
                                 style: TextStyle(
                                   color: subtitleColor,
                                   fontSize: 16,
@@ -379,7 +381,7 @@ class _FindRunningAppointmentPageState
                                                   size: 16),
                                               const SizedBox(width: 4),
                                               Text(
-                                                "${doctor.experience ?? 0} Years",
+                                                "${doctor.experience ?? 0} ${loc.yrs}",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: subtitleColor,

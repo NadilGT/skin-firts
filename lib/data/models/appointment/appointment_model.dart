@@ -34,6 +34,7 @@ class AppointmentModel extends Appointment {
     required this.appointmentDate,
     super.notes,
     super.status = 'pending',
+    super.branchId,
   }) : super(appointmentDate: appointmentDate);
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) =>

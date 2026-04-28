@@ -9,9 +9,9 @@ import '../../../service_locator.dart';
 class DoctorScheduleRepositoryImpl extends DoctorScheduleRepository {
   final ApiService apiService = sl<ApiService>();
   @override
-  Future<DataState<DoctorScheduleResponseModel>> getDoctorSchedule(String doctorId) async{
+  Future<DataState<DoctorScheduleResponseModel>> getDoctorSchedule(String doctorId, String? branchId) async{
     try{
-      final httpResponse = await apiService.getDoctorSchedule(doctorId);
+      final httpResponse = await apiService.getDoctorSchedule(doctorId, branchId);
       if(httpResponse.response.statusCode == 200){
         return DataSuccess(httpResponse.data);
       } else {
