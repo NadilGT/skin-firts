@@ -57,13 +57,6 @@ class _DoctorInfoState extends State<DoctorInfo> {
               letterSpacing: -0.3,
             ),
           ),
-          action: Row(
-            children: [
-              _appBarIcon(Icons.search_rounded),
-              const SizedBox(width: 8),
-              _appBarIcon(Icons.menu_rounded),
-            ],
-          ),
         ),
         body: BlocBuilder<DoctorInfoCubit, DoctorInfoState>(
           builder: (context, state) {
@@ -344,13 +337,7 @@ class _DoctorInfoState extends State<DoctorInfo> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              _buildActionButton(Icons.info_outline_rounded,
-                                  () {}),
-                              const SizedBox(width: 8),
-                              _buildActionButton(
-                                  Icons.share_outlined, () {}),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 10),                           
                               _buildActionButton(
                                 isFavorite
                                     ? Icons.favorite_rounded
