@@ -34,7 +34,7 @@ class GetNotificationsCubit extends Cubit<GetNotificationsState> {
       final data = result.data!;
 
       emit(GetNotificationsLoaded(
-        notifications: data.notifications,
+        notifications: data.notifications ?? [],
         nextCursor: data.nextCursor,
         hasReachedEnd: data.nextCursor == null || data.nextCursor!.isEmpty,
       ));
@@ -72,7 +72,7 @@ class GetNotificationsCubit extends Cubit<GetNotificationsState> {
 
       final updatedList = [
         ...currentState.notifications,
-        ...data.notifications,
+        ...?data.notifications,
       ];
 
       emit(currentState.copyWith(

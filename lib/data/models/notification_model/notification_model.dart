@@ -37,10 +37,10 @@ class NotificationResponseModel extends NotificationResponseEntity {
 @JsonSerializable()
 class NotificationPaginationResponseModel extends NotificationPaginationResponseEntity {
   @override
-  final List<NotificationResponseModel> notifications;
+  final List<NotificationResponseModel>? notifications;
 
   const NotificationPaginationResponseModel({
-    required this.notifications,
+    this.notifications,
     required super.nextCursor,
   }) : super(notifications: notifications);
 

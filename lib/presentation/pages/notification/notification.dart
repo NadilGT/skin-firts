@@ -77,11 +77,11 @@ class _NotificationPageState extends State<NotificationPage> {
             BlocBuilder<GetNotificationsCubit, GetNotificationsState>(
               builder: (context, state) {
                 if (state is GetNotificationsLoaded &&
-                    state.notifications.isNotEmpty) {
+                    (state.notifications?.isNotEmpty ?? false)) {
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: _UnreadBadge(count: state.notifications.length),
+                      child: _UnreadBadge(count: state.notifications?.length ?? 0),
                     ),
                   );
                 }
@@ -111,7 +111,8 @@ class _NotificationPageState extends State<NotificationPage> {
         }
 
         if (state is GetNotificationsLoaded) {
-          if (state.notifications.isEmpty) {
+          final notifications = state.notifications ?? [];
+          if (notifications.isEmpty) {
             return _buildEmpty();
           }
           return _buildList(state);
@@ -124,6 +125,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Widget _buildList(GetNotificationsLoaded state) {
     final primaryColor = Theme.of(context).primaryColor;
+    final notifications = state.notifications ?? [];
 
     return RefreshIndicator(
       color: primaryColor,
@@ -132,14 +134,14 @@ class _NotificationPageState extends State<NotificationPage> {
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
-        itemCount: state.notifications.length + (state.isLoadingMore ? 1 : 0),
+        itemCount: notifications.length + (state.isLoadingMore ? 1 : 0),
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
-          if (index == state.notifications.length) {
+          if (index == notifications.length) {
             return const _LoadMoreIndicator();
           }
           return _NotificationCard(
-            notification: state.notifications[index],
+            notification: notifications[index],
             index: index,
           );
         },

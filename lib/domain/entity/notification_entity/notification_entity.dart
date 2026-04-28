@@ -44,10 +44,10 @@ class NotificationResponseEntity extends Equatable {
 
 class NotificationPaginationResponseEntity extends Equatable {
   final String? nextCursor;
-  final List<NotificationResponseEntity> notifications;
+  final List<NotificationResponseEntity>? notifications;
 
   const NotificationPaginationResponseEntity({
-    required this.notifications,
+    this.notifications,
     required this.nextCursor,
   });
   

@@ -53,8 +53,8 @@ Map<String, dynamic> _$NotificationResponseModelToJson(
 NotificationPaginationResponseModel
 _$NotificationPaginationResponseModelFromJson(Map<String, dynamic> json) =>
     NotificationPaginationResponseModel(
-      notifications: (json['notifications'] as List<dynamic>)
-          .map(
+      notifications: (json['notifications'] as List<dynamic>?)
+          ?.map(
             (e) =>
                 NotificationResponseModel.fromJson(e as Map<String, dynamic>),
           )
