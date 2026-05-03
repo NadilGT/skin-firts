@@ -1,5 +1,5 @@
 import 'package:skin_firts/core/storage/data_state.dart';
-import 'package:skin_firts/domain/entity/running_appointment_number_entity/running_appointment_number_entity.dart';
+import 'package:skin_firts/core/storage/shared_pref_manager.dart';
 import 'package:skin_firts/domain/usecases/usecase/usecase.dart';
 import 'package:skin_firts/service_locator.dart';
 
@@ -15,10 +15,12 @@ class GetRunningAppointmentNumberUsecase
   @override
   Future<DataState<RunningAppointmentNumberModel>> call({
     RunningAppointmentNumberParamsModel? params,
-  }) {
+  }) async {
+    final branchId = await sl<SharedPrefManager>().getBranchId();
     return sl<AppointmentRepository>().getRunningAppointmentNumber(
       params!.doctorId,
       params.date,
+      branchId,
     );
   }
 }

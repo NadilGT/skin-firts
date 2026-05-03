@@ -142,11 +142,13 @@ class AppointmentRepositoryImpl extends AppointmentRepository {
   Future<DataState<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
     String doctorId,
     String date,
+    String? branchId,
   ) async {
     try {
       final response = await apiService.getRunningAppointmentNumber(
         doctorId,
         date,
+        branchId,
       );
       
       if (response.response.statusCode == 200) {

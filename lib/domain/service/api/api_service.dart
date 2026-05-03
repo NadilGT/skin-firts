@@ -76,6 +76,7 @@ abstract class ApiService {
   Future<HttpResponse<RunningAppointmentNumberModel>> getRunningAppointmentNumber(
     @Query("doctorId") String doctorId,
     @Query("date") String date,
+    @Query("branchId") String? branchId,
   );
 
   @GET('/doctor-weekly-schedule/available-dates')

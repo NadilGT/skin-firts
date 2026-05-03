@@ -336,12 +336,18 @@ class _ApiService implements ApiService {
 
   @override
   Future<HttpResponse<RunningAppointmentNumberModel>>
-  getRunningAppointmentNumber(String doctorId, String date) async {
+  getRunningAppointmentNumber(
+    String doctorId,
+    String date,
+    String? branchId,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'doctorId': doctorId,
       r'date': date,
+      r'branchId': branchId,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options =

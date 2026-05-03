@@ -213,7 +213,7 @@ class _FindRunningAppointmentPageState
                                     context
                                         .read<DoctorsByFocusCubit>()
                                         .getAllDoctorsByFocus(
-                                          value.name ?? "",
+                                          value.focusId ?? "",
                                         );
                                   }
                                 },
